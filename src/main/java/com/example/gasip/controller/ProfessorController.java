@@ -1,14 +1,11 @@
 package com.example.gasip.controller;
 
-import com.example.gasip.domain.prof.ProfessorEntity;
 import com.example.gasip.dto.ProfessorDto;
+import com.example.gasip.entity.ProfessorEntity;
 import com.example.gasip.service.ProfessorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.example.gasip.domain.prof.ProfessorRepository;
 
 import java.util.List;
 
@@ -32,6 +29,13 @@ public class ProfessorController {
         model.addAttribute("prof", prof);
         return "professor/professorlist";
     }
+
+//    // Dto
+//    public String list(Model model) {
+//        List<ProfessorDto> prof = professorService.findAll();
+//        model.addAttribute("prof", prof);
+//        return "professor/professorlist";
+//    }
 
     //    public String list(Model model) {
 //        List<ProfessorDto> professorDtoList = ProfessorService.findAll();

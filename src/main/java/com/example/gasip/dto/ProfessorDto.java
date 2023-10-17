@@ -1,5 +1,5 @@
 package com.example.gasip.dto;
-import com.example.gasip.domain.prof.ProfessorEntity;
+import com.example.gasip.entity.ProfessorEntity;
 import lombok.*;
 
 @Getter

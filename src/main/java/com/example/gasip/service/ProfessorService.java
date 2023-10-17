@@ -1,13 +1,10 @@
 package com.example.gasip.service;
 
-import com.example.gasip.domain.prof.ProfessorEntity;
-import com.example.gasip.domain.prof.ProfessorRepository;
 import com.example.gasip.dto.ProfessorDto;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.gasip.entity.ProfessorEntity;
+import com.example.gasip.repository.ProfessorRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +21,11 @@ public class ProfessorService {
     public List<ProfessorEntity> findAll() {
         return professorRepository.findAll();
     }
+
+    // Dto
+//    public List<ProfessorDto> findAll() {
+//        return professorRepository.findAll();
+//    }
 
     //@Transactional
 //    public List<ProfessorEntity> findProfessor() {

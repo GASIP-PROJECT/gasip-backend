@@ -1,15 +1,14 @@
 package com.example.gasip.controller;
 
-import com.example.gasip.entity.ProfessorEntity;
+import com.example.gasip.domain.prof.ProfessorEntity;
+import com.example.gasip.dto.ProfessorDto;
 import com.example.gasip.service.ProfessorService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.gasip.repository.ProfessorRepository;
+import com.example.gasip.domain.prof.ProfessorRepository;
 
 import java.util.List;
 
@@ -20,25 +19,35 @@ public class ProfessorController {
 
     private final ProfessorService professorService;
 
-    @Autowired
     public ProfessorController(ProfessorService professorService) {
         this.professorService = professorService;
     }
 
-
     /**
      * 교수 조회
      */
-//    @GetMapping("prof")
-//    public String list(Model model) {
-////        List<ProfessorEntity> prof = professorService.findProfessor();
-////        model.addAttribute("prof", prof);
-//        return "professor/professorlist";
-//    }
     @GetMapping("prof")
     public String list(Model model) {
+        List<ProfessorEntity> prof = professorService.findAll();
+        model.addAttribute("prof", prof);
         return "professor/professorlist";
     }
+
+    //    public String list(Model model) {
+//        List<ProfessorDto> professorDtoList = ProfessorService.findAll();
+//        model.addAttribute("profList", professorDtoList);
+//        return "professor/professorlist";
+//    }
+
+//    @Autowired
+//    public ProfessorController(ProfessorService professorService) {
+//        this.professorService = professorService;
+//    }
+
+//    @GetMapping("prof")
+//    public String list(Model model) {
+//        return "professor/professorlist";
+//    }
 
 
 }

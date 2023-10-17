@@ -1,6 +1,7 @@
 package com.example.gasip.entity;
 
 import com.example.gasip.dto.ProfessorDto;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,13 +16,13 @@ public class ProfessorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long professor_Id;
 
-    @Column
+    @Column(nullable = false)
     private Long major_Id;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String major;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String name;
 
     public static ProfessorEntity professorEntity(ProfessorDto professorDto) {

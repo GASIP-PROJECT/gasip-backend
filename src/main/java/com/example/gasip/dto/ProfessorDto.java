@@ -16,13 +16,11 @@ public class ProfessorDto {
     private String name;
 
     public static ProfessorDto toProfessorDto(ProfessorEntity professorEntity) {
-        ProfessorDto professorDto = new ProfessorDto();
-        professorDto.setProfessor_Id(professorEntity.getProfessor_Id());
-        professorDto.setMajor_Id(professorEntity.getMajor_Id());
-        professorDto.setMajor(professorEntity.getMajor());
-        professorDto.setName(professorEntity.getName());
-
-        return professorDto;
+        return new ProfessorDto(
+                professorEntity.getProfessor_Id(),
+                professorEntity.getMajor_Id(),
+                professorEntity.getMajor(),
+                professorEntity.getName());
     }
 
 }

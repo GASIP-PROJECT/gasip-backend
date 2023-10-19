@@ -4,7 +4,6 @@ import com.example.gasip.dto.ProfessorDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import java.util.Objects;
 
 @Entity
@@ -55,6 +54,7 @@ public class ProfessorEntity {
         if (this == o) return true;
         if (!(o instanceof ProfessorEntity that)) return false;
         return professor_Id != null && professor_Id.equals(that.getProfessor_Id());
+
     }
 
     @Override

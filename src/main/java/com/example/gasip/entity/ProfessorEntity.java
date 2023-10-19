@@ -25,6 +25,18 @@ public class ProfessorEntity {
     @Column
     private String name;
 
+    protected ProfessorEntity () {
+
+    }
+
+    @Builder
+    private ProfessorEntity(Long professor_Id, Long major_Id, String major, String name) {
+        this.professor_Id = professor_Id;
+        this.major_Id = major_Id;
+        this.major = major;
+        this.name = name;
+    }
+
 
     public static ProfessorEntity professorEntity(ProfessorDto professorDto) {
         return new ProfessorEntity(
@@ -45,6 +57,7 @@ public class ProfessorEntity {
         if (this == o) return true;
         if (!(o instanceof ProfessorEntity that)) return false;
         return professor_Id != null && professor_Id.equals(that.getProfessor_Id());
+
     }
 
     @Override

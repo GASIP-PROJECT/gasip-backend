@@ -16,11 +16,6 @@ public class ProfessorDto {
     private String name;
 
     public static ProfessorDto toProfessorDto(ProfessorEntity professorEntity) {
-        return new ProfessorDto(
-                professorEntity.getProfessor_Id(),
-                professorEntity.getMajor_Id(),
-                professorEntity.getMajor(),
-                professorEntity.getName());
     }
 
 }

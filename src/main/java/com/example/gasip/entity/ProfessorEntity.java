@@ -2,11 +2,12 @@ package com.example.gasip.entity;
 
 import com.example.gasip.dto.ProfessorDto;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Builder;
 import java.util.Objects;
 
 @Entity
+
 @Getter
 @Table(name = "prof")
 public class ProfessorEntity {
@@ -15,13 +16,13 @@ public class ProfessorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long professor_Id;
 
-    @Column(nullable = false)
+    @Column
     private Long major_Id;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String major;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String name;
 
     protected ProfessorEntity () {
@@ -35,6 +36,7 @@ public class ProfessorEntity {
         this.major = major;
         this.name = name;
     }
+
 
     public static ProfessorEntity professorEntity(ProfessorDto professorDto) {
         return new ProfessorEntity(
@@ -62,4 +64,5 @@ public class ProfessorEntity {
     public int hashCode() {
         return Objects.hash(professor_Id);
     }
+
 }

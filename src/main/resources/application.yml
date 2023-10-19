@@ -1,0 +1,20 @@
+# database ?? ??
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    DB ?? ??
+    url: jdbc:mysql://127.0.0.1/GasipTest
+    #    mysql ?? ??, password? ???.
+    username: TESTUSER
+    password: 1234
+  thymeleaf:
+    cache: false
+
+  # spring data jpa ??.
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      # create ?? ??.
+      ddl-auto: update

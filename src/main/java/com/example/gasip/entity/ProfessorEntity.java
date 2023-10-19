@@ -7,6 +7,7 @@ import lombok.Builder;
 import java.util.Objects;
 
 @Entity
+
 @Getter
 @Table(name = "prof")
 public class ProfessorEntity {
@@ -15,25 +16,15 @@ public class ProfessorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long professor_Id;
 
-    @Column(nullable = false)
+    @Column
     private Long major_Id;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String major;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String name;
 
-    protected ProfessorEntity () {
-    }
-
-    @Builder
-    private ProfessorEntity(Long professor_Id, Long major_Id, String major, String name) {
-        this.professor_Id = professor_Id;
-        this.major_Id = major_Id;
-        this.major = major;
-        this.name = name;
-    }
 
     public static ProfessorEntity professorEntity(ProfessorDto professorDto) {
         return new ProfessorEntity(
@@ -60,4 +51,5 @@ public class ProfessorEntity {
     public int hashCode() {
         return Objects.hash(professor_Id);
     }
+
 }

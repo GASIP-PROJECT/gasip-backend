@@ -25,6 +25,7 @@ public class ProfessorEntity {
     private String name;
 
     protected ProfessorEntity () {
+
     }
 
     @Builder

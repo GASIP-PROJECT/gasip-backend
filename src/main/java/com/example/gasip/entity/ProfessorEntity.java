@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 @Entity
 @Setter
 @Getter
@@ -13,25 +15,25 @@ public class ProfessorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long professor_Id;
+    private Long prof_ID;
 
     @Column
-    private Long major_Id;
+    private Long major_ID;
 
     @Column
-    private String major;
+    private String major_name;
 
     @Column
-    private String name;
+    private String prof_name;
 
 
 
     public static ProfessorEntity professorEntity(ProfessorDto professorDto) {
         ProfessorEntity professorEntity = new ProfessorEntity();
-        professorEntity.setProfessor_Id(professorDto.getProfessor_Id());
-        professorEntity.setMajor_Id(professorDto.getMajor_Id());
-        professorEntity.setMajor(professorDto.getMajor());
-        professorEntity.setName(professorDto.getName());
+        professorEntity.setProf_ID(professorDto.getProf_Id());
+        professorEntity.setMajor_ID(professorDto.getMajor_Id());
+        professorEntity.setMajor_name(professorDto.getMajor_name());
+        professorEntity.setProf_name(professorDto.getProf_name());
 
         return professorEntity;
     }

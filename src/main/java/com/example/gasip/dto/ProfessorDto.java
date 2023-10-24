@@ -9,18 +9,18 @@ import lombok.*;
 @ToString
 public class ProfessorDto {
 
-    private Long professor_Id;
+    private Long prof_Id;
     private Long major_Id;
-    private String major;
-    private String name;
+    private String major_name;
+    private String prof_name;
 
 
     public static ProfessorDto toProfessorDto(ProfessorEntity professorEntity) {
         ProfessorDto professorDto = new ProfessorDto();
-        professorDto.setProfessor_Id(professorEntity.getProfessor_Id());
-        professorDto.setMajor_Id(professorEntity.getMajor_Id());
-        professorDto.setMajor(professorEntity.getMajor());
-        professorDto.setName(professorEntity.getName());
+        professorDto.setProf_Id(professorEntity.getProf_ID());
+        professorDto.setMajor_Id(professorEntity.getMajor_ID());
+        professorDto.setMajor_name(professorEntity.getMajor_name());
+        professorDto.setProf_name(professorEntity.getProf_name());
 
         return professorDto;
     }

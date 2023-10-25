@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Prof_ID</th>
+                <th>Major_ID</th>
+                <th>전공</th>
+                <th>이름</th>
+            </tr>
+            </thead>
+            <tbody>
+                <p>교수 목록입니다.</p>
+                <tr th:each="prof : ${prof}">
+                    <td th:text="${prof.getProf_ID}"></td>
+                    <td th:text="${prof.getMajor_ID()}"></td>
+                    <td th:text="${prof.getMajor_name()}"></td>
+                    <td><a th:href="@{/prof/details(prof_ID=${prof.getProf_ID})}" th:text="${prof.getProf_name()}"></a></td>
+                </tr>
+            </td>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
+

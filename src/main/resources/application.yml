@@ -1,20 +1,23 @@
-# database ?? ??
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #    DB ?? ??
-    url: jdbc:mysql://127.0.0.1/GasipTest
-    #    mysql ?? ??, password? ???.
+    url: jdbc:mysql://127.0.0.1/testDB
     username: TESTUSER
     password: 1234
   thymeleaf:
     cache: false
 
-  # spring data jpa ??.
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
     open-in-view: false
     show-sql: true
-    hibernate:
-      # create ?? ??.
-      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        hbm2ddl:
+          auto: update
+    database: mysql
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 200MB

@@ -1,6 +1,6 @@
-package com.example.gasip.dto;
+package com.example.gasip.professordetail.dto;
 
-import com.example.gasip.entity.ProfessorDetail;
+import com.example.gasip.professordetail.model.ProfessorDetail;
 import lombok.Builder;
 import lombok.Getter;
 

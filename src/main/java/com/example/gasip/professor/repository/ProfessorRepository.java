@@ -1,7 +1,7 @@
-package com.example.gasip.repository;
+package com.example.gasip.professor.repository;
 
 
-import com.example.gasip.entity.Professor;
+import com.example.gasip.professor.model.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

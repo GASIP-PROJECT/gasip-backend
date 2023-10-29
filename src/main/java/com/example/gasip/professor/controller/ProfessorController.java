@@ -1,8 +1,8 @@
-package com.example.gasip.controller;
+package com.example.gasip.professor.controller;
 
-import com.example.gasip.dto.ProfessorResponse;
-import com.example.gasip.entity.Professor;
-import com.example.gasip.service.ProfessorService;
+import com.example.gasip.professor.dto.ProfessorResponse;
+import com.example.gasip.professor.model.Professor;
+import com.example.gasip.professor.service.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.example.gasip.controller;
+package com.example.gasip;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

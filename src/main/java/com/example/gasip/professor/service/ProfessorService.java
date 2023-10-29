@@ -1,8 +1,8 @@
-package com.example.gasip.service;
+package com.example.gasip.professor.service;
 
-import com.example.gasip.dto.ProfessorResponse;
-import com.example.gasip.entity.Professor;
-import com.example.gasip.repository.ProfessorRepository;
+import com.example.gasip.professor.dto.ProfessorResponse;
+import com.example.gasip.professor.model.Professor;
+import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

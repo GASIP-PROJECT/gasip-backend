@@ -1,4 +1,4 @@
-package com.example.gasip.entity;
+package com.example.gasip.professor.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,9 +10,9 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "prof")
-public class ProfessorDetail {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Professor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class ProfessorDetail {
     private String majorName;
 
     @Builder
-    public ProfessorDetail(Long profId, String profName, Long majorId, String majorName) {
+    public Professor(Long profId, String profName, Long majorId, String majorName) {
         this.profId = profId;
         this.profName = profName;
         this.majorId = majorId;
@@ -46,4 +46,8 @@ public class ProfessorDetail {
     public int hashCode() {
         return Objects.hash(profId);
     }
+
 }
+
+
+

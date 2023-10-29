@@ -1,6 +1,6 @@
 package com.example.gasip.dto;
 
-import com.example.gasip.entity.ProfessorEntity;
+import com.example.gasip.entity.Professor;
 import lombok.*;
 
 @Getter
@@ -16,7 +16,7 @@ public class ProfessorDto {
     private String major_name;
     private String prof_name;
 
-    public static ProfessorDto toProfessorDto(ProfessorEntity professorEntity) {
+    public static ProfessorDto toProfessorDto(Professor professorEntity) {
 
         ProfessorDto professorDto = new ProfessorDto();
         professorDto.setProf_Id(professorEntity.getProfId());

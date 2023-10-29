@@ -19,10 +19,10 @@ public class ProfessorDto {
     public static ProfessorDto toProfessorDto(ProfessorEntity professorEntity) {
 
         ProfessorDto professorDto = new ProfessorDto();
-        professorDto.setProf_Id(professorEntity.getProf_ID());
-        professorDto.setMajor_Id(professorEntity.getMajor_ID());
-        professorDto.setMajor_name(professorEntity.getMajor_name());
-        professorDto.setProf_name(professorEntity.getProf_name());
+        professorDto.setProf_Id(professorEntity.getProfId());
+        professorDto.setMajor_Id(professorEntity.getMajorId());
+        professorDto.setMajor_name(professorEntity.getMajorName());
+        professorDto.setProf_name(professorEntity.getProfName());
 
         return professorDto;
 

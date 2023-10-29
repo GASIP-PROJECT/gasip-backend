@@ -16,9 +16,9 @@
                 <p>교수 목록입니다.</p>
                 <tr th:each="prof : ${prof}">
                     <td th:text="${prof.getProf_ID}"></td>
-                    <td th:text="${prof.getMajor_ID()}"></td>
-                    <td th:text="${prof.getMajor_name()}"></td>
-                    <td><a th:href="@{/prof/details(prof_ID=${prof.getProf_ID})}" th:text="${prof.getProf_name()}"></a></td>
+                    <td th:text="${prof.getMajorId()}"></td>
+                    <td th:text="${prof.getMajorName()}"></td>
+                    <td><a th:href="@{/prof/details(prof_ID=${prof.getProf_ID})}" th:text="${prof.getProfName()}"></a></td>
                 </tr>
             </td>
             </tbody>

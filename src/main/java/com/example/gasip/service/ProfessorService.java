@@ -3,9 +3,13 @@ package com.example.gasip.service;
 import com.example.gasip.dto.ProfessorDto;
 import com.example.gasip.entity.ProfessorEntity;
 import com.example.gasip.repository.ProfessorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfessorService {
@@ -21,6 +25,19 @@ public class ProfessorService {
     public List<ProfessorEntity> findAll() {
         return professorRepository.findAll();
     }
+
+
+    /**
+     * 특정 교수 불러오기
+     */
+    public ProfessorEntity findProfDetails(Long prof_ID) {
+        return professorRepository.findById(prof_ID).get();
+    }
+//    @Transactional
+//    public Optional<ProfessorEntity> findProfDetails(Long prof_ID){
+//        return professorRepository.findById(prof_ID);
+//    }
+//
 
     // Dto
 //    public List<ProfessorDto> findAll() {

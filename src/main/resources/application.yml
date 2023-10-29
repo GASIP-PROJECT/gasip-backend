@@ -5,7 +5,7 @@ spring:
     #    DB ?? ??
     url: jdbc:mysql://127.0.0.1/GasipTest
     #    mysql ?? ??, password? ???.
-    username: TESTUSER
+    username: admin
     password: 1234
   thymeleaf:
     cache: false

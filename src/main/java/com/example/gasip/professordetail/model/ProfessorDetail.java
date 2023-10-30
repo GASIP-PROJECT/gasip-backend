@@ -1,6 +1,5 @@
 package com.example.gasip.professordetail.model;
 
-import com.example.gasip.professor.model.Professor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,7 +38,7 @@ public class ProfessorDetail {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Professor that)) return false;
+        if (!(o instanceof ProfessorDetail that)) return false;
         return profId != null && profId.equals(that.getProfId());
     }
 

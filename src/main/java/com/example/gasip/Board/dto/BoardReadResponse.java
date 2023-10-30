@@ -1,5 +1,6 @@
 package com.example.gasip.Board.dto;
 
+import com.example.gasip.Board.model.Board;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +35,15 @@ public class BoardReadResponse {
         this.profId = profId;
     }
 
-    //fromEntity메서드 개발
+    public BoardReadResponse fromEntity(Board board) {
+        return BoardReadResponse.builder()
+                .postId(board.getPostId())
+                .content(board.getContent())
+                .clickCount(board.getClickCount())
+                .likeCount(board.getLikeCount())
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
+                .profId(board.getProfId())
+                .build();
+    }
 }

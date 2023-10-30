@@ -1,5 +1,6 @@
 package com.example.gasip.Board.dto;
 
+import com.example.gasip.Board.model.Board;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,14 @@ public class BoardUpdateRequest {
     @NotNull
     private Long profId;
 
-    // toEntity메서드 개발
+    public Board toEntity(BoardUpdateRequest boardUpdateRequest) {
+        return Board.builder()
+                .content(boardUpdateRequest.getContent())
+                .clickCount(boardUpdateRequest.getClickCount())
+                .likeCount(boardUpdateRequest.getLikeCount())
+                .regDate(boardUpdateRequest.getRegDate())
+                .updateDate(boardUpdateRequest.getUpdateDate())
+                .profId(boardUpdateRequest.getProfId())
+                .build();
+    }
 }

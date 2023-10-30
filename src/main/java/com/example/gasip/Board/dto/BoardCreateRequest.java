@@ -2,15 +2,15 @@ package com.example.gasip.Board.dto;
 
 import com.example.gasip.Board.model.Board;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class BoardCreateRequest {
 
     @NotNull

@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
-public class Board {
+public class Board extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,6 @@ public class Board {
     @Column(nullable = true)
     private Long likeCount;
     @Column(nullable = false)
-    private LocalDateTime regDate;
-    @Column(nullable = false)
-    private LocalDateTime updateDate;
-    @Column(nullable = false)
     private Long profId;
 
     @Builder
@@ -37,8 +33,6 @@ public class Board {
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-        this.regDate = regDate;
-        this.updateDate = updateDate;
         this.profId = profId;
     }
 

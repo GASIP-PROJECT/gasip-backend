@@ -1,5 +1,6 @@
 package com.example.gasip.Board.dto;
 
+import com.example.gasip.Board.model.BaseTimeEntity;
 import com.example.gasip.Board.model.Board;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
@@ -11,18 +12,12 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardCreateRequest {
+public class BoardCreateRequest extends BaseTimeEntity {
 
     @NotNull
     private String content;
     private Long clickCount;
     private Long likeCount;
-//    @NotNull
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime regDate;
-//    @NotNull
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime updateDate;
     @NotNull
     private Long profId;
 
@@ -31,8 +26,6 @@ public class BoardCreateRequest {
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-        this.regDate = regDate;
-        this.updateDate = updateDate;
         this.profId = profId;
     }
     public Board toEntity() {
@@ -40,8 +33,6 @@ public class BoardCreateRequest {
                 .content(content)
                 .clickCount(clickCount)
                 .likeCount(likeCount)
-                .regDate(regDate)
-                .updateDate(updateDate)
                 .profId(profId)
                 .build();
     }

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfessorDetailService {
     private final ProfessorDetailRepository professorDetailRepository;
+
     public ProfessorDetailResponse findByProfId(Long profId) {
         ProfessorDetail detailProfessor = professorDetailRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
         return ProfessorDetailResponse.fromEntity(detailProfessor);
     }
-
+}

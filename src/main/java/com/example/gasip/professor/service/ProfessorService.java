@@ -6,6 +6,7 @@ import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,8 +17,13 @@ public class ProfessorService {
     /**
      * 교수 조회
      */
-    public List<Professor> findAll() {
-        return professorRepository.findAll();
+    public List<ProfessorResponse> findAll() {
+        List<Professor> professors = professorRepository.findAll();
+        List<ProfessorResponse> professorsList = new ArrayList<>();
+        for (Professor professor : professors) {
+            professorsList.add(ProfessorResponse.fromEntity(professor));
+        }
+        return professorsList;
     }
 
 

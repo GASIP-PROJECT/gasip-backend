@@ -2,6 +2,7 @@ package com.example.gasip.Board.model;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,8 +18,10 @@ import java.time.LocalDateTime;
 public class BaseTimeEntity {
 
     @CreatedDate // Entity 생성 시 시간 저장
+    @NotNull
     private LocalDateTime regDate;
 
     @LastModifiedDate // 조회한 Entity 값 변경 시 시간 저장
+    @NotNull
     private LocalDateTime updateDate;
 }

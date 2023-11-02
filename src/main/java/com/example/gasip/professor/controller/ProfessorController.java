@@ -1,7 +1,6 @@
 package com.example.gasip.professor.controller;
 
 import com.example.gasip.professor.dto.ProfessorResponse;
-import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.service.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class ProfessorController {
     private final ProfessorService professorService;
 
     @GetMapping("")
-    public ResponseEntity<List<Professor>> findAllProfessor() {
+    public ResponseEntity<List<ProfessorResponse>> findAllProfessor() {
         return ResponseEntity.ok(professorService.findAll());
     }
 

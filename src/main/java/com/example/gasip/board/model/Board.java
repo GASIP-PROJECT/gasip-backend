@@ -1,5 +1,6 @@
-package com.example.gasip.Board.model;
+package com.example.gasip.board.model;
 
+import com.example.gasip.professor.model.Professor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,19 +29,21 @@ public class Board {
     private LocalDateTime regDate;
     @Column(nullable = false)
     private LocalDateTime updateDate;
-    @Column(nullable = false)
-    private Long profId;
+    @ManyToOne
+    @JoinColumn(name = "Prof_ID")
+    private Professor professor;
 
     @Builder
-    public Board(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Long profId) {
+    public Board(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Professor professor) {
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
         this.regDate = regDate;
         this.updateDate = updateDate;
-        this.profId = profId;
+        this.professor = professor;
     }
+
 
     @Override
     public boolean equals(Object o) {

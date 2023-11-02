@@ -1,6 +1,7 @@
-package com.example.gasip.Board.dto;
+package com.example.gasip.board.dto;
 
-import com.example.gasip.Board.model.Board;
+import com.example.gasip.board.model.Board;
+import com.example.gasip.professor.model.Professor;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class BoardCreateRequest {
     @NotNull
     private LocalDateTime updateDate;
     @NotNull
-    private Long profId;
+    private Professor professor;
 
     public Board toEntity(BoardCreateRequest boardCreateRequest) {
         return Board.builder()
@@ -31,7 +32,7 @@ public class BoardCreateRequest {
                 .likeCount(boardCreateRequest.getLikeCount())
                 .regDate(boardCreateRequest.getRegDate())
                 .updateDate(boardCreateRequest.getUpdateDate())
-                .profId(boardCreateRequest.getProfId())
+                .professor(boardCreateRequest.getProfessor())
                 .build();
     }
 

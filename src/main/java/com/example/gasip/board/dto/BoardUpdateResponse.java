@@ -1,6 +1,7 @@
-package com.example.gasip.Board.dto;
+package com.example.gasip.board.dto;
 
-import com.example.gasip.Board.model.Board;
+import com.example.gasip.board.model.Board;
+import com.example.gasip.professor.model.Professor;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class BoardReadResponse {
+public class BoardUpdateResponse {
+
     @NotNull
     private Long postId;
     @NotNull
@@ -22,28 +24,28 @@ public class BoardReadResponse {
     @NotNull
     private LocalDateTime updateDate;
     @NotNull
-    private Long profId;
+    private Professor professor;
 
     @Builder
-    public BoardReadResponse(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Long profId) {
+    public BoardUpdateResponse(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Professor professor) {
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
         this.regDate = regDate;
         this.updateDate = updateDate;
-        this.profId = profId;
+        this.professor = professor;
     }
 
-    public BoardReadResponse fromEntity(Board board) {
-        return BoardReadResponse.builder()
+    public BoardUpdateResponse fromEntity(Board board) {
+        return BoardUpdateResponse.builder()
                 .postId(board.getPostId())
                 .content(board.getContent())
                 .clickCount(board.getClickCount())
                 .likeCount(board.getLikeCount())
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
-                .profId(board.getProfId())
+                .professor(board.getProfessor())
                 .build();
     }
 }

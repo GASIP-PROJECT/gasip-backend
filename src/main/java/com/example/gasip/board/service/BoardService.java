@@ -1,9 +1,9 @@
-package com.example.gasip.Board.service;
+package com.example.gasip.board.service;
 
-import com.example.gasip.Board.dto.BoardCreateRequest;
-import com.example.gasip.Board.dto.BoardCreateResponse;
-import com.example.gasip.Board.dto.BoardUpdateRequest;
-import com.example.gasip.Board.dto.BoardUpdateResponse;
+import com.example.gasip.board.dto.BoardCreateRequest;
+import com.example.gasip.board.dto.BoardCreateResponse;
+import com.example.gasip.board.dto.BoardUpdateRequest;
+import com.example.gasip.board.dto.BoardUpdateResponse;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

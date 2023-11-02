@@ -1,10 +1,10 @@
-package com.example.gasip.Board.controller;
+package com.example.gasip.board.controller;
 
-import com.example.gasip.Board.dto.BoardCreateRequest;
-import com.example.gasip.Board.dto.BoardCreateResponse;
-import com.example.gasip.Board.dto.BoardUpdateRequest;
-import com.example.gasip.Board.dto.BoardUpdateResponse;
-import com.example.gasip.Board.service.BoardService;
+import com.example.gasip.board.dto.BoardCreateRequest;
+import com.example.gasip.board.dto.BoardCreateResponse;
+import com.example.gasip.board.dto.BoardUpdateRequest;
+import com.example.gasip.board.dto.BoardUpdateResponse;
+import com.example.gasip.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

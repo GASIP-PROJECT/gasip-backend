@@ -14,4 +14,4 @@ public class ProfessorDetailService {
         ProfessorDetail detailProfessor = professorDetailRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
         return ProfessorDetailResponse.fromEntity(detailProfessor);
     }
-}
+

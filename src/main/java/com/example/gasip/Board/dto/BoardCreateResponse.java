@@ -37,17 +37,28 @@ public class BoardCreateResponse {
     }
 
     //fromEntity메서드 개발
-    public BoardCreateResponse fromEntity(Board board) {
+    public BoardCreateResponse fromEntity() {
         return BoardCreateResponse.builder()
-                .postId(board.getPostId())
-                .content(board.getContent())
-                .clickCount(board.getClickCount())
-                .likeCount(board.getLikeCount())
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .profId(board.getProfId())
+                .postId(postId)
+                .content(content)
+                .clickCount(clickCount)
+                .likeCount(likeCount)
+                .regDate(regDate)
+                .updateDate(updateDate)
+                .profId(profId)
                 .build();
     }
+//    public BoardCreateResponse fromEntity(Board board) {
+//        return BoardCreateResponse.builder()
+//                .postId(board.getPostId())
+//                .content(board.getContent())
+//                .clickCount(board.getClickCount())
+//                .likeCount(board.getLikeCount())
+//                .regDate(board.getRegDate())
+//                .updateDate(board.getUpdateDate())
+//                .profId(board.getProfId())
+//                .build();
+//    }
 
 
 }

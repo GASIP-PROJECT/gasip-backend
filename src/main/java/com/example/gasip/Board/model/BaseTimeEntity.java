@@ -1,5 +1,6 @@
 package com.example.gasip.Board.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
@@ -18,10 +19,10 @@ import java.time.LocalDateTime;
 public class BaseTimeEntity {
 
     @CreatedDate // Entity 생성 시 시간 저장
-    @NotNull
+    @Column
     private LocalDateTime regDate;
 
     @LastModifiedDate // 조회한 Entity 값 변경 시 시간 저장
-    @NotNull
+    @Column
     private LocalDateTime updateDate;
 }

@@ -17,10 +17,6 @@ public class BoardUpdateRequest {
     private Long clickCount;
     private Long likeCount;
     @NotNull
-    private LocalDateTime regDate;
-    @NotNull
-    private LocalDateTime updateDate;
-    @NotNull
     private Long profId;
 
     public Board toEntity(BoardUpdateRequest boardUpdateRequest) {
@@ -28,8 +24,6 @@ public class BoardUpdateRequest {
                 .content(boardUpdateRequest.getContent())
                 .clickCount(boardUpdateRequest.getClickCount())
                 .likeCount(boardUpdateRequest.getLikeCount())
-                .regDate(boardUpdateRequest.getRegDate())
-                .updateDate(boardUpdateRequest.getUpdateDate())
                 .profId(boardUpdateRequest.getProfId())
                 .build();
     }

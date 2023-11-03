@@ -22,29 +22,27 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Long profId;
 
     @Builder
-    public BoardCreateRequest(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Long profId) {
+    public BoardCreateRequest(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
         this.profId = profId;
     }
-    public Board toEntity() {
+
+    public Board toEntity(BoardCreateRequest boardCreateRequest) {
         return Board.builder()
-                .content(content)
-                .clickCount(clickCount)
-                .likeCount(likeCount)
-                .profId(profId)
+                .content(boardCreateRequest.getContent())
+                .clickCount(boardCreateRequest.getClickCount())
+                .likeCount(boardCreateRequest.getLikeCount())
+                .profId(boardCreateRequest.getProfId())
                 .build();
     }
-
-//    public Board toEntity(BoardCreateRequest boardCreateRequest) {
+//    public Board toEntity() {
 //        return Board.builder()
-//                .content(boardCreateRequest.getContent())
-//                .clickCount(boardCreateRequest.getClickCount())
-//                .likeCount(boardCreateRequest.getLikeCount())
-//                .regDate(boardCreateRequest.getRegDate())
-//                .updateDate(boardCreateRequest.getUpdateDate())
-//                .profId(boardCreateRequest.getProfId())
+//                .content(content)
+//                .clickCount(clickCount)
+//                .likeCount(likeCount)
+//                .profId(profId)
 //                .build();
 //    }
 

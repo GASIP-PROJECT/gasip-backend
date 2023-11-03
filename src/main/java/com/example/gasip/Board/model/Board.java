@@ -1,5 +1,6 @@
 package com.example.gasip.Board.model;
 
+import com.example.gasip.Board.dto.BoardCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class Board extends BaseTimeEntity{
     private Long profId;
 
     @Builder
-    public Board(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Long profId) {
+    public Board(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;

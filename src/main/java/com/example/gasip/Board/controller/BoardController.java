@@ -21,13 +21,14 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("")
-    public long createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
-
-        return boardService.createBoard(boardCreateRequest);
+    public ResponseEntity<BoardCreateResponse> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
+        return ResponseEntity.ok(boardService.createBoard(boardCreateRequest));
     }
+
 //    @PostMapping("")
-//    public ResponseEntity<BoardCreateResponse> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
-//        return ResponseEntity.ok(boardService.createBoard());
+//    public long createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
+//
+//        return boardService.createBoard(boardCreateRequest);
 //    }
 
     @GetMapping("")

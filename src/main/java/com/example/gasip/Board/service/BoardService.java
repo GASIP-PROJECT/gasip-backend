@@ -23,20 +23,16 @@ public class BoardService {
 
     // 게시글 post
     @Transactional
-    public long createBoard(BoardCreateRequest boardCreateRequest) {
-        return boardRepository.save(boardCreateRequest.toEntity()).getPostId();
+    public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest) {
+        Board board = boardRepository.save(boardCreateRequest.toEntity(boardCreateRequest));
+        return BoardCreateResponse.fromEntity(board);
     }
-//    @Transactional
-//    public BoardCreateRequest createBoard(BoardCreateRequest boardCreateRequest) {
-//        return boardRepository.save(boardCreateRequest.toEntity()).getPostId();
-//    }
+
     @Transactional(readOnly = true)
     public List<Board> findAllBoard() {
         return boardRepository.findAll();
     }
-//    public BoardCreateResponse findAllBoard() {
-//        return null;
-//    }
+
     @Transactional
     public BoardUpdateResponse editBoard(Long boardId, @Valid BoardUpdateRequest boardUpdateRequest) {
         return null;

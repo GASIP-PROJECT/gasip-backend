@@ -37,7 +37,7 @@ public class BoardReadResponse {
     }
 
 
-    public BoardReadResponse fromEntity(Board board) {
+    public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
                 .postId(board.getPostId())
                 .content(board.getContent())

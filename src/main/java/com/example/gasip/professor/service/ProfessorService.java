@@ -1,5 +1,6 @@
 package com.example.gasip.professor.service;
 
+import com.example.gasip.professor.dto.ProfessorDto;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
@@ -19,7 +20,6 @@ public class ProfessorService {
     public List<Professor> findAll() {
         return professorRepository.findAll();
     }
-
 
     /**
      * 특정 교수 불러오기

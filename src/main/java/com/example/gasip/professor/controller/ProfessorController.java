@@ -1,5 +1,6 @@
 package com.example.gasip.professor.controller;
 
+import com.example.gasip.professor.dto.ProfessorDto;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.service.ProfessorService;

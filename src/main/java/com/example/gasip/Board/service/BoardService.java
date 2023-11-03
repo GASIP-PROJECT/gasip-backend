@@ -35,9 +35,13 @@ public class BoardService {
         }
         return boardList;
     }
-//    public List<Board> findAllBoard() {
-//        return boardRepository.findAll();
-//    }
+
+    @Transactional
+    public BoardReadResponse findBoardId(Long postId) {
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(IllegalArgumentException::new);
+        return BoardReadResponse.fromEntity(board);
+    }
 
     @Transactional
     public BoardUpdateResponse editBoard(Long boardId, @Valid BoardUpdateRequest boardUpdateRequest) {

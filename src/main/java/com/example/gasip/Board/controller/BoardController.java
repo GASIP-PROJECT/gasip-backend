@@ -22,19 +22,15 @@ public class BoardController {
         return ResponseEntity.ok(boardService.createBoard(boardCreateRequest));
     }
 
-//    @PostMapping("")
-//    public long createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
-//
-//        return boardService.createBoard(boardCreateRequest);
-//    }
-
     @GetMapping("")
     public ResponseEntity<List<BoardReadResponse>> findAllBoard() {
         return ResponseEntity.ok(boardService.findAllBoard());
     }
-//    public ResponseEntity<BoardCreateResponse> findAllBoard() {
-//        return ResponseEntity.ok(boardService.findAllBoard());
-//    }
+
+    @GetMapping("{postId}")
+    public ResponseEntity<BoardReadResponse> findByBoardId(@PathVariable Long postId) {
+        return ResponseEntity.ok(boardService.findBoardId(postId));
+    }
 
     @PutMapping("{boardId}")
     public ResponseEntity<BoardUpdateResponse> editBoard(

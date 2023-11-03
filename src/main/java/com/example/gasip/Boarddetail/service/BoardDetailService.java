@@ -16,4 +16,5 @@ public class BoardDetailService {
         BoardDetail boardDetail = boardDetailRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardDetailResponse.fromEntity(boardDetail);
     }
+
 }

@@ -1,9 +1,6 @@
 package com.example.gasip.Board.service;
 
-import com.example.gasip.Board.dto.BoardCreateRequest;
-import com.example.gasip.Board.dto.BoardCreateResponse;
-import com.example.gasip.Board.dto.BoardUpdateRequest;
-import com.example.gasip.Board.dto.BoardUpdateResponse;
+import com.example.gasip.Board.dto.*;
 import com.example.gasip.Board.model.Board;
 import com.example.gasip.Board.repository.BoardRepository;
 import jakarta.validation.Valid;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -29,9 +27,17 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<Board> findAllBoard() {
-        return boardRepository.findAll();
+    public List<BoardReadResponse> findAllBoard() {
+        List<Board> boards = boardRepository.findAll();
+        List<BoardReadResponse> boardList = new ArrayList<>();
+        for (Board board : boards) {
+            boardList.add(BoardReadResponse.fromEntity(board));
+        }
+        return boardList;
     }
+//    public List<Board> findAllBoard() {
+//        return boardRepository.findAll();
+//    }
 
     @Transactional
     public BoardUpdateResponse editBoard(Long boardId, @Valid BoardUpdateRequest boardUpdateRequest) {

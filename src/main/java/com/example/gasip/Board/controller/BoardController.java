@@ -1,9 +1,6 @@
 package com.example.gasip.Board.controller;
 
-import com.example.gasip.Board.dto.BoardCreateRequest;
-import com.example.gasip.Board.dto.BoardCreateResponse;
-import com.example.gasip.Board.dto.BoardUpdateRequest;
-import com.example.gasip.Board.dto.BoardUpdateResponse;
+import com.example.gasip.Board.dto.*;
 import com.example.gasip.Board.model.Board;
 import com.example.gasip.Board.service.BoardService;
 import jakarta.validation.Valid;
@@ -32,8 +29,8 @@ public class BoardController {
 //    }
 
     @GetMapping("")
-    public List<Board> findAllBoard() {
-        return boardService.findAllBoard();
+    public ResponseEntity<List<BoardReadResponse>> findAllBoard() {
+        return ResponseEntity.ok(boardService.findAllBoard());
     }
 //    public ResponseEntity<BoardCreateResponse> findAllBoard() {
 //        return ResponseEntity.ok(boardService.findAllBoard());

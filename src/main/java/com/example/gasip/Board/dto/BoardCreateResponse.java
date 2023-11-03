@@ -35,15 +35,6 @@ public class BoardCreateResponse {
     }
 
     //fromEntity메서드 개발
-//    public static BoardCreateResponse fromEntity() {
-//        return BoardCreateResponse.builder()
-//                .postId(postId)
-//                .content(content)
-//                .clickCount(clickCount)
-//                .likeCount(likeCount)
-//                .profId(profId)
-//                .build();
-//    }
     public static BoardCreateResponse fromEntity(Board board) {
         return BoardCreateResponse.builder()
                 .postId(board.getPostId())
@@ -53,6 +44,16 @@ public class BoardCreateResponse {
                 .profId(board.getProfId())
                 .build();
     }
+
+//    public static BoardCreateResponse fromEntity() {
+//        return BoardCreateResponse.builder()
+//                .postId(postId)
+//                .content(content)
+//                .clickCount(clickCount)
+//                .likeCount(likeCount)
+//                .profId(profId)
+//                .build();
+//    }
 
 
 }

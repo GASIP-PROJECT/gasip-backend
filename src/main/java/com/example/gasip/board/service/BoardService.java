@@ -15,7 +15,6 @@ public class BoardService {
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
-
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest) {
         return null;
@@ -25,8 +24,10 @@ public class BoardService {
         return null;
     }
     @Transactional
-    public BoardUpdateResponse editBoard(Long boardId, @Valid BoardUpdateRequest boardUpdateRequest) {
-        return null;
+    public BoardUpdateResponse editBoard(Long boardId,  @Valid BoardUpdateRequest boardUpdateRequest) {
+        Board board = validateBoardEmpty(boardId);
+        board.updateBoard(boardUpdateRequest.getContent());
+        return BoardUpdateResponse.fromEntity(board);
     }
     @Transactional
     public String deleteBoard(Long boardId) {
@@ -35,13 +36,11 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
 
-    private BoardReadResponse validateBoardEmpty(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
+    private Board validateBoardEmpty(Long boardId) {
+        return boardRepository.findById(boardId).orElseThrow(
                 IllegalArgumentException::new
         );
-        BoardReadResponse boardReadResponse = BoardReadResponse.fromEntity(board);
-        return boardReadResponse;
-        }
     }
+}
 
 

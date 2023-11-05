@@ -1,5 +1,6 @@
 package com.example.gasip.professor.model;
 
+import com.example.gasip.major.model.Major;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,22 +18,17 @@ public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profId;
-
     @Column(nullable = false,length = 40)
     private String profName;
-
-    @Column(nullable = false)
-    private Long majorId;
-
-    @Column(nullable = false,length = 100)
-    private String majorName;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "major_ID")
+    private Major major;
 
     @Builder
-    public Professor(Long profId, String profName, Long majorId, String majorName) {
+    public Professor(Long profId, String profName,Major major) {
         this.profId = profId;
         this.profName = profName;
-        this.majorId = majorId;
-        this.majorName = majorName;
+        this.major = major;
     }
 
     @Override

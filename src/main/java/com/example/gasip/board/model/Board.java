@@ -43,7 +43,10 @@ public class Board {
         this.updateDate = updateDate;
         this.professor = professor;
     }
-
+    public void updateBoard(String content) {
+        this.content = content;
+        this.updateDate = LocalDateTime.now();
+    }
 
     @Override
     public boolean equals(Object o) {

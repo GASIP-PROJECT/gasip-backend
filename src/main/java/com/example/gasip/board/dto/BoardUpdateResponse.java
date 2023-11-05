@@ -37,7 +37,7 @@ public class BoardUpdateResponse {
         this.professor = professor;
     }
 
-    public BoardUpdateResponse fromEntity(Board board) {
+    public static BoardUpdateResponse fromEntity(Board board) {
         return BoardUpdateResponse.builder()
                 .postId(board.getPostId())
                 .content(board.getContent())

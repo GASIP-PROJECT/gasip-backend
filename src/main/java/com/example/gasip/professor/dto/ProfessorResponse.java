@@ -16,8 +16,8 @@ public class ProfessorResponse {
     public static ProfessorResponse fromEntity(Professor professor) {
         return ProfessorResponse.builder()
                 .profId(professor.getProfId())
-                .majorId(professor.getMajorId())
-                .majorName(professor.getMajorName())
+                .majorId(professor.getMajor().getMajorId())
+                .majorName(professor.getMajor().getMajorName())
                 .profName(professor.getProfName())
                 .build();
     }

@@ -20,8 +20,8 @@ public class ProfessorDto {
 
         ProfessorDto professorDto = new ProfessorDto();
         professorDto.setProfId(professorEntity.getProfId());
-        professorDto.setMajorId(professorEntity.getMajorId());
-        professorDto.setMajorName(professorEntity.getMajorName());
+        professorDto.setMajorId(professorEntity.getMajor().getMajorId());
+        professorDto.setMajorName(professorEntity.getMajor().getMajorName());
         professorDto.setProfName(professorEntity.getProfName());
 
         return professorDto;

@@ -1,17 +1,19 @@
 package com.example.gasip.board.dto;
 
+import com.example.common.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.professor.model.Professor;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class BoardReadResponse {
+@SuperBuilder
+public class BoardReadResponse extends BaseTimeEntity {
     @NotNull
     private Long postId;
     @NotNull
@@ -19,33 +21,25 @@ public class BoardReadResponse {
     private Long clickCount;
     private Long likeCount;
     @NotNull
-    private LocalDateTime regDate;
-    @NotNull
-    private LocalDateTime updateDate;
-    @NotNull
     private Professor professor;
 
-    @Builder
-    public BoardReadResponse(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Professor professor) {
+    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+        super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-        this.regDate = regDate;
-        this.updateDate = updateDate;
-        this.professor = professor;
+//        this.professor = professor;
     }
-
-
     public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
                 .postId(board.getPostId())
                 .content(board.getContent())
                 .clickCount(board.getClickCount())
                 .likeCount(board.getLikeCount())
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .professor(board.getProfessor())
+//                .professor(board.getProfessor())
                 .build();
     }
 }

@@ -1,14 +1,13 @@
 package com.example.gasip.board.controller;
 
-import com.example.gasip.board.dto.BoardCreateRequest;
-import com.example.gasip.board.dto.BoardCreateResponse;
-import com.example.gasip.board.dto.BoardUpdateRequest;
-import com.example.gasip.board.dto.BoardUpdateResponse;
+import com.example.gasip.board.dto.*;
 import com.example.gasip.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/boards")
@@ -21,8 +20,13 @@ public class BoardController {
     }
 
     @GetMapping("")
-    public ResponseEntity<BoardCreateResponse> findAllBoard() {
+    public ResponseEntity<List<BoardReadResponse>> findAllBoard() {
         return ResponseEntity.ok(boardService.findAllBoard());
+    }
+
+    @GetMapping("{postId}")
+    public ResponseEntity<BoardReadResponse> findByBoardId(@PathVariable Long postId) {
+        return ResponseEntity.ok(boardService.findBoardId(postId));
     }
 
     @PutMapping("/{boardId}")

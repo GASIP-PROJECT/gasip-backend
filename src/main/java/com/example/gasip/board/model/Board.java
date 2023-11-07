@@ -1,11 +1,12 @@
 package com.example.gasip.board.model;
 
+import com.example.common.BaseTimeEntity;
 import com.example.gasip.professor.model.Professor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,7 +15,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
-public class Board {
+@SuperBuilder
+public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,27 +27,21 @@ public class Board {
     private Long clickCount;
     @Column(nullable = true)
     private Long likeCount;
-    @Column(nullable = false)
-    private LocalDateTime regDate;
-    @Column(nullable = false)
-    private LocalDateTime updateDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Prof_ID")
     private Professor professor;
 
-    @Builder
-    public Board(Long postId, String content, Long clickCount, Long likeCount, LocalDateTime regDate, LocalDateTime updateDate, Professor professor) {
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+        super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-        this.regDate = regDate;
-        this.updateDate = updateDate;
         this.professor = professor;
     }
     public void updateBoard(String content) {
         this.content = content;
-        this.updateDate = LocalDateTime.now();
+//        this.updateDate = LocalDateTime.now();
     }
 
     @Override

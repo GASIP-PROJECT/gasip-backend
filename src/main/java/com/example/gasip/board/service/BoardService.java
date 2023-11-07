@@ -4,24 +4,40 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import jakarta.validation.Valid;
-import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public BoardService(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest) {
-        return null;
+        Board board = boardRepository.save(boardCreateRequest.toEntity(boardCreateRequest));
+        return BoardCreateResponse.fromEntity(board);
     }
+
     @Transactional(readOnly = true)
-    public BoardCreateResponse findAllBoard() {
-        return null;
+    public List<BoardReadResponse> findAllBoard() {
+        List<Board> boards = boardRepository.findAll();
+        List<BoardReadResponse> boardList = new ArrayList<>();
+        for (Board board : boards) {
+            boardList.add(BoardReadResponse.fromEntity(board));
+        }
+        return boardList;
+    }
+
+    @Transactional
+    public BoardReadResponse findBoardId(Long postId) {
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(IllegalArgumentException::new);
+        return BoardReadResponse.fromEntity(board);
     }
     @Transactional
     public BoardUpdateResponse editBoard(Long boardId,  @Valid BoardUpdateRequest boardUpdateRequest) {

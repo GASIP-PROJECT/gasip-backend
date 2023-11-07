@@ -25,14 +25,14 @@ public class BoardController {
         return ResponseEntity.ok(boardService.findAllBoard());
     }
 
-    @PutMapping("{boardId}")
+    @PutMapping("/{boardId}")
     public ResponseEntity<BoardUpdateResponse> editBoard(
             @PathVariable Long boardId,
             @RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return ResponseEntity.ok(boardService.editBoard(boardId,boardUpdateRequest));
     }
 
-    @DeleteMapping("{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.deleteBoard(boardId));
 

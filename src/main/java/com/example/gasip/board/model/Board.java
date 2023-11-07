@@ -29,7 +29,7 @@ public class Board {
     private LocalDateTime regDate;
     @Column(nullable = false)
     private LocalDateTime updateDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Prof_ID")
     private Professor professor;
 

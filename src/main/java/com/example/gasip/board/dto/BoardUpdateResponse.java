@@ -45,7 +45,6 @@ public class BoardUpdateResponse {
                 .likeCount(board.getLikeCount())
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
-                .professor(board.getProfessor())
                 .build();
     }
 }

@@ -26,6 +26,9 @@ public class BoardController {
     public ResponseEntity<List<BoardReadResponse>> findAllBoard() {
         return ResponseEntity.ok(boardService.findAllBoard());
     }
+//    public List<Board> findAllBoard() {
+//        return boardService.findAllBoard();
+//    }
 
     @GetMapping("{postId}")
     public ResponseEntity<BoardReadResponse> findByBoardId(@PathVariable Long postId) {

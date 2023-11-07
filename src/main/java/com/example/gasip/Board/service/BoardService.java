@@ -35,6 +35,9 @@ public class BoardService {
         }
         return boardList;
     }
+//    public List<Board> findAllBoard() {
+//        return boardRepository.findAll();
+//    }
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId) {

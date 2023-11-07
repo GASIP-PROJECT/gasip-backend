@@ -1,10 +1,15 @@
-package com.example.gasip.Board.model;
+package com.example.gasip.Board.basetime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,13 +21,21 @@ import java.time.LocalDateTime;
 @MappedSuperclass // JPA Entity 클래스가 BaseTimeEntity를 상속할 경우 필드를 Column으로 인식하게 함
 @EntityListeners(AuditingEntityListener.class) // 해당 클래스에 Auditing 기능을 포함시킴
                                                // JPA에서 시간에 대한 값을 자동으로 넣어줌
+@SuperBuilder
+@NoArgsConstructor
 public class BaseTimeEntity {
 
     @CreatedDate // Entity 생성 시 시간 저장
-    @Column
+    @Column(updatable = false)
     private LocalDateTime regDate;
 
     @LastModifiedDate // 조회한 Entity 값 변경 시 시간 저장
-    @Column
+    @Column(updatable = false)
     private LocalDateTime updateDate;
+
+//    @Builder
+    public BaseTimeEntity(LocalDateTime regDate, LocalDateTime updateDate) {
+        this.regDate = regDate;
+        this.updateDate = updateDate;
+    }
 }

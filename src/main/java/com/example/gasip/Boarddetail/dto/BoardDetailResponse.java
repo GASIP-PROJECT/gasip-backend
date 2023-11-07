@@ -1,14 +1,15 @@
 package com.example.gasip.Boarddetail.dto;
 
+import com.example.gasip.Board.basetime.BaseTimeEntity;
 import com.example.gasip.Boarddetail.model.BoardDetail;
-import com.example.gasip.professordetail.dto.ProfessorDetailResponse;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
-public class BoardDetailResponse {
+//@Builder
+@SuperBuilder
+public class BoardDetailResponse extends BaseTimeEntity {
     private Long postId;
     private String content;
     private Long clickCount;
@@ -17,6 +18,8 @@ public class BoardDetailResponse {
 
     public static BoardDetailResponse fromEntity(BoardDetail boardDetail) {
         return BoardDetailResponse.builder()
+                .regDate(boardDetail.getRegDate())
+                .updateDate(boardDetail.getUpdateDate())
                 .postId(boardDetail.getPostId())
                 .content(boardDetail.getContent())
                 .clickCount(boardDetail.getClickCount())

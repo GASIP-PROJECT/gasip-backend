@@ -1,16 +1,20 @@
 package com.example.gasip.Board.dto;
 
+import com.example.gasip.Board.basetime.BaseTimeEntity;
 import com.example.gasip.Board.model.Board;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class BoardCreateResponse {
+@SuperBuilder
+public class BoardCreateResponse extends BaseTimeEntity{
 
     @NotNull
     private Long postId;
@@ -19,14 +23,11 @@ public class BoardCreateResponse {
     private Long clickCount;
     private Long likeCount;
     @NotNull
-    private LocalDateTime regDate;
-    @NotNull
-    private LocalDateTime updateDate;
-    @NotNull
     private Long profId;
 
-    @Builder
-    public BoardCreateResponse(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
+//    @Builder
+    public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId) {
+        super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
@@ -37,6 +38,8 @@ public class BoardCreateResponse {
     //fromEntity메서드 개발
     public static BoardCreateResponse fromEntity(Board board) {
         return BoardCreateResponse.builder()
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
                 .postId(board.getPostId())
                 .content(board.getContent())
                 .clickCount(board.getClickCount())

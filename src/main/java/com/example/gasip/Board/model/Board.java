@@ -1,20 +1,20 @@
 package com.example.gasip.Board.model;
 
-import com.example.gasip.Board.dto.BoardCreateRequest;
+import com.example.gasip.Board.basetime.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
-public class Board extends BaseTimeEntity{
+@SuperBuilder
+public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +28,9 @@ public class Board extends BaseTimeEntity{
     @Column(nullable = false)
     private Long profId;
 
-    @Builder
-    public Board(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
+//    @Builder
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId) {
+        super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;

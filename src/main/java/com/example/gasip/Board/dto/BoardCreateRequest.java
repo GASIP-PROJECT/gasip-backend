@@ -1,13 +1,9 @@
 package com.example.gasip.Board.dto;
 
-import com.example.gasip.Board.model.BaseTimeEntity;
+import com.example.gasip.Board.basetime.BaseTimeEntity;
 import com.example.gasip.Board.model.Board;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -21,7 +17,7 @@ public class BoardCreateRequest extends BaseTimeEntity {
     @NotNull
     private Long profId;
 
-    @Builder
+//    @Builder
     public BoardCreateRequest(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         this.content = content;
         this.clickCount = clickCount;

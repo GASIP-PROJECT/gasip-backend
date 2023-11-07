@@ -17,7 +17,6 @@ public class BoardCreateRequest extends BaseTimeEntity {
     @NotNull
     private Long profId;
 
-//    @Builder
     public BoardCreateRequest(Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         this.content = content;
         this.clickCount = clickCount;

@@ -25,7 +25,6 @@ public class BoardCreateResponse extends BaseTimeEntity{
     @NotNull
     private Long profId;
 
-//    @Builder
     public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         super(regDate, updateDate);
         this.postId = postId;

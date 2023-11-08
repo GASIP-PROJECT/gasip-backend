@@ -1,4 +1,5 @@
-package com.example.gasip.board.model;
+package com.example.gasip.Boarddetail.model;
+
 
 import com.example.gasip.common.BaseTimeEntity;
 import com.example.gasip.professor.model.Professor;
@@ -16,22 +17,23 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
 @SuperBuilder
-public class Board extends BaseTimeEntity {
+public class BoardDetail extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-    @Column(nullable = false,length = 500)
+    @Column(nullable = false, length = 500)
     private String content;
     @Column(nullable = true)
     private Long clickCount;
     @Column(nullable = true)
     private Long likeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Prof_ID")
+    @JoinColumn(name = "prof_ID")
     private Professor professor;
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+    public BoardDetail(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -39,15 +41,11 @@ public class Board extends BaseTimeEntity {
         this.likeCount = likeCount;
         this.professor = professor;
     }
-    public void updateBoard(String content) {
-        this.content = content;
-//        this.updateDate = LocalDateTime.now();
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Board that)) return false;
+        if (!(o instanceof BoardDetail that)) return false;
         return postId != null && postId.equals(that.getPostId());
     }
 
@@ -55,4 +53,5 @@ public class Board extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hash(postId);
     }
+
 }

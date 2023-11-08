@@ -1,6 +1,6 @@
 package com.example.gasip.board.dto;
 
-import com.example.common.BaseTimeEntity;
+import com.example.gasip.common.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.professor.model.Professor;
 import jakarta.validation.constraints.NotNull;

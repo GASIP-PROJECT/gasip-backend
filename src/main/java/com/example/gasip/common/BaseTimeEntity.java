@@ -18,18 +18,19 @@ import java.time.LocalDateTime;
 // JPA에서 시간에 대한 값을 자동으로 넣어줌
 @SuperBuilder
 @NoArgsConstructor
-public class BaseTimeEntity {
+public abstract class BaseTimeEntity {
 
     @CreatedDate // Entity 생성 시 시간 저장
-    @Column(updatable = false)
+    @Column(updatable = false, name = "reg_date")
     private LocalDateTime regDate;
 
     @LastModifiedDate // 조회한 Entity 값 변경 시 시간 저장
-    @Column(updatable = false)
-    private LocalDateTime updateDate;
+    @Column(name = "update_date")
+    protected LocalDateTime updateDate;
 
     public BaseTimeEntity(LocalDateTime regDate, LocalDateTime updateDate) {
         this.regDate = regDate;
         this.updateDate = updateDate;
     }
+
 }

@@ -41,7 +41,7 @@ public class Board extends BaseTimeEntity {
     }
     public void updateBoard(String content) {
         this.content = content;
-//        this.updateDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
     @Override

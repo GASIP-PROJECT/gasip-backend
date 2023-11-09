@@ -1,8 +1,7 @@
 package com.example.gasip.board.dto;
 
-import com.example.gasip.common.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
-import com.example.gasip.professor.model.Professor;
+import com.example.gasip.common.BaseTimeEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,18 +14,14 @@ public class BoardCreateRequest extends BaseTimeEntity {
 
     @NotNull
     private String content;
-    private Long clickCount;
-    private Long likeCount;
-//    @NotNull
-    private Professor professor;
+    private Long clickCount = 0L;
+    private Long likeCount = 0L;
 
-
-    public Board toEntity(BoardCreateRequest boardCreateRequest) {
+    public Board toEntity() {
         return Board.builder()
-                .content(boardCreateRequest.getContent())
-                .clickCount(boardCreateRequest.getClickCount())
-                .likeCount(boardCreateRequest.getLikeCount())
-                .professor(boardCreateRequest.getProfessor())
+                .content(content)
+                .clickCount(clickCount)
+                .likeCount(likeCount)
                 .build();
     }
 

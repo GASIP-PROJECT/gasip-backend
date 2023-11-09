@@ -14,9 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    @PostMapping("")
-    public ResponseEntity<BoardCreateResponse> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
-        return ResponseEntity.ok(boardService.createBoard(boardCreateRequest));
+    @PostMapping("/create/{profId}")
+    public ResponseEntity<BoardCreateResponse> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest,@PathVariable Long profId) {
+        return ResponseEntity.ok(boardService.createBoard(boardCreateRequest,profId));
     }
 
     @GetMapping("")

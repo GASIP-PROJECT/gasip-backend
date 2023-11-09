@@ -44,6 +44,10 @@ public class Board extends BaseTimeEntity {
         this.updateDate = LocalDateTime.now();
     }
 
+    public void addProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

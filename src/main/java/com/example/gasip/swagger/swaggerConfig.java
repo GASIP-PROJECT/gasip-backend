@@ -14,12 +14,68 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class swaggerConfig {
+
+    /**
+     * 전체 API
+     */
+    @Bean
+    public GroupedOpenApi gasipOpenApi() {
+        String[] paths = {"/**"};
+
+        return GroupedOpenApi.builder()
+                .group("Gasip 서비스 V1")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    /**
+     * 교수 정보 그룹
+     */
     @Bean
     public GroupedOpenApi professorOpenApi() {
         String[] paths = {"/all-professors/**"};
 
         return GroupedOpenApi.builder()
                 .group("professors")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    /**
+     * 교수 상세정보 그룹
+     */
+    @Bean
+    public GroupedOpenApi professorDetailsOpenApi() {
+        String[] paths = {"/professors/**"};
+
+        return GroupedOpenApi.builder()
+                .group("professorDetails")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    /**
+     * 게시글 CRUD 그룹
+     */
+    @Bean
+    public GroupedOpenApi boardOpenApi() {
+        String[] paths = {"/boards/**"};
+
+        return GroupedOpenApi.builder()
+                .group("boards")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    /**
+     * 게시글 상세정보 그룹
+     */
+    @Bean
+    public GroupedOpenApi boardDetailsOpenApi() {
+        String[] paths = {"/details/**"};
+
+        return GroupedOpenApi.builder()
+                .group("boardDetails")
                 .pathsToMatch(paths)
                 .build();
     }

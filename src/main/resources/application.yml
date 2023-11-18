@@ -22,15 +22,15 @@ spring:
       max-file-size: 50MB
       max-request-size: 200MB
 
-  springdoc:
-    swagger-ui:
-      path: /swagger-ui.html
-      groups-order: DESC
-      operationsSorter: method
-      disable-swagger-default-url: true
-      display-request-duration: true
-    api-docs:
-      path: /api-docs
-    show-actuator: true
-    default-consumes-media-type: application/json
-    default-produces-media-type: application/json
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

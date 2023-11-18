@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/testDB
-    username: TESTUSER
+    url: jdbc:mysql://127.0.0.1/GasipTest
+    username: admin
     password: 1234
   thymeleaf:
     cache: false
@@ -21,3 +21,16 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 200MB
+
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+      groups-order: DESC
+      operationsSorter: method
+      disable-swagger-default-url: true
+      display-request-duration: true
+    api-docs:
+      path: /api-docs
+    show-actuator: true
+    default-consumes-media-type: application/json
+    default-produces-media-type: application/json

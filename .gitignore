@@ -7,7 +7,7 @@ build/
 
 ### setiing files
 .DS_Store
-src/main/resources/application.yml
+main/resources/application.yml
 gradlew
 gradlew.bat
 gradle/

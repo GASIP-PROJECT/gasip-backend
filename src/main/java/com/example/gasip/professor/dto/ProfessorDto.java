@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Schema(description = "교수 관련 VO")
+@Schema(description = "교수 DTO 관련 VO")
 public class ProfessorDto {
 
     @Schema(description = "교수 ID")

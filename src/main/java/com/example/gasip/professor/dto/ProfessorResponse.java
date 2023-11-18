@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@Schema(description = "교수 관련 VO")
+@Schema(description = "교수 DTO Response 관련 VO")
 public class ProfessorResponse {
 
     @Schema(description = "교수 ID")

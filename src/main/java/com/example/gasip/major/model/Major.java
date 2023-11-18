@@ -21,7 +21,7 @@ public class Major extends BaseTimeEntity {
     @Column(nullable = false, name = "name")
     @Schema(description = "전공 이름")
     private String majorName;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "college_ID")
     @Schema(description = "전공 단과대")
     private College college;

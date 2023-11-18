@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/GasipTest
-    username: admin
-    password: 1234
+    url: jdbc:mysql://gasip.c9mdfujtzgii.ap-northeast-2.rds.amazonaws.com/gasip
+    username: developer
+    password: gasipapp1118!
   thymeleaf:
     cache: false
 

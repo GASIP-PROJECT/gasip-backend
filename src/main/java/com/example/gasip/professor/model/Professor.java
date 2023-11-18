@@ -24,7 +24,7 @@ public class Professor {
     @Column(nullable = false,length = 40)
     @Schema(description = "교수 이름")
     private String profName;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "major_ID")
     @Schema(description = "교수 전공")
     private Major major;

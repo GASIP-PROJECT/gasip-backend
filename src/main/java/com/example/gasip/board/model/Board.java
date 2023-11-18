@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,6 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
 @SuperBuilder
+@DynamicInsert
 public class Board extends BaseTimeEntity {
 
     @Id
@@ -23,12 +26,14 @@ public class Board extends BaseTimeEntity {
     private Long postId;
     @Column(nullable = false,length = 500)
     private String content;
-    @Column(nullable = true)
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Long clickCount;
-    @Column(nullable = true)
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Long likeCount;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Prof_ID")
+    @JoinColumn(name = "Prof_id")
     private Professor professor;
 
     public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {

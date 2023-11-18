@@ -23,7 +23,7 @@ public class ProfessorDetail {
     private String profName;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "major_ID")
+    @JoinColumn(name = "major_id")
     private Major major;
 
     @Builder

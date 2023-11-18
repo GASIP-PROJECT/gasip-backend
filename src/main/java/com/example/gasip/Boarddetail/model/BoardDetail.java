@@ -30,7 +30,7 @@ public class BoardDetail extends BaseTimeEntity {
     private Long likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prof_ID")
+    @JoinColumn(name = "prof_id")
     private Professor professor;
 
     public BoardDetail(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {

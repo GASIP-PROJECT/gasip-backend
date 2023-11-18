@@ -20,8 +20,8 @@ public class Professor {
     private Long profId;
     @Column(nullable = false,length = 40)
     private String profName;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "major_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "major_id")
     private Major major;
 
     @Builder

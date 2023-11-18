@@ -19,7 +19,9 @@ public class BoardCreateResponse extends BaseTimeEntity {
     private Long postId;
     @NotNull
     private String content;
+    @NotNull
     private Long clickCount;
+    @NotNull
     private Long likeCount;
     @NotNull
     private Professor professor;

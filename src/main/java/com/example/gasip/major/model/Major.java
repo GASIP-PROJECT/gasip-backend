@@ -17,8 +17,7 @@ public class Major extends BaseTimeEntity {
     private Long majorId;
     @Column(nullable = false, name = "name")
     private String majorName;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "college_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "college_id")
     private College college;
-
 }

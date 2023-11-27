@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,6 +20,7 @@ import java.util.Objects;
 @Table(name = "board")
 @SuperBuilder
 @Schema(description = "게시글 관련된 VO")
+@DynamicInsert
 public class Board extends BaseTimeEntity {
 
     @Id
@@ -27,11 +30,13 @@ public class Board extends BaseTimeEntity {
     @Column(nullable = false,length = 500)
     @Schema(description = "게시글 내용")
     private String content;
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Schema(description = "게시글 조회수")
+    @ColumnDefault("0")
     private Long clickCount;
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Schema(description = "게시글 좋아요")
+    @ColumnDefault("0")
     private Long likeCount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Prof_ID")

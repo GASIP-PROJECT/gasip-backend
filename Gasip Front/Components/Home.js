@@ -114,7 +114,7 @@ function Home({navigation}) {
                         paddingBottom: SCREEN_HEIGHT/3,
                     }}
                     data={feedData}
-                    keyExtractor={(_) => _.postID}
+                    keyExtractor={(_) => _.postId}
                     renderItem={renderFeed}
              
                 />

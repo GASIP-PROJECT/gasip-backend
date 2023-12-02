@@ -47,4 +47,12 @@ async function writeBoard({content, profId}){
     const data = await res.json();
     return data;
 }
-export {fetchUsers, fetchColleges, fetchMajors, fetchProf, fetchBoards, writeBoard};
+
+async function deleteBoard({boardId}){
+    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/boards/"+boardId, {
+                method: "DELETE",
+            });
+    const data = await res.json();
+    return data;
+}
+export {fetchUsers, fetchColleges, fetchMajors, fetchProf, fetchBoards, writeBoard, deleteBoard};

@@ -1,6 +1,6 @@
 package com.example.gasip.board.model;
 
-import com.example.gasip.common.BaseTimeEntity;
+import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;

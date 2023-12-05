@@ -1,4 +1,4 @@
-package com.example.gasip.common;
+package com.example.gasip.global.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

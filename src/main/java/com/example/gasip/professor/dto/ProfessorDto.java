@@ -10,7 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Schema(description = "교수 DTO 관련 VO")
-public class ProfessorDto {
+public class
+ProfessorDto {
 
     @Schema(description = "교수 ID")
     private Long profId;

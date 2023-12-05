@@ -1,4 +1,4 @@
-package com.example.gasip.swagger;
+package com.example.gasip.global.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

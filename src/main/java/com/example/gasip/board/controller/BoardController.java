@@ -2,10 +2,12 @@ package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.service.BoardService;
+import com.example.gasip.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,10 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    @PostMapping("")
+    @PostMapping("{profId}")
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<BoardCreateResponse> createBoard(@RequestBody @Valid BoardCreateRequest boardCreateRequest) {
-        return ResponseEntity.ok(boardService.createBoard(boardCreateRequest));
+    public ResponseEntity<BoardCreateResponse> createBoard(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        @RequestBody @Valid BoardCreateRequest boardCreateRequest,
+        @PathVariable Long profId) {
+        return ResponseEntity.ok(boardService.createBoard(boardCreateRequest,memberDetails,profId));
     }
 
     @GetMapping("")

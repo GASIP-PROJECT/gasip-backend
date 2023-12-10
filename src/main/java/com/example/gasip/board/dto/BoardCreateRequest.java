@@ -2,6 +2,7 @@ package com.example.gasip.board.dto;
 
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -22,17 +23,19 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Long clickCount;
     @Schema(description = "게시글 좋아요")
     private Long likeCount;
-//    @NotNull
-@Schema(description = "게시글과 관련된 교수 정보")
+    @Schema(description = "게시글과 관련된 교수 정보")
     private Professor professor;
+    @Schema(description = "게시글 작성한 사용자")
+    private Member member;
 
 
-    public Board toEntity(BoardCreateRequest boardCreateRequest) {
+    public Board toEntity(Professor prof, Member mem) {
         return Board.builder()
-                .content(boardCreateRequest.getContent())
-                .clickCount(boardCreateRequest.getClickCount())
-                .likeCount(boardCreateRequest.getLikeCount())
-                .professor(boardCreateRequest.getProfessor())
+                .content(content)
+                .clickCount(clickCount)
+                .likeCount(likeCount)
+                .professor(prof)
+                .member(mem)
                 .build();
     }
 

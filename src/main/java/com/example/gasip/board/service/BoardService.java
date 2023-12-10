@@ -3,6 +3,11 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.member.model.Member;
+import com.example.gasip.member.repository.MemberRepository;
+import com.example.gasip.professor.model.Professor;
+import com.example.gasip.professor.repository.ProfessorRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +21,14 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
+    private final ProfessorRepository professorRepository;
 
     @Transactional
-    public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest) {
-        Board board = boardRepository.save(boardCreateRequest.toEntity(boardCreateRequest));
+    public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
+        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
+        Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
 

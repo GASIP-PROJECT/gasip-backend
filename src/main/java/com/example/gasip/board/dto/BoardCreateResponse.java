@@ -28,15 +28,15 @@ public class BoardCreateResponse extends BaseTimeEntity {
     private Long likeCount;
     @NotNull
     @Schema(description = "게시글과 관련된 교수 정보")
-    private Professor professor;
+    private Long profId;
 
-    public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+    public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Professor professor) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
-        this.clickCount = clickCount;
-        this.likeCount = likeCount;
-        this.professor = professor;
+        this.clickCount = 0L;
+        this.likeCount = 0L;
+        this.profId = professor.getProfId();
     }
 
     //fromEntity메서드 개발
@@ -46,9 +46,9 @@ public class BoardCreateResponse extends BaseTimeEntity {
                 .updateDate(board.getUpdateDate())
                 .postId(board.getPostId())
                 .content(board.getContent())
-                .clickCount(board.getClickCount())
-                .likeCount(board.getLikeCount())
-                .professor(board.getProfessor())
+                .clickCount(0L)
+                .likeCount(0L)
+                .profId(board.getProfessor().getProfId())
                 .build();
     }
 

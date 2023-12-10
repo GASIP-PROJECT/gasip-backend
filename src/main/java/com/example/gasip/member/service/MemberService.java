@@ -48,18 +48,18 @@ public class MemberService {
 
     @Transactional
     public MemberMyPageResponse getMyPage(Long id) {
-        Member nowMember = memberRepository.findById(id).orElseThrow(
+        Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
         );
-        return MemberMyPageResponse.fromEntity(nowMember);
+        return MemberMyPageResponse.fromEntity(member);
     }
 
     @Transactional
     public MemberMyBoardResponse getBoards(Long id) {
-        Member nowMember = memberRepository.findById(id).orElseThrow(
+        Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
         );
-        List<ArrayList<?>> boards = boardRepository.findContentsByMemberIdOrderByPostIdDesc(nowMember.getMemberId());
+        List<ArrayList<?>> boards = boardRepository.findContentsByMemberIdOrderByPostIdDesc(member.getMemberId());
         return MemberMyBoardResponse.fromEntity(boards);
     }
 

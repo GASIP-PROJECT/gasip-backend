@@ -1,6 +1,7 @@
 package com.example.gasip.board.model;
 
 import com.example.gasip.global.entity.BaseTimeEntity;
+import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -43,13 +44,18 @@ public class Board extends BaseTimeEntity {
     @Schema(description = "게시글과 관련된 교수정보")
     private Professor professor;
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
         this.professor = professor;
+        this.member = member;
     }
     public void updateBoard(String content) {
         this.content = content;

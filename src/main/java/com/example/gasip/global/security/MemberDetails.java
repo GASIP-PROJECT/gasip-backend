@@ -19,7 +19,7 @@ public class MemberDetails implements UserDetails {
 
     public static MemberDetails create(Member member) {
         return MemberDetails.builder()
-            .id(member.getId())
+            .id(member.getMemberId())
             .email(member.getEmail())
             .password(member.getPassword())
             .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole().name())))

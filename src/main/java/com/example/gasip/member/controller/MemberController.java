@@ -1,14 +1,13 @@
 package com.example.gasip.member.controller;
 
+import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.dto.*;
 import com.example.gasip.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/members")
@@ -27,9 +26,14 @@ public class MemberController {
         return ResponseEntity.ok(memberService.login(memberLogInRequest));
     }
 
-    @PostMapping("/mypage")
-    public ResponseEntity<MemberMyPageResponse> getMyPage(@RequestBody @Valid MemberMyPageRequest memberMyPageRequest) {
-        return ResponseEntity.ok(memberService.getMyPage(memberMyPageRequest));
+    @GetMapping("/mypage")
+    public ResponseEntity<MemberMyPageResponse> getMyPage(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity.ok(memberService.getMyPage(memberDetails.getId()));
+    }
+
+    @GetMapping("/myboards")
+    public ResponseEntity<MemberMyBoardResponse> getMyBoards(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity.ok(memberService.getBoards(memberDetails.getId()));
     }
 
 }

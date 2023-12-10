@@ -1,5 +1,6 @@
 package com.example.gasip.member.service;
 
+import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.dto.*;
@@ -13,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -20,6 +24,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationProvider authenticationProvider;
     private final JwtService jwtService;
+    private final BoardRepository boardRepository;
+
     @Transactional
     public MemberSignUpResponse signup(MemberSignUpRequest memberSignUpRequest) {
         validateEmailDuplicated(memberSignUpRequest);
@@ -36,13 +42,25 @@ public class MemberService {
         );
         MemberDetails memberDetails = (MemberDetails) authentication.getPrincipal();
         Member member = memberRepository.getReferenceById(memberDetails.getId());
-        String accessToken = jwtService.issue(member.getId(), member.getEmail(), member.getRole());
+        String accessToken = jwtService.issue(member.getMemberId(), member.getEmail(), member.getRole());
         return MemberLogInResponse.fromEntity(member,accessToken);
     }
 
     @Transactional
-    public MemberMyPageResponse getMyPage(MemberMyPageRequest memberMyPageRequest) {
-        return null;
+    public MemberMyPageResponse getMyPage(Long id) {
+        Member nowMember = memberRepository.findById(id).orElseThrow(
+            (IllegalArgumentException::new)
+        );
+        return MemberMyPageResponse.fromEntity(nowMember);
+    }
+
+    @Transactional
+    public MemberMyBoardResponse getBoards(Long id) {
+        Member nowMember = memberRepository.findById(id).orElseThrow(
+            (IllegalArgumentException::new)
+        );
+        List<ArrayList<?>> boards = boardRepository.findContentsByMemberIdOrderByPostIdDesc(nowMember.getMemberId());
+        return MemberMyBoardResponse.fromEntity(boards);
     }
 
     private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {

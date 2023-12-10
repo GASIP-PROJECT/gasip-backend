@@ -21,7 +21,7 @@ public class MemberSignUpResponse {
 
     public static MemberSignUpResponse fromEntity(Member member) {
         return MemberSignUpResponse.builder()
-            .id(member.getId())
+            .id(member.getMemberId())
             .email(member.getEmail())
             .name(member.getName())
             .build();

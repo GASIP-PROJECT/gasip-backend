@@ -251,7 +251,7 @@ function ProfList ({navigation, style}){
                     >
                         <Text
                         style={{
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: "bold",
                             textAlign: "center",
                         }}
@@ -296,8 +296,6 @@ function ProfList ({navigation, style}){
                             major: selectedMajor,
                         });
                     }}
-                    onPressIn={pressIn}
-                    onPressOut={pressOut}
                 >
                     <Text>글쓰기</Text>
                 </Pressable>

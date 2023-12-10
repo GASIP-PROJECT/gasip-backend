@@ -10,7 +10,7 @@ import { fetchBoards } from '../Utils/FetchFunc';
 
 const {width:SCREEN_WIDTH, height:SCREEN_HEIGHT} = Dimensions.get("window");
 
-function Home({navigation}) {
+function HomeScreen({navigation}) {
     const isFocused = useIsFocused(); // 화면이 focus되었는지 확인하는 hook -> 글쓰기 후 화면이 focus되면 새로고침을 하기 위한 용도.
     const [isloading, setIsLoading] = useState(false);
     const [islessFeedNum, setIsLessFeedNum] = useState(false);    
@@ -124,4 +124,4 @@ function Home({navigation}) {
     );
 };
 
-export default Home;
+export default HomeScreen;

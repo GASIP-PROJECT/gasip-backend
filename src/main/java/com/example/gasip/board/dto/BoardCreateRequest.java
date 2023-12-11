@@ -22,8 +22,7 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Long clickCount;
     @Schema(description = "게시글 좋아요")
     private Long likeCount;
-//    @NotNull
-@Schema(description = "게시글과 관련된 교수 정보")
+    @Schema(description = "게시글과 관련된 교수 정보")
     private Professor professor;
 
 

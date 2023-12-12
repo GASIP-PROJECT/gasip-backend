@@ -21,10 +21,15 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dbsrlskfdk.gasipfrontrefactor",
+      "versionCode": 1
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    
+    "extra": {
+      "eas": {
+        "projectId": "e64747e5-36c2-4f50-89f3-6fe57be149d6"
+      }
     }
   }
 }

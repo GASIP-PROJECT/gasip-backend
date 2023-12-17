@@ -1,18 +1,12 @@
 package com.example.gasip.category.dto;
 
 import com.example.gasip.category.model.Category;
-import com.example.gasip.common.BaseTimeEntity;
-import com.example.gasip.major.dto.MajorResponse;
-import com.example.gasip.major.model.Major;
-import com.fasterxml.jackson.databind.ser.Serializers;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter

@@ -1,7 +1,7 @@
 package com.example.gasip.college.dto;
 
 import com.example.gasip.college.model.College;
-import com.example.gasip.common.BaseTimeEntity;
+import com.example.gasip.global.entity.BaseTimeEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +27,6 @@ public class CollegeResponse extends BaseTimeEntity {
 
     public static CollegeResponse fromEntity(College college) {
         return CollegeResponse.builder()
-                .regDate(college.getRegDate())
-                .updateDate(college.getUpdateDate())
                 .collegeId(college.getCollegeId())
                 .collegeName(college.getCollegeName())
                 .build();

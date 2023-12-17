@@ -1,5 +1,6 @@
 package com.example.gasip.board.controller;
 
+import com.example.gasip.board.dto.BoardDetailResponse;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.security.MemberDetails;
@@ -30,6 +31,12 @@ public class BoardController {
     @Operation(summary = "전체 게시글 조회 요청", description = "전체 게시글을 조회를 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<List<BoardReadResponse>> findAllBoard() {
         return ResponseEntity.ok(boardService.findAllBoard());
+    }
+
+    @GetMapping("/details/{postId}")
+    @Operation(summary = "게시글 상세 정보 불러오기", description = "게시글 상세 정보를 불러옵니다.", tags = { "BoardDetail Controller" })
+    public ResponseEntity<BoardDetailResponse> getBoardDetail(@PathVariable Long postId) {
+        return ResponseEntity.ok(boardService.findByID(postId));
     }
 
     @GetMapping("{postId}")

@@ -1,6 +1,6 @@
 package com.example.gasip.board.service;
 
-import com.example.gasip.Boarddetail.model.BoardDetail;
+
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;

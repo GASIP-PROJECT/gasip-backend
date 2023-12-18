@@ -1,6 +1,6 @@
 package com.example.gasip.professordetail.controller;
 
-import com.example.gasip.professordetail.dto.ProfessorDetailResponse;
+import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.professordetail.service.ProfessorDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,13 @@ public class ProfessorDetailController {
      */
     @GetMapping("/{profId}")
     @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = { "ProfessorDetail Controller" })
-    public ResponseEntity<ProfessorDetailResponse> getProfessorDetail(@PathVariable Long profId) {
-        return ResponseEntity.ok(professorDetailService.findByProfId(profId));
+    public ResponseEntity<?> getProfessorDetail(@PathVariable Long profId) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorDetailService.findByProfId(profId)
+                )
+            );
     }
 }

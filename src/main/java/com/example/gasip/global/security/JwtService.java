@@ -15,7 +15,7 @@ import java.util.List;
 public class JwtService {
 
     private static final String SECRET_KEY = "secret_key";
-    private static final Duration ACCESS_DURATION = Duration.of(1, ChronoUnit.DAYS);
+    private static final Duration ACCESS_DURATION = Duration.of(1, ChronoUnit.WEEKS);
 
     public String issue(Long id, String email, Role role) {
         return JWT.create()

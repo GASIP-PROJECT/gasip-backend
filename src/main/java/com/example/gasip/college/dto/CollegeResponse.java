@@ -1,26 +1,22 @@
 package com.example.gasip.college.dto;
 
 import com.example.gasip.college.model.College;
-import com.example.gasip.global.entity.BaseTimeEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class CollegeResponse extends BaseTimeEntity {
+public class CollegeResponse {
 
     @NotNull
     private Long collegeId;
     @NotNull
     private String collegeName;
 
-    public CollegeResponse(Long collegeId, LocalDateTime regDate, LocalDateTime updateDate, String collegeName) {
-        super(regDate, updateDate);
+    public CollegeResponse(Long collegeId, String collegeName) {
         this.collegeId = collegeId;
         this.collegeName = collegeName;
     }

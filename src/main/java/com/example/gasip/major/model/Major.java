@@ -1,7 +1,6 @@
 package com.example.gasip.major.model;
 
 import com.example.gasip.college.model.College;
-import com.example.gasip.global.entity.BaseTimeEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "major")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "전공 관련 VO")
-public class Major extends BaseTimeEntity {
+public class Major {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "전공 ID")

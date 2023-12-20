@@ -1,5 +1,6 @@
 package com.example.gasip.member.service;
 
+import com.example.gasip.board.dto.BoardContentDto;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
@@ -14,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,12 +55,12 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberMyBoardResponse getBoards(Long id) {
+    public List<?> getBoards(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
         );
-        List<ArrayList<?>> boards = boardRepository.findContentsByMemberIdOrderByPostIdDesc(member.getMemberId());
-        return MemberMyBoardResponse.fromEntity(boards);
+        List<BoardContentDto> boards = boardRepository.findContentsByMemberId(member.getMemberId());
+        return boards;
     }
 
     private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {

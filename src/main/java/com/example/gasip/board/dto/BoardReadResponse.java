@@ -1,10 +1,11 @@
 package com.example.gasip.board.dto;
 
-import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
-import com.example.gasip.professor.model.Professor;
+import com.example.gasip.global.entity.BaseTimeEntity;
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @Schema(description = "게시글 읽기 Response DTO 관련 VO")
+@AllArgsConstructor
 public class BoardReadResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글 ID")
@@ -28,15 +30,16 @@ public class BoardReadResponse extends BaseTimeEntity {
     private Long likeCount;
     @NotNull
     @Schema(description = "게시글과 관련된 교수 정보")
-    private Professor professor;
+    private Long profId;
 
-    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor) {
+    @QueryProjection
+    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-//        this.professor = professor;
+        this.profId = profId;
     }
     public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
@@ -46,7 +49,7 @@ public class BoardReadResponse extends BaseTimeEntity {
                 .content(board.getContent())
                 .clickCount(board.getClickCount())
                 .likeCount(board.getLikeCount())
-//                .professor(board.getProfessor())
+                .profId(board.getProfessor().getProfId())
                 .build();
     }
 }

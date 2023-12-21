@@ -9,13 +9,12 @@ import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,27 +34,24 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard() {
-        List<Board> boards = boardRepository.findAll();
-        List<BoardReadResponse> boardList = new ArrayList<>();
-        for (Board board : boards) {
-            boardList.add(BoardReadResponse.fromEntity(board));
-        }
-        return boardList;
+        return boardRepository.findAll()
+            .stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
     }
-
-    public BoardDetailResponse findByID(Long postId) {
+    @Transactional
+    public BoardDetailResponse findById(Long postId) {
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardDetailResponse.fromEntity(board);
     }
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId) {
-        Board board = boardRepository.findById(postId)
-                .orElseThrow(IllegalArgumentException::new);
+        Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
-    public BoardUpdateResponse editBoard(Long boardId,  @Valid BoardUpdateRequest boardUpdateRequest) {
+    public BoardUpdateResponse editBoard(Long boardId,BoardUpdateRequest boardUpdateRequest) {
         Board board = validateBoardEmpty(boardId);
         board.updateBoard(boardUpdateRequest.getContent());
         return BoardUpdateResponse.fromEntity(board);

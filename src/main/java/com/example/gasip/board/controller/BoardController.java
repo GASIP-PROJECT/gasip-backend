@@ -52,7 +52,7 @@ public class BoardController {
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.findByID(postId)
+                    boardService.findById(postId)
                 )
             );
     }

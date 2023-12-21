@@ -1,6 +1,8 @@
 package com.example.gasip.board.repository;
 
 import com.example.gasip.board.dto.BoardContentDto;
+import com.example.gasip.board.dto.BoardReadResponse;
+import com.example.gasip.board.dto.QBoardReadResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,6 +26,15 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
             .leftJoin(board.member, member)
             .where(idEqual(id))
             .orderBy(board.postId.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<BoardReadResponse> findAllBoard() {
+        return queryFactory
+            .select(new QBoardReadResponse(
+                board.regDate,board.updateDate,board.postId,board.content,board.clickCount,board.likeCount,board.professor.profId))
+            .from(board)
             .fetch();
     }
 

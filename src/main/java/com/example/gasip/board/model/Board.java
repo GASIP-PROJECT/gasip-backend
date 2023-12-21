@@ -13,7 +13,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -39,6 +38,7 @@ public class Board extends BaseTimeEntity {
     @Schema(description = "게시글 좋아요")
     @ColumnDefault("0")
     private Long likeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Prof_ID")
     @Schema(description = "게시글과 관련된 교수정보")
@@ -60,17 +60,5 @@ public class Board extends BaseTimeEntity {
     public void updateBoard(String content) {
         this.content = content;
         this.updateDate = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Board that)) return false;
-        return postId != null && postId.equals(that.getPostId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(postId);
     }
 }

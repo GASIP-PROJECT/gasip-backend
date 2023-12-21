@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { SafeAreaView, View, Text, Animated, ActivityIndicator, Dimensions} from 'react-native';
+import { SafeAreaView, View, Text, Animated, ActivityIndicator, Dimensions, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import Feed from './Feed';

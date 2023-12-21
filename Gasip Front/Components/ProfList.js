@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Pressable, Modal, Dimensions, Animated, StyleSheet } from 'react-native';
 
 import { fetchColleges, fetchMajors, fetchProf } from '../Utils/FetchFunc';
+import { StatusBar } from 'expo-status-bar';
 
 const {width:SCREEN_WIDTH, height:SCREEN_HEIGHT} = Dimensions.get("window");
 const MODAL_HEIGHT = SCREEN_HEIGHT/3;
@@ -83,7 +84,6 @@ function ProfList ({navigation, style}){
                     setStatusBarHidden(!statusBarHidden);
                 }}
             >
-                
                 <Pressable
                     onPress={() => {
                         setModalVisible(false);

@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +20,10 @@ public class ProfessorService {
      */
     @Transactional
     public List<ProfessorResponse> findAll() {
-        List<Professor> professors = professorRepository.findAll();
-        List<ProfessorResponse> professorsList = new ArrayList<>();
-        for (Professor professor : professors) {
-            professorsList.add(ProfessorResponse.fromEntity(professor));
-        }
-        return professorsList;
+        return professorRepository.findAll()
+            .stream()
+            .map(ProfessorResponse::fromEntity)
+            .collect(Collectors.toList());
     }
 
 

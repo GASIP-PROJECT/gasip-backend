@@ -1,6 +1,5 @@
 package com.example.gasip.member.service;
 
-import com.example.gasip.board.dto.BoardContentDto;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
@@ -59,8 +58,7 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
         );
-        List<BoardContentDto> boards = boardRepository.findContentsByMemberId(member.getMemberId());
-        return boards;
+        return boardRepository.findContentsByMemberId(member.getMemberId());
     }
 
     private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {

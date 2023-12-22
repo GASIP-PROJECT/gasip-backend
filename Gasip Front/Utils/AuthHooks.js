@@ -26,31 +26,14 @@ const useAuthDispatch = () => {
                 });
             },
             signOut: () => dispatch({type: "SIGN_OUT"}),
-            signUp: async ({name, email, password}) => {
-                // dispatch({ 
-                //     type: "SIGN_IN",
-                //     token: "dummy-auth-token"
-                // });
-                postSignUp({name: name, email: email, password: password}).then(async (res) => {
-                    console.log("SignUp res : ", res);
-                    if (res.statusCode){
-                        console.log("SignUp Failed");
-                    } else {
-                        console.log("SignUp Success");
-                        await postSignIn({email: email, password: password}).then(async (res) => {
-                                                                                    if (res.access_token) {
-                                                                                        console.log("SignIn Success");
-                                                                                        await storeToken(res.access_token);
-                                                                                        dispatch({ 
-                                                                                            type: "SIGN_IN",
-                                                                                            token: res.access_token
-                                                                                        });
-                                                                                    } else {
-                                                                                        console.log("SignIn Failed");
-                                                                                    }
-                        });
-                    }
+            signUp: async (token) => {
+                await storeToken(token);
+                dispatch({
+                    type: "SIGN_IN",
+                    token: token
                 });
+
+                
             },
             restoreToken: async () => {
                 restoreToken().then((res) => {

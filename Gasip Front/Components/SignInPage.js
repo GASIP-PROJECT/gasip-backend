@@ -12,7 +12,6 @@ const SignInPage = ({navigation, route}) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isValid, setIsValid] = React.useState(true);
-    // const { signIn } = route.params.authContext;
     const passwordRef = useRef(null);
 
     const authDispatch = useAuthDispatch();
@@ -29,8 +28,6 @@ const SignInPage = ({navigation, route}) => {
             setIsValid(false);
             console.log("Sign In Failed");
         }
-        // storeToken("USER_TOKEN");
-        // authDispatch.signIn("USER_TOKEN");
     };
 
   return (

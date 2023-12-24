@@ -2,29 +2,24 @@ package com.example.gasip.comment.dto;
 
 import com.example.gasip.board.model.Board;
 import com.example.gasip.comment.model.Comment;
-import com.example.gasip.common.BaseTimeEntity;
+import com.example.gasip.member.model.Member;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Data
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class CommentCreateRequest{
-    private Long postId;
     private String content;
     private String writer;
     private Long parentId;
 
-//    public Comment toEntity(CommentCreateRequest commentCreateRequest) {
-//        return Comment.builder()
-//                .board(commentCreateRequest.getBoard())
-//                .writer(commentCreateRequest.getWriter())
-//                .content(commentCreateRequest.getContent())
+    public Comment toEntity(Board board,Member member) {
+        return Comment.builder()
+                .board(board)
+                .member(member)
+                .content(content)
+                .writer(writer)
 //                .commentChildren(commentCreateRequest.getCommentChildren().stream().map(CommentCreateRequest::toEntity).collect(Collectors.toList()))
-//                .build();
-//    }
+                .build();
+    }
 }

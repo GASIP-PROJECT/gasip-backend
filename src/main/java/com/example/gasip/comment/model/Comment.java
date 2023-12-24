@@ -1,20 +1,23 @@
 package com.example.gasip.comment.model;
 
 import com.example.gasip.board.model.Board;
-import com.example.gasip.common.BaseTimeEntity;
+import com.example.gasip.global.entity.BaseTimeEntity;
+import com.example.gasip.member.model.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Getter
 @Table(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @SuperBuilder
 public class Comment extends BaseTimeEntity {
     @Id
@@ -23,12 +26,17 @@ public class Comment extends BaseTimeEntity {
     private Long commentId;
     @Column(nullable = false)
     private String content;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
-    private Board board;
     @Column(nullable = false)
     private String writer;
     private Long commentLike;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private Board board;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -45,6 +53,10 @@ public class Comment extends BaseTimeEntity {
         comment.writer = writer;
         comment.parentComment = parentComment;
         return comment;
+    }
+
+    public void updateParent(Comment comment) {
+        this.parentComment = comment;
     }
 
 }

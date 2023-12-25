@@ -47,7 +47,7 @@ public class CommentController {
 
     // 특정 게시글 댓글 read
     @GetMapping("{postId}")
-    public ResponseEntity<?> findCommentByBoard(@PathVariable Board postId) {
+    public ResponseEntity<?> findCommentByBoard(@PathVariable Long postId) {
         return ResponseEntity
             .ok()
             .body(

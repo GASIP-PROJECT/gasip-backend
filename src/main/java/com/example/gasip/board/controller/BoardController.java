@@ -72,13 +72,14 @@ public class BoardController {
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 요청", description = "게시글을 수정을 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> editBoard(
+            @AuthenticationPrincipal MemberDetails memberDetails,
             @PathVariable Long boardId,
             @RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.editBoard(boardId,boardUpdateRequest)
+                    boardService.editBoard(memberDetails,boardId,boardUpdateRequest)
                 )
             );
 
@@ -86,12 +87,14 @@ public class BoardController {
 
     @DeleteMapping("/{boardId}")
     @Operation(summary = "게시글 삭제 요청", description = "게시글 삭제를 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
+    public ResponseEntity<?> deleteBoard(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        @PathVariable Long boardId) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.deleteBoard(boardId)
+                    boardService.deleteBoard(memberDetails,boardId)
                 )
             );
 

@@ -51,16 +51,25 @@ public class BoardService {
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
-    public BoardUpdateResponse editBoard(Long boardId,BoardUpdateRequest boardUpdateRequest) {
-        Board board = validateBoardEmpty(boardId);
+    public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
+        Board board = validatedBoardWritter(memberDetails, boardId);
         board.updateBoard(boardUpdateRequest.getContent());
         return BoardUpdateResponse.fromEntity(board);
     }
     @Transactional
-    public String deleteBoard(Long boardId) {
-        validateBoardEmpty(boardId);
+    public String deleteBoard(MemberDetails memberDetails,Long boardId) {
+        validatedBoardWritter(memberDetails, boardId);
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
+    }
+
+    private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
+        Board board = validateBoardEmpty(boardId);
+        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        if (!member.getMemberId().equals(board.getMember().getMemberId())) {
+            throw new IllegalArgumentException();
+        }
+        return board;
     }
 
     private Board validateBoardEmpty(Long boardId) {

@@ -29,24 +29,32 @@ public class CommentDto implements Serializable {
     public static CommentDto fromEntity(Comment comment) {
         // 부모댓글이 있는 경우
         if (comment.getParentComment() != null) {
-            return CommentDto.builder()
-                .postId(comment.getBoard().getPostId())
-                .memberId(comment.getMember().getMemberId())
-                .content(comment.getContent())
-                .writer(comment.getWriter())
-                .parentId(comment.getParentComment().getCommentId())
-                .build();
+            return buildCommentDtoWithParentId(comment);
         }
         // 부모댓글이 없는 경우
         else {
-            return CommentDto.builder()
-                .postId(comment.getBoard().getPostId())
-                .memberId(comment.getMember().getMemberId())
-                .content(comment.getContent())
-                .writer(comment.getWriter())
-                .commentChildren(comment.getCommentChildren().stream().map(CommentDto::fromEntity).collect(Collectors.toList()))
-                .build();
+            return buildCommentDtoWithChildrenComment(comment);
         }
 
+    }
+
+    private static CommentDto buildCommentDtoWithChildrenComment(Comment comment) {
+        return CommentDto.builder()
+            .postId(comment.getBoard().getPostId())
+            .memberId(comment.getMember().getMemberId())
+            .content(comment.getContent())
+            .writer(comment.getWriter())
+            .commentChildren(comment.getCommentChildren().stream().map(CommentDto::fromEntity).collect(Collectors.toList()))
+            .build();
+    }
+
+    private static CommentDto buildCommentDtoWithParentId(Comment comment) {
+        return CommentDto.builder()
+            .postId(comment.getBoard().getPostId())
+            .memberId(comment.getMember().getMemberId())
+            .content(comment.getContent())
+            .writer(comment.getWriter())
+            .parentId(comment.getParentComment().getCommentId())
+            .build();
     }
 }

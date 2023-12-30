@@ -26,6 +26,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Long> clickCount = createNumber("clickCount", Long.class);
 
+    public final ListPath<com.example.gasip.comment.model.Comment, com.example.gasip.comment.model.QComment> comments = this.<com.example.gasip.comment.model.Comment, com.example.gasip.comment.model.QComment>createList("comments", com.example.gasip.comment.model.Comment.class, com.example.gasip.comment.model.QComment.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);

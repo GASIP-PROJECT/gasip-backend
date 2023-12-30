@@ -1,5 +1,6 @@
 package com.example.gasip.board.model;
 
+import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
@@ -13,6 +14,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,6 +50,9 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
     public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member) {
         super(regDate, updateDate);

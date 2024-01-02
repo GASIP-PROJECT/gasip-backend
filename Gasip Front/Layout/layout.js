@@ -47,7 +47,8 @@ function Layout({navigation}) {
                             unmountOnBlur: true,
                             tabBarLabel: ({focused}) => (
                             <Text
-                                style={focused ? ThemeStyle.focusedTabLabel: ThemeStyle.unfocusedTabLabel}>
+                                style={focused ? ThemeStyle.focusedTabLabel: ThemeStyle.unfocusedTabLabel}
+                            >
                                 마이페이지
                             </Text>)
                         }}

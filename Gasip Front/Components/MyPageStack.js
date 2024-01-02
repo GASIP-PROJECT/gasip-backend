@@ -41,7 +41,8 @@ function HomeStack(){
                 <>
                     <Stack.Screen name="MyPageScreen" component={MyPageScreen}
                         options={{
-                            headerShown: false,
+                            headerShown: true,
+                            headerTitle: '마이페이지'
                         }}
                     />
                 </>

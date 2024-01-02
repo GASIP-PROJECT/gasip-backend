@@ -7,6 +7,11 @@ const ThemeStyle = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
         padding: 10,
     },
+    basicHeaderContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+    },
     basicButtonContainer:{
         flexDirection: 'row',
         justifyContent: 'space-around',

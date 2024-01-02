@@ -27,7 +27,6 @@ function WritePage({navigation}){
             style={{
                 ...ThemeStyle.basicContainer,
                 justifyContent: "flex-start",
-                padding: 5,
             }}
         >
         

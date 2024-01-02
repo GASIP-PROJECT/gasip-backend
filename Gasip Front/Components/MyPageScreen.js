@@ -12,10 +12,6 @@ function MyPageScreen({navigation, route}) {
     const authDispatch = useAuthDispatch();
     const {userToken} = useSelector(state => state.authReducer);
     const [userProfile, setUserProfile] = React.useState(null);
-
-
-    // const { signOut } = route.params.authContext;
-    // const {signOut} = AuthContext;
     
     const handleSignOut = () => {
         // Perform sign out logic here
@@ -33,10 +29,9 @@ function MyPageScreen({navigation, route}) {
     }, []);
         
     return (
-        <View style={ThemeStyle.basicContainer}>
+        <View style={ThemeStyle.basicHeaderContainer}>
             <View>
                 <View>
-                    <Text>MyPage</Text>
                     <Image source={{uri: userProfile ? userProfile.avatar : null}} style={{width: 100, height: 100}} />
                     <Text>Email: {userProfile ? userProfile.email : null}</Text>
                     <Text>Name: {userProfile ? userProfile.name : null}</Text>

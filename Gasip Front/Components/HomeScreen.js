@@ -7,6 +7,8 @@ import ProfList from './ProfList';
 import ThemeStyle from './ThemeStyle';
 import { fetchBoards } from '../Utils/FetchFunc';
 
+import { fakeBoardsFetch } from '../Utils/FakeFetch';
+
 
 const {width:SCREEN_WIDTH, height:SCREEN_HEIGHT} = Dimensions.get("window");
 
@@ -51,11 +53,15 @@ function HomeScreen({navigation}) {
 
 
     useEffect(() => {
-        // fetchData();
-        // console.log(isFocused);
-        fetchBoards().then((data) => {
-            setFeedData(data);
-        });
+        
+        {/* 실제 데이터 호출 시 사용할 코드 */}
+        // fetchBoards().then((data) => {
+        //     setFeedData(data);
+        // });
+        {/* FakeAPI를 이용한 데이터 받아오는 피드 */}
+        fakeBoardsFetch().then((data) => {
+            setFeedData(data)
+        } );
     }, [isFocused]); // useEffect의 의존성 배열로 넣어줘서, 변화가 생길 시 리렌더링하여 새로운 글을 받아온다.
 
     return (

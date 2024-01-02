@@ -18,6 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentByParentComment(Comment parentComment_id);
 
     // 특정 게시글 댓글 조회
+    // 찾을게 없어도 error 코드 안뜸 -> 수정 필요
     @Query("select c from Comment c where c.board.postId = :postId")
     List<Comment> findCommentByBoard(@Param("postId") Long postId);
 

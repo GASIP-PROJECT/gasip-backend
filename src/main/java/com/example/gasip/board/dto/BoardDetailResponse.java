@@ -2,7 +2,6 @@ package com.example.gasip.board.dto;
 
 import com.example.gasip.board.model.Board;
 import com.example.gasip.global.entity.BaseTimeEntity;
-import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -21,7 +20,7 @@ public class BoardDetailResponse extends BaseTimeEntity {
     @Schema(description = "게시글 좋아요")
     private Long likeCount;
     @Schema(description = "게시글과 관련된 교수정보")
-    private Professor professor;
+    private Long profId;
 
     public static BoardDetailResponse fromEntity(Board board) {
         return BoardDetailResponse.builder()
@@ -31,7 +30,7 @@ public class BoardDetailResponse extends BaseTimeEntity {
                 .content(board.getContent())
                 .clickCount(board.getClickCount())
                 .likeCount(board.getLikeCount())
-                .professor(board.getProfessor())
+                .profId(board.getProfessor().getProfId())
                 .build();
     }
 }

@@ -50,10 +50,16 @@ public class CommentService {
     // 특정 게시글 댓글 조회
     @Transactional(readOnly = true)
     public List<CommentReadResponse> findCommentByBoard(Long postId) {
-        return commentRepository.findCommentByBoard(postId)
+        Board board = boardRepository.getReferenceById(postId);
+        List<CommentReadResponse> commentlist = commentRepository.findAllByBoard(board)
             .stream()
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());
+        if (commentlist.isEmpty()) {
+            throw new IllegalArgumentException("적합한 댓글이 없습니다.");
+        } else {
+            return commentlist;
+        }
     }
 
     // 댓글 edit

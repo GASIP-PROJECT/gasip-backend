@@ -1,6 +1,7 @@
 package com.example.gasip.professor.controller;
 
 import com.example.gasip.global.api.ApiUtils;
+import com.example.gasip.major.model.Major;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +49,18 @@ public class ProfessorController {
                     professorService.findByProfId(profId)
                 )
             );
+    }
+
+    @GetMapping("/major/{majorId}")
+    @Operation(summary = "학과별 교수 정보 불러오기", description = "학과별 교수 정보를 불러옵니다.", tags = { "Professor Controller" })
+    public ResponseEntity<?> findAllById(@PathVariable Major majorId) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                professorService.findProfByMajor(majorId)
+                        )
+                );
     }
 
 }

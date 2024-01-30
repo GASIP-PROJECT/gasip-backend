@@ -21,9 +21,9 @@ const SignInPage = ({navigation, route}) => {
         console.log('Email: ', email, 'Password: ', password);
         const res = await postSignIn({email: email, password: password});
         console.log("res : ", res);
-        if (res.access_token) {
+        if (res.success) {
             console.log("Sign In Success");
-            authDispatch.signIn(res.access_token);
+            authDispatch.signIn(res.response.accessToken);
         } else {
             setIsValid(false);
             console.log("Sign In Failed");

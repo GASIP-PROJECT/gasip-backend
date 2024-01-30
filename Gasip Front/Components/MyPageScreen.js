@@ -23,8 +23,8 @@ function MyPageScreen({navigation, route}) {
     useEffect(() => {
         console.log("userToken : ", userToken);
         getUserProfile(userToken).then((data) => {
-            setUserProfile(data);
-            console.log(data);
+            setUserProfile(data.response);
+            console.log(data.response);
         });
     }, []);
         
@@ -32,7 +32,7 @@ function MyPageScreen({navigation, route}) {
         <View style={ThemeStyle.basicHeaderContainer}>
             <View>
                 <View>
-                    <Image source={{uri: userProfile ? userProfile.avatar : null}} style={{width: 100, height: 100}} />
+                    
                     <Text>Email: {userProfile ? userProfile.email : null}</Text>
                     <Text>Name: {userProfile ? userProfile.name : null}</Text>
                 </View>

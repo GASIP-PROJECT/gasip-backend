@@ -18,7 +18,7 @@ function WritePage({navigation}){
     const handleButtonPress = () => {
         console.log(text);
         // Add code to save the text to a database or file
-        writeBoard({content: text, profId: 1}).then((res) => {console.log(res);});
+        writeBoard({content: text, profId: 2}).then((res) => {console.log(res);});
         navigation.goBack();
     };
 

@@ -1,4 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
+import { HOSTADDR, PORT } from './Configuration';
+
 
 const storeToken = async (token) => { // 추후에 id로 저장하도록
     try {
@@ -28,7 +30,7 @@ const restoreToken = async () => { // 추후에 id로 얻어오도록
 };
 
 const postSignIn = async ({email, password}) => {
-    const res = await fetch('https://api.escuelajs.co/api/v1/auth/login', {
+    const res = await fetch('http://'+HOSTADDR+':'+PORT+'/members/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ const postSignIn = async ({email, password}) => {
 };
 
 const postSignUp = async({name, email, password}) => {
-    const res = await fetch('https://api.escuelajs.co/api/v1/users/', {
+    const res = await fetch('http://'+HOSTADDR+':'+PORT+'/members/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -53,7 +55,6 @@ const postSignUp = async({name, email, password}) => {
                         "name": name,
                         "email": email,
                         "password": password,
-                        "avatar": "https://picsum.photos/800"
                     })
                 });
     const data = await res.json();
@@ -62,7 +63,7 @@ const postSignUp = async({name, email, password}) => {
 }
 
 const getUserProfile = async (token) => {
-    const res = await fetch('https://api.escuelajs.co/api/v1/auth/profile', {
+    const res = await fetch('http://'+HOSTADDR+':'+PORT+'/members/mypage', {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer '+token,

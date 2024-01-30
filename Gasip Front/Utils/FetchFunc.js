@@ -1,5 +1,5 @@
-const HOSTADDR = "192.168.219.109";
-const PORT = "8080";
+import { restoreToken } from "./AuthFunc";
+import { HOSTADDR, PORT } from './Configuration';
 
 async function fetchUsers (gender) {
     const res = await fetch("https://dummyjson.com/users/filter?key=gender&value="+gender+"&limit=30&select=firstName,gender");
@@ -8,9 +8,16 @@ async function fetchUsers (gender) {
 };
 
 async function fetchColleges () {
-    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/major/college");
+    const AUTH_TOKEN = await restoreToken();
+    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/all-colleges", {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+AUTH_TOKEN
+        },
+    });
     const data = await res.json();
-    return data;
+    return data.response;
 };
 
 async function fetchMajors(college){
@@ -26,26 +33,44 @@ async function fetchProf(major_ID){
 }
 
 async function fetchBoards(){
-    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/boards");
-    const data = await res.json();
-    return data;
+    
+    try{
+        const AUTH_TOKEN = await restoreToken();
+        const res = await fetch("http://"+HOSTADDR+":"+PORT+"/boards",{
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+AUTH_TOKEN
+        },
+        });
+        const data = await res.json();
+        return data.response;
+    } catch(e){
+        console.log("fetchBoardsError: ", e);
+    }    
+    
+    // return data;
 }
 
 async function writeBoard({content, profId}){
-    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/boards", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    content: content,
-                    professor: {
-                        "profId": profId,
+    try{
+        const AUTH_TOKEN = await restoreToken();
+
+        const res = await fetch("http://"+HOSTADDR+":"+PORT+"/boards/"+profId, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+AUTH_TOKEN
                     },
-                })
-            });
-    const data = await res.json();
-    return data;
+                    body: JSON.stringify({
+                        content: content
+                    })
+                });
+        const data = await res.json();
+        return data.response;
+    } catch(e){
+        console.log("writeBoardError: ", e);
+    }
 }
 
 async function deleteBoard({boardId}){
@@ -55,4 +80,45 @@ async function deleteBoard({boardId}){
     const data = await res.json();
     return data;
 }
-export {fetchUsers, fetchColleges, fetchMajors, fetchProf, fetchBoards, writeBoard, deleteBoard};
+
+
+async function fetchComments({boardId}){
+    try{
+        const AUTH_TOKEN = await restoreToken();
+
+        const res = await fetch("http://"+HOSTADDR+":"+PORT+"/comments/"+boardId,{
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+AUTH_TOKEN
+                        },
+                    });
+        const data = await res.json();
+        return data.response;
+    } catch (e){
+        console.log("fetchCommentsError: ", e);
+    }
+}
+
+async function writeComments({boardId, content}){
+    try{
+        const AUTH_TOKEN = await restoreToken();
+
+        const res = await fetch("http://"+HOSTADDR+":"+PORT+"/comments/"+boardId,{
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+AUTH_TOKEN
+                        },
+                        body: JSON.stringify({
+                            content: content
+                        })
+                    });
+        const data = await res.json();
+        return data.response;
+    } catch (e){
+        console.log("writeCommentsError: ", e);
+    }
+}
+
+export {fetchUsers, fetchColleges, fetchMajors, fetchProf, fetchBoards, writeBoard, deleteBoard, fetchComments, writeComments};

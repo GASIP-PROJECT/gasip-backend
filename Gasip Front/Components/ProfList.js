@@ -146,7 +146,7 @@ function ProfList ({navigation, style}){
                                                 borderColor: "gray",
                                             }}
                                         >
-                                            <Text>{item.college}</Text>
+                                            <Text>{item.collegeName}</Text>
                                         </Pressable>
                                     );
                                 }}

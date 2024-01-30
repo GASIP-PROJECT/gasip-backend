@@ -33,7 +33,7 @@ const SignUpPage = ({navigation, route}) => {
     }
     const res = await postSignUp({name: name, email: email, password: password_last});
 
-    if (res.statusCode){
+    if (res.success === false){
         console.log("SignUp Failed");
         setIsResValid(false);
     } else {
@@ -41,9 +41,9 @@ const SignUpPage = ({navigation, route}) => {
         console.log('Email: ', email, 'Password: ', password_last);
         await postSignIn({email: email, password: password_last}) // 회원가입 후 따로 로그인이 필요하지 않도록, 로그인 처리 진행
         .then(async (res) => {
-                                if (res.access_token) {
+                                if (res.success) {
                                     console.log("SignIn Success");
-                                    await  authDispatch.signUp(res.access_token);
+                                    await  authDispatch.signUp(res.response.accessToken);
 
                                 } else {
                                     console.log("SignIn Failed");

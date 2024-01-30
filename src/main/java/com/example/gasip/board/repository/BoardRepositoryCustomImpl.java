@@ -3,6 +3,7 @@ package com.example.gasip.board.repository;
 import com.example.gasip.board.dto.BoardContentDto;
 import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.dto.QBoardReadResponse;
+import com.example.gasip.board.model.Board;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,7 +39,24 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
             .fetch();
     }
 
+    @Override
+    public void addLikeCount(Board selectedBoard) {
+        queryFactory.update(board)
+                .set(board.likeCount, board.likeCount.add(1))
+                .where(board.eq(selectedBoard))
+                .execute();
+    }
+
+    @Override
+    public void subLikeCount(Board selectedBoard) {
+        queryFactory.update(board)
+                .set(board.likeCount, board.likeCount.subtract(1))
+                .where(board.eq(selectedBoard))
+                .execute();
+    }
+
     private BooleanExpression idEqual(Long id) {
         return (id == null) ? null : member.memberId.eq(id);
     }
+
 }

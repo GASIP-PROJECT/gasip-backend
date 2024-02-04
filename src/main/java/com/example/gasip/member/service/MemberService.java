@@ -1,5 +1,6 @@
 package com.example.gasip.member.service;
 
+import com.auth0.jwt.JWT;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -59,6 +62,17 @@ public class MemberService {
             (IllegalArgumentException::new)
         );
         return boardRepository.findContentsByMemberId(member.getMemberId());
+    }
+
+    @Transactional
+    public Boolean isAuthenticated(String accessToken) {
+        String token = accessToken.substring(7);
+        Date expiresAt = JWT.decode(token).getExpiresAt();
+        if (expiresAt.after(Date.from(Instant.now()))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {

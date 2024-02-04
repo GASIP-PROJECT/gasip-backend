@@ -62,4 +62,15 @@ public class MemberController {
             );
     }
 
+    @GetMapping("/authcheck")
+    public ResponseEntity<?> isAuthenticated(@RequestHeader(name = "Authorization") String Authorization) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.isAuthenticated(Authorization)
+                )
+            );
+    }
+
 }

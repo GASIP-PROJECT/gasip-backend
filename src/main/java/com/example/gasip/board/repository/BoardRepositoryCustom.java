@@ -1,6 +1,7 @@
 package com.example.gasip.board.repository;
 
 import com.example.gasip.board.dto.BoardContentDto;
+import com.example.gasip.board.dto.BoardReadRequest;
 import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.model.Board;
 
@@ -11,7 +12,11 @@ public interface BoardRepositoryCustom {
 
     List<BoardReadResponse> findAllBoard();
 
+    List<BoardReadRequest> findAllByPostId(Long postId);
+
     void addLikeCount(Board board);
 
     void subLikeCount(Board board);
+
+    void addViewCount(Board board);
 }

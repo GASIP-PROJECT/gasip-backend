@@ -1,9 +1,12 @@
 package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
+import com.example.gasip.board.dto.BoardReadRequest;
+import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
+import com.example.gasip.global.entity.HttpResponseEntity;
 import com.example.gasip.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -12,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.gasip.global.entity.HttpResponseEntity.success;
 
 @RestController
 @RequestMapping("/boards")
@@ -47,27 +52,33 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) {
+    public ResponseEntity<?> getBoardDetail(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
+        boardService.insertView(boardReadRequest);
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(
-                    boardService.findById(postId)
-                )
+                ApiUtils.success(boardService.findBoardId(boardReadRequest.getPostId()))
             );
     }
 
-    @GetMapping("{postId}")
-    @Operation(summary = "게시글 상세 조회 요청", description = "게시글의 상세 내용을 조회를 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> findByBoardId(@PathVariable Long postId) {
-        return ResponseEntity
-            .ok()
-            .body(
-                ApiUtils.success(
-                    boardService.findBoardId(postId)
-                )
-            );
-    }
+//    @GetMapping("/details/{postId}")
+//    @Operation(summary = "게시글 상세 조회 요청", description = "게시글의 상세 내용을 조회를 요청합니다.", tags = { "Board Controller" })
+//    public ResponseEntity<?> findByBoardId(@PathVariable Long postId) {
+//        return ResponseEntity
+//            .ok()
+//            .body(
+//                ApiUtils.success(
+//                    boardService.findBoardId(postId)
+//                )
+//            );
+//    }
+
+//    @GetMapping("{postId}")
+//    public HttpResponseEntity.ResponseResult<?> insertView(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
+//        boardService.insertView(boardReadRequest);
+//        return success();
+//            }
+
 
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 요청", description = "게시글을 수정을 요청합니다.", tags = { "Board Controller" })

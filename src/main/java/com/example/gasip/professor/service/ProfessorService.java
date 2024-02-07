@@ -1,5 +1,6 @@
 package com.example.gasip.professor.service;
 
+import com.example.gasip.major.model.Major;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
@@ -35,5 +36,16 @@ public class ProfessorService {
         Professor professor = professorRepository.findById(profId)
                 .orElseThrow(IllegalArgumentException::new);
         return ProfessorResponse.fromEntity(professor);
+    }
+
+    /**
+     * 특정 학과 교수 불러오기
+     */
+    @Transactional
+    public List<ProfessorResponse> findProfByMajor(Major majorId) {
+        return professorRepository.findProfessorByMajor(majorId)
+                .stream()
+                .map(ProfessorResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 }

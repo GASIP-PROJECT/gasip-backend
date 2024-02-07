@@ -4,7 +4,10 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.exception.DuplicateResourceException;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.likes.dto.LikeRequestDto;
+import com.example.gasip.likes.model.Likes;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
@@ -12,6 +15,7 @@ import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,6 +80,33 @@ public class BoardService {
         return boardRepository.findById(boardId).orElseThrow(
                 IllegalArgumentException::new
         );
+    }
+
+    /**
+     *
+     * 조회수
+     */
+    @Transactional
+    public void insertView(BoardReadRequest boardReadRequest) throws Exception {
+
+//        Member member = memberRepository.findById(boardReadResponse.getMemberId())
+//                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
+
+        Board board = boardRepository.findById(boardReadRequest.getPostId())
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReadRequest.getPostId()));
+
+//        // 이미 좋아요되어있으면 에러 반환
+//        if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
+//            //TODO 409에러로 변경
+//            throw new NotFoundException("Wrong postId : " + boardReadRequest.getPostId());
+//        }
+
+//        Likes likes = Likes.builder()
+//                .board(board)
+//                .build();
+
+        boardRepository.save(board);
+        boardRepository.addViewCount(board);
     }
 }
 

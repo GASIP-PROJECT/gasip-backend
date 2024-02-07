@@ -54,6 +54,9 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/members/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/all-professors/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/boards").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/details/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/comments/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/all-colleges/**").permitAll()
                     .anyRequest().authenticated()
             );
         return http.build();

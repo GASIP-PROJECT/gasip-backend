@@ -3,6 +3,7 @@ package com.example.gasip.category.controller;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.category.service.CategoryService;
 import com.example.gasip.global.api.ApiUtils;
+import com.example.gasip.major.model.Major;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,5 +37,16 @@ public class CategoryController {
                     categoryService.findCategoryByParentCategory(parentCategory_id)
                 )
             );
+    }
+
+    @GetMapping("/categories/{parentCategory_id}/{major_id}")
+    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long major_id) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                categoryService.findCategoryByMajorId(major_id)
+                        )
+                );
     }
 }

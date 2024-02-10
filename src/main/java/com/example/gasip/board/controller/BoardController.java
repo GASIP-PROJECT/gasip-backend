@@ -2,21 +2,18 @@ package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
 import com.example.gasip.board.dto.BoardReadRequest;
-import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
-import com.example.gasip.global.entity.HttpResponseEntity;
 import com.example.gasip.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import static com.example.gasip.global.entity.HttpResponseEntity.success;
 
 @RestController
 @RequestMapping("/boards")
@@ -40,12 +37,12 @@ public class BoardController {
 
     @GetMapping("")
     @Operation(summary = "전체 게시글 조회 요청", description = "전체 게시글을 조회를 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> findAllBoard() {
+    public ResponseEntity<?> findAllBoard(Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.findAllBoard()
+                    boardService.findAllBoard(pageable)
                 )
             );
     }

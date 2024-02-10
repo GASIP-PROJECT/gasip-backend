@@ -4,15 +4,13 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
-import com.example.gasip.exception.DuplicateResourceException;
 import com.example.gasip.global.security.MemberDetails;
-import com.example.gasip.likes.dto.LikeRequestDto;
-import com.example.gasip.likes.model.Likes;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -37,7 +35,7 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardReadResponse> findAllBoard() {
+    public List<BoardReadResponse> findAllBoard(Pageable pageable) {
         return boardRepository.findAll()
             .stream()
             .map(BoardReadResponse::fromEntity)

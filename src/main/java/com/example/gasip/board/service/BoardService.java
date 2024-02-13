@@ -36,7 +36,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAll()
+        return boardRepository.findAll(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());

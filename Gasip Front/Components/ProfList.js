@@ -38,10 +38,10 @@ function ProfList ({navigation, style}){
     useEffect(() => {
         fetchColleges().then(res => {
             setColleges(res);
-            fetchMajors(res[0].college).then(res => {
+            fetchMajors(res[0].collegeId).then(res => {
                 setMajors(res);
-                setMajor(res[0].name);
-                fetchProf(res[0].major_ID).then(res => {
+                setMajor(res[0].majorName);
+                fetchProf(res[0].majorId).then(res => {
                     setProf(res);
                 });
             });
@@ -53,8 +53,8 @@ function ProfList ({navigation, style}){
         <Pressable
             onPress={() => {
                 navigation.navigate('Prof', {
-                    id: item.prof_ID,
-                    name: item.prof_name,
+                    id: item.profId,
+                    name: item.profName,
                     });
                 }
             }
@@ -66,7 +66,7 @@ function ProfList ({navigation, style}){
             }}
             
         >
-            <Text>{item.prof_name}</Text>
+            <Text>{item.profName}</Text>
 
         </Pressable>
     );
@@ -134,7 +134,7 @@ function ProfList ({navigation, style}){
                                     return(
                                         <Pressable
                                             onPress={() => {
-                                                fetchMajors(item.college).then(res => {
+                                                fetchMajors(item.collegeId).then(res => {
                                                     setMajors(res);
                                                 });
                                             }}
@@ -182,9 +182,9 @@ function ProfList ({navigation, style}){
                                     return(
                                         <Pressable
                                             onPress={() => {
-                                                setMajor(item.name);
+                                                setMajor(item.majorName);
                                                 setModalVisible(false);
-                                                fetchProf(item.major_ID).then(res => {
+                                                fetchProf(item.majorId).then(res => {
                                                     setProf(res);
                                                 });
                                             }}
@@ -195,11 +195,11 @@ function ProfList ({navigation, style}){
                                                 justifyContent: "center",
                                             }}
                                         >
-                                            <Text>{item.name}</Text>
+                                            <Text>{item.majorName}</Text>
                                         </Pressable>
                                     );
                                 }}
-                                key={majors.major_ID}    
+                                key={majors.majorID}    
                             />
 
                         </View>
@@ -269,7 +269,7 @@ function ProfList ({navigation, style}){
                 <FlatList
                     data={prof}
                     renderItem={renderItem}
-                    key={prof.prof_ID}
+                    key={prof.profId}
                     
                 />
             </View>

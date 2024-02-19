@@ -20,16 +20,16 @@ async function fetchColleges () {
     return data.response;
 };
 
-async function fetchMajors(college){
-    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/major/college/"+college);
+async function fetchMajors(collegeId){
+    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/all-colleges/categories/"+(collegeId+66));
     const data = await res.json();
-    return data;
+    return data.response;
 };
 
 async function fetchProf(major_ID){
-    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/prof/major/"+major_ID);
+    const res = await fetch("http://"+HOSTADDR+":"+PORT+"/all-professors/major/"+major_ID);
     const data = await res.json();
-    return data;
+    return data.response;
 }
 
 async function fetchBoards(){

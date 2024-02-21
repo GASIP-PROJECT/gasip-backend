@@ -2,6 +2,7 @@ package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
 import com.example.gasip.board.dto.BoardReadRequest;
+import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
@@ -47,15 +48,16 @@ public class BoardController {
             );
     }
 
+
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
-        boardService.insertView(boardReadRequest);
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) throws Exception {
+        boardService.insertView(postId);
         return ResponseEntity
-            .ok()
-            .body(
-                ApiUtils.success(boardService.findBoardId(boardReadRequest.getPostId()))
-            );
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findBoardId(postId))
+                );
     }
 
 //    @GetMapping("/details/{postId}")

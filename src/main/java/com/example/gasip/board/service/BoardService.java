@@ -85,13 +85,17 @@ public class BoardService {
      * 조회수
      */
     @Transactional
-    public void insertView(BoardReadRequest boardReadRequest) throws Exception {
+    public void insertView(Long postId) throws Exception {
+
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+
+        boardRepository.save(board);
+        boardRepository.addViewCount(board);
 
 //        Member member = memberRepository.findById(boardReadResponse.getMemberId())
 //                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
 
-        Board board = boardRepository.findById(boardReadRequest.getPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReadRequest.getPostId()));
 
 //        // 이미 좋아요되어있으면 에러 반환
 //        if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
@@ -103,9 +107,8 @@ public class BoardService {
 //                .board(board)
 //                .build();
 
-        boardRepository.save(board);
-        boardRepository.addViewCount(board);
     }
+
 }
 
 

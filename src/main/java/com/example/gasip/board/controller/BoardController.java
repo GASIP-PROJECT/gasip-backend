@@ -1,7 +1,6 @@
 package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
-import com.example.gasip.board.dto.BoardReadRequest;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
@@ -49,15 +48,24 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
-        boardService.insertView(boardReadRequest);
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardId(boardReadRequest.getPostId()))
+                ApiUtils.success(boardService.findBoardId(postId))
             );
     }
 
+    @GetMapping("/details/profs/{profId}")
+    public ResponseEntity<?> getProfBoardDetail(
+        Pageable pageable,
+        @PathVariable Long profId) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(boardService.findProfBoardDetail(profId,pageable))
+            );
+    }
 //    @GetMapping("/details/{postId}")
 //    @Operation(summary = "게시글 상세 조회 요청", description = "게시글의 상세 내용을 조회를 요청합니다.", tags = { "Board Controller" })
 //    public ResponseEntity<?> findByBoardId(@PathVariable Long postId) {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +37,12 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+        List<BoardReadResponse> boardReadResponseList = boardRepository.findAllByOrderByRegDateDesc(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
+        Collections.reverse(boardReadResponseList);
+        return boardReadResponseList;
     }
     @Transactional
     public BoardDetailResponse findById(Long postId) {
@@ -108,14 +111,16 @@ public class BoardService {
         boardRepository.addViewCount(board);
     }
 
-    public List<BoardReadResponse> findProfBoardDetail(Long profId) {
+    public List<BoardReadResponse> findProfBoardDetail(Long profId,Pageable pageable) {
         Professor professor = professorRepository.findById(profId).orElseThrow(
             () -> new IllegalArgumentException()
         );
-        return boardRepository.findAllByProfessor(professor)
+        List<BoardReadResponse> boardReadResponseList = boardRepository.findAllByProfessorOrderByRegDateDesc(professor,pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
+        Collections.reverse(boardReadResponseList);
+        return boardReadResponseList;
     }
 }
 

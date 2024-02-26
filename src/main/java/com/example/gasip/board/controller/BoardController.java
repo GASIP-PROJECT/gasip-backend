@@ -58,11 +58,12 @@ public class BoardController {
 
     @GetMapping("/details/profs/{profId}")
     public ResponseEntity<?> getProfBoardDetail(
+        Pageable pageable,
         @PathVariable Long profId) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findProfBoardDetail(profId))
+                ApiUtils.success(boardService.findProfBoardDetail(profId,pageable))
             );
     }
 //    @GetMapping("/details/{postId}")

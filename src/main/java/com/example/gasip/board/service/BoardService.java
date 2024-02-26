@@ -50,6 +50,7 @@ public class BoardService {
     @Transactional
     public BoardReadResponse findBoardId(Long postId) {
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
+        insertView(postId);
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
@@ -85,13 +86,13 @@ public class BoardService {
      * 조회수
      */
     @Transactional
-    public void insertView(BoardReadRequest boardReadRequest) throws Exception {
+    public void insertView(Long postId) {
 
 //        Member member = memberRepository.findById(boardReadResponse.getMemberId())
 //                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
 
-        Board board = boardRepository.findById(boardReadRequest.getPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReadRequest.getPostId()));
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
 
 //        // 이미 좋아요되어있으면 에러 반환
 //        if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
@@ -105,6 +106,16 @@ public class BoardService {
 
         boardRepository.save(board);
         boardRepository.addViewCount(board);
+    }
+
+    public List<BoardReadResponse> findProfBoardDetail(Long profId) {
+        Professor professor = professorRepository.findById(profId).orElseThrow(
+            () -> new IllegalArgumentException()
+        );
+        return boardRepository.findAllByProfessor(professor)
+            .stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
     }
 }
 

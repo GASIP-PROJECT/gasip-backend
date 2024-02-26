@@ -7,7 +7,6 @@ import ProfList from './ProfList';
 import ThemeStyle from './ThemeStyle';
 
 import { fetchBoards } from '../Utils/FetchFunc';
-import { fakeBoardsFetch } from '../Utils/FakeFetch';
 
 
 const {width:SCREEN_WIDTH, height:SCREEN_HEIGHT} = Dimensions.get("window");

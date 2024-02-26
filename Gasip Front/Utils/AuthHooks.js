@@ -25,7 +25,9 @@ const useAuthDispatch = () => {
                     token: token
                 });
             },
-            signOut: () => dispatch({type: "SIGN_OUT"}),
+            signOut: () => dispatch({
+                type: "SIGN_OUT"
+            }),
             signUp: async (token) => {
                 await storeToken(token);
                 dispatch({

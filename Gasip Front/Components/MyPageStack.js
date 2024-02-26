@@ -8,7 +8,7 @@ import SignUpPage from '../Components/SignUpPage';
 import SignInPage from '../Components/SignInPage';
 import SplashScreen from './SplashScreen';
 
-import { restoreToken } from '../Utils/AuthFunc';
+import { checkToken } from '../Utils/AuthFunc';
 import useAuthDispatch from '../Utils/AuthHooks';
 
 
@@ -20,6 +20,14 @@ function HomeStack(){
 
     useEffect(() => {
         authDispatch.restoreToken();
+
+        if (userToken !== null) {
+            checkToken(userToken).then((res) => {
+                if (res === 401) {
+                    authDispatch.signOut();
+                }
+            })
+        }
     }, []);
 
 

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,6 @@ public class BoardService {
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
-        Collections.reverse(boardReadResponseList);
         return boardReadResponseList;
     }
     @Transactional
@@ -119,7 +117,6 @@ public class BoardService {
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
-        Collections.reverse(boardReadResponseList);
         return boardReadResponseList;
     }
 }

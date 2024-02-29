@@ -1,6 +1,6 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,8 +16,8 @@ public class BoardUpdateRequest {
     @Schema(description = "게시글 내용")
     private String content;
 
-    public Board toEntity(BoardUpdateRequest boardUpdateRequest) {
-        return Board.builder()
+    public ProfBoard toEntity(BoardUpdateRequest boardUpdateRequest) {
+        return ProfBoard.builder()
                 .content(boardUpdateRequest.getContent())
                 .build();
     }

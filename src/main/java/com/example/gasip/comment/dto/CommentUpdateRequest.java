@@ -1,6 +1,6 @@
 package com.example.gasip.comment.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.member.model.Member;
 import jakarta.validation.constraints.NotNull;
@@ -17,9 +17,9 @@ public class CommentUpdateRequest {
     @NotNull
     private String content;
 
-    public Comment toEntity(Board board, Member member) {
+    public Comment toEntity(ProfBoard profBoard, Member member) {
         return Comment.builder()
-            .board(board)
+            .profBoard(profBoard)
             .member(member)
             .content(content)
             .build();

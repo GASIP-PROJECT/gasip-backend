@@ -1,7 +1,7 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
-import com.example.gasip.board.model.Board;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -40,15 +40,15 @@ public class BoardCreateResponse extends BaseTimeEntity {
     }
 
     //fromEntity메서드 개발
-    public static BoardCreateResponse fromEntity(Board board) {
+    public static BoardCreateResponse fromEntity(ProfBoard profBoard) {
         return BoardCreateResponse.builder()
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .postId(board.getPostId())
-                .content(board.getContent())
+                .regDate(profBoard.getRegDate())
+                .updateDate(profBoard.getUpdateDate())
+                .postId(profBoard.getPostId())
+                .content(profBoard.getContent())
                 .clickCount(0L)
                 .likeCount(0L)
-                .profId(board.getProfessor().getProfId())
+                .profId(profBoard.getProfessor().getProfId())
                 .build();
     }
 

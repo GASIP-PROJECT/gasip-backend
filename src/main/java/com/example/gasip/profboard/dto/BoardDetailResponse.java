@@ -1,6 +1,6 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -22,15 +22,15 @@ public class BoardDetailResponse extends BaseTimeEntity {
     @Schema(description = "게시글과 관련된 교수정보")
     private Long profId;
 
-    public static BoardDetailResponse fromEntity(Board board) {
+    public static BoardDetailResponse fromEntity(ProfBoard profBoard) {
         return BoardDetailResponse.builder()
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .postId(board.getPostId())
-                .content(board.getContent())
-                .clickCount(board.getClickCount())
-                .likeCount(board.getLikeCount())
-                .profId(board.getProfessor().getProfId())
+                .regDate(profBoard.getRegDate())
+                .updateDate(profBoard.getUpdateDate())
+                .postId(profBoard.getPostId())
+                .content(profBoard.getContent())
+                .clickCount(profBoard.getClickCount())
+                .likeCount(profBoard.getLikeCount())
+                .profId(profBoard.getProfessor().getProfId())
                 .build();
     }
 }

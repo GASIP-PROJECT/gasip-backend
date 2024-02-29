@@ -22,7 +22,7 @@ public class QLikes extends EntityPathBase<Likes> {
 
     public static final QLikes likes = new QLikes("likes");
 
-    public final com.example.gasip.board.model.QBoard board;
+    public final com.example.gasip.profboard.model.QBoard board;
 
     public final NumberPath<Long> likesId = createNumber("likesId", Long.class);
 
@@ -46,7 +46,7 @@ public class QLikes extends EntityPathBase<Likes> {
 
     public QLikes(Class<? extends Likes> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.board = inits.isInitialized("board") ? new com.example.gasip.board.model.QBoard(forProperty("board"), inits.get("board")) : null;
+        this.board = inits.isInitialized("board") ? new com.example.gasip.profboard.model.QBoard(forProperty("board"), inits.get("board")) : null;
         this.member = inits.isInitialized("member") ? new com.example.gasip.member.model.QMember(forProperty("member")) : null;
     }
 

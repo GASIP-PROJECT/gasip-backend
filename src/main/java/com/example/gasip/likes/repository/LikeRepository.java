@@ -1,6 +1,6 @@
 package com.example.gasip.likes.repository;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.likes.model.Likes;
 import com.example.gasip.member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, Long> {
-    Optional<Likes> findByMemberAndBoard(Member member, Board board);
+    Optional<Likes> findByMemberAndBoard(Member member, ProfBoard profBoard);
 }

@@ -1,8 +1,7 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,9 +14,9 @@ public class BoardReadRequest extends BaseTimeEntity {
 
     private Long postId;
 
-    public static BoardReadRequest toEntity(Board board) {
+    public static BoardReadRequest toEntity(ProfBoard profBoard) {
         return BoardReadRequest.builder()
-                .postId(board.getPostId())
+                .postId(profBoard.getPostId())
                 .build();
     }
 }

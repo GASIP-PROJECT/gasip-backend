@@ -1,10 +1,10 @@
-package com.example.gasip.board.repository;
+package com.example.gasip.profboard.repository;
 
-import com.example.gasip.board.dto.BoardContentDto;
-import com.example.gasip.board.dto.BoardReadRequest;
-import com.example.gasip.board.dto.BoardReadResponse;
-import com.example.gasip.board.dto.QBoardReadResponse;
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.dto.BoardContentDto;
+import com.example.gasip.profboard.dto.BoardReadRequest;
+import com.example.gasip.profboard.dto.BoardReadResponse;
+import com.example.gasip.profboard.dto.QBoardReadResponse;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.example.gasip.board.model.QBoard.board;
+import static com.example.gasip.profboard.model.QBoard.board;
 import static com.example.gasip.member.model.QMember.member;
 
 @RequiredArgsConstructor
-public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
+public class ProfProfBoardRepositoryCustomImpl implements ProfBoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -52,18 +52,18 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
 
     @Override
-    public void addLikeCount(Board selectedBoard) {
+    public void addLikeCount(ProfBoard selectedProfBoard) {
         queryFactory.update(board)
                 .set(board.likeCount, board.likeCount.add(1))
-                .where(board.eq(selectedBoard))
+                .where(board.eq(selectedProfBoard))
                 .execute();
     }
 
     @Override
-    public void subLikeCount(Board selectedBoard) {
+    public void subLikeCount(ProfBoard selectedProfBoard) {
         queryFactory.update(board)
                 .set(board.likeCount, board.likeCount.subtract(1))
-                .where(board.eq(selectedBoard))
+                .where(board.eq(selectedProfBoard))
                 .execute();
     }
 
@@ -73,10 +73,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
 
     @Override
-    public void addViewCount(Board selectedBoard) {
+    public void addViewCount(ProfBoard selectedProfBoard) {
         queryFactory.update(board)
                 .set(board.clickCount, board.clickCount.add(1))
-                .where(board.eq(selectedBoard))
+                .where(board.eq(selectedProfBoard))
                 .execute();
     }
 

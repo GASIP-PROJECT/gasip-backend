@@ -1,7 +1,7 @@
 package com.example.gasip.member.service;
 
 import com.auth0.jwt.JWT;
-import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.profboard.repository.ProfBoardRepository;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.dto.*;
@@ -26,7 +26,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationProvider authenticationProvider;
     private final JwtService jwtService;
-    private final BoardRepository boardRepository;
+    private final ProfBoardRepository boardRepository;
 
     @Transactional
     public MemberSignUpResponse signup(MemberSignUpRequest memberSignUpRequest) {

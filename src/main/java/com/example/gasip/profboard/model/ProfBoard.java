@@ -1,6 +1,7 @@
-package com.example.gasip.board.model;
+package com.example.gasip.profboard.model;
 
 import com.example.gasip.comment.model.Comment;
+import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,16 +11,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "prof_board")
+@Table(name = "board")
 @SuperBuilder
-public class Board {
+@Schema(description = "게시글 관련된 VO")
+@DynamicInsert
+public class ProfBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +51,20 @@ public class Board {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "profBoard", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
+
+    public ProfBoard(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member) {
+        super(regDate, updateDate);
+        this.postId = postId;
+        this.content = content;
+        this.clickCount = clickCount;
+        this.likeCount = likeCount;
+        this.professor = professor;
+        this.member = member;
+    }
+    public void updateBoard(String content) {
+        this.content = content;
+        this.updateDate = LocalDateTime.now();
+    }
 }

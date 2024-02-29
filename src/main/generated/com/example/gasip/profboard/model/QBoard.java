@@ -1,4 +1,4 @@
-package com.example.gasip.board.model;
+package com.example.gasip.profboard.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -14,7 +14,7 @@ import com.querydsl.core.types.dsl.PathInits;
  * QBoard is a Querydsl query type for Board
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QBoard extends EntityPathBase<Board> {
+public class QBoard extends EntityPathBase<ProfBoard> {
 
     private static final long serialVersionUID = -509021414L;
 
@@ -45,10 +45,10 @@ public class QBoard extends EntityPathBase<Board> {
     public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
 
     public QBoard(String variable) {
-        this(Board.class, forVariable(variable), INITS);
+        this(ProfBoard.class, forVariable(variable), INITS);
     }
 
-    public QBoard(Path<? extends Board> path) {
+    public QBoard(Path<? extends ProfBoard> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
@@ -57,10 +57,10 @@ public class QBoard extends EntityPathBase<Board> {
     }
 
     public QBoard(PathMetadata metadata, PathInits inits) {
-        this(Board.class, metadata, inits);
+        this(ProfBoard.class, metadata, inits);
     }
 
-    public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
+    public QBoard(Class<? extends ProfBoard> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.member = inits.isInitialized("member") ? new com.example.gasip.member.model.QMember(forProperty("member")) : null;
         this.professor = inits.isInitialized("professor") ? new com.example.gasip.professor.model.QProfessor(forProperty("professor"), inits.get("professor")) : null;

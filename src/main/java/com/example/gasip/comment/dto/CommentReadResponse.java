@@ -38,7 +38,7 @@ public class CommentReadResponse implements Serializable {
     }
     private static CommentReadResponse buildCommentDtoWithParentId(Comment comment) {
         return CommentReadResponse.builder()
-            .postId(comment.getBoard().getPostId())
+            .postId(comment.getProfBoard().getPostId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .parentId(comment.getParentComment().getCommentId())
@@ -46,7 +46,7 @@ public class CommentReadResponse implements Serializable {
     }
     private static CommentReadResponse buildCommentDtoWithChildrenComment(Comment comment) {
         return CommentReadResponse.builder()
-            .postId(comment.getBoard().getPostId())
+            .postId(comment.getProfBoard().getPostId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .commentChildren(comment.getCommentChildren().stream().map(CommentReadResponse::fromEntity).collect(Collectors.toList()))

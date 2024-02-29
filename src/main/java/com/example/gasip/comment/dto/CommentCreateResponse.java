@@ -31,7 +31,7 @@ public class CommentCreateResponse {
     }
     private static CommentCreateResponse buildCommentDtoWithParentId(Comment comment) {
         return CommentCreateResponse.builder()
-            .postId(comment.getBoard().getPostId())
+            .postId(comment.getProfBoard().getPostId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .parentId(comment.getParentComment().getCommentId())
@@ -39,7 +39,7 @@ public class CommentCreateResponse {
     }
     private static CommentCreateResponse buildCommentDtoWithoutParentId(Comment comment) {
         return CommentCreateResponse.builder()
-            .postId(comment.getBoard().getPostId())
+            .postId(comment.getProfBoard().getPostId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .build();

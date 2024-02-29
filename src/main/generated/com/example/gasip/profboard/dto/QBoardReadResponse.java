@@ -1,6 +1,4 @@
-package com.example.gasip.board.dto;
-
-import com.querydsl.core.types.dsl.*;
+package com.example.gasip.profboard.dto;
 
 import com.querydsl.core.types.ConstructorExpression;
 import javax.annotation.processing.Generated;

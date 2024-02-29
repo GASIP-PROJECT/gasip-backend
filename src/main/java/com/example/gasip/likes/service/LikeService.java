@@ -1,7 +1,7 @@
 package com.example.gasip.likes.service;
 
-import com.example.gasip.board.model.Board;
-import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.profboard.model.ProfBoard;
+import com.example.gasip.profboard.repository.ProfBoardRepository;
 import com.example.gasip.exception.DuplicateResourceException;
 import com.example.gasip.likes.dto.LikeRequestDto;
 import com.example.gasip.likes.model.Likes;
@@ -18,7 +18,7 @@ import org.webjars.NotFoundException;
 public class LikeService {
     private final LikeRepository likeRepository;
     private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
+    private final ProfBoardRepository boardRepository;
 
     @Transactional
     public void insert(LikeRequestDto likeRequestDto) throws Exception {
@@ -26,23 +26,23 @@ public class LikeService {
         Member member = memberRepository.findById(likeRequestDto.getMemberId())
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + likeRequestDto.getMemberId()));
 
-        Board board = boardRepository.findById(likeRequestDto.getPostId())
+        ProfBoard profBoard = boardRepository.findById(likeRequestDto.getPostId())
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + likeRequestDto.getPostId()));
 
         // 이미 좋아요되어있으면 에러 반환
-        if (likeRepository.findByMemberAndBoard(member, board).isPresent()){
+        if (likeRepository.findByMemberAndBoard(member, profBoard).isPresent()){
             //TODO 409에러로 변경
             throw new DuplicateResourceException("already exist data by member id :" + member.getMemberId() + " ,"
-                    + "board id : " + board.getPostId());
+                    + "board id : " + profBoard.getPostId());
         }
 
         Likes likes = Likes.builder()
-                .board(board)
+                .board(profBoard)
                 .member(member)
                 .build();
 
         likeRepository.save(likes);
-        boardRepository.addLikeCount(board);
+        boardRepository.addLikeCount(profBoard);
     }
 
     @Transactional
@@ -51,13 +51,13 @@ public class LikeService {
         Member member = memberRepository.findById(likeRequestDto.getMemberId())
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + likeRequestDto.getMemberId()));
 
-        Board board = boardRepository.findById(likeRequestDto.getPostId())
+        ProfBoard profBoard = boardRepository.findById(likeRequestDto.getPostId())
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + likeRequestDto.getPostId()));
 
-        Likes likes = likeRepository.findByMemberAndBoard(member, board)
+        Likes likes = likeRepository.findByMemberAndBoard(member, profBoard)
                 .orElseThrow(() -> new NotFoundException("Could not found heart id"));
 
         likeRepository.delete(likes);
-        boardRepository.subLikeCount(board);
+        boardRepository.subLikeCount(profBoard);
     }
 }

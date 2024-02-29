@@ -1,7 +1,7 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
-import com.example.gasip.board.model.Board;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,8 +29,8 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Member member;
 
 
-    public Board toEntity(Professor prof, Member mem) {
-        return Board.builder()
+    public ProfBoard toEntity(Professor prof, Member mem) {
+        return ProfBoard.builder()
                 .content(content)
                 .clickCount(clickCount)
                 .likeCount(likeCount)

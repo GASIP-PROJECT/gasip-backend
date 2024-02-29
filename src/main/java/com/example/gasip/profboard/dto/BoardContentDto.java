@@ -1,6 +1,6 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,10 +19,10 @@ public class BoardContentDto {
         this.content = content;
     }
 
-    public static BoardContentDto fromEntity(Board board) {
+    public static BoardContentDto fromEntity(ProfBoard profBoard) {
         return BoardContentDto.builder()
-            .postId(board.getPostId())
-            .content(board.getContent())
+            .postId(profBoard.getPostId())
+            .content(profBoard.getContent())
             .build();
         }
     }

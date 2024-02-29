@@ -1,6 +1,6 @@
 package com.example.gasip.likes.model;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.member.model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,11 +22,11 @@ public class Likes {
     private Member member;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Board board;
+    private ProfBoard profBoard;
 
     @Builder
-    public Likes(Member member, Board board) {
+    public Likes(Member member, ProfBoard profBoard) {
         this.member = member;
-        this.board = board;
+        this.profBoard = profBoard;
     }
 }

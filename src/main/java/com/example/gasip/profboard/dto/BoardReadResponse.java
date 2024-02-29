@@ -1,6 +1,6 @@
-package com.example.gasip.board.dto;
+package com.example.gasip.profboard.dto;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,15 +41,15 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.likeCount = likeCount;
         this.profId = profId;
     }
-    public static BoardReadResponse fromEntity(Board board) {
+    public static BoardReadResponse fromEntity(ProfBoard profBoard) {
         return BoardReadResponse.builder()
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .postId(board.getPostId())
-                .content(board.getContent())
-                .clickCount(board.getClickCount())
-                .likeCount(board.getLikeCount())
-                .profId(board.getProfessor().getProfId())
+                .regDate(profBoard.getRegDate())
+                .updateDate(profBoard.getUpdateDate())
+                .postId(profBoard.getPostId())
+                .content(profBoard.getContent())
+                .clickCount(profBoard.getClickCount())
+                .likeCount(profBoard.getLikeCount())
+                .profId(profBoard.getProfessor().getProfId())
                 .build();
     }
 }

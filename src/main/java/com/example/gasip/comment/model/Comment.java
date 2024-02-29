@@ -1,6 +1,6 @@
 package com.example.gasip.comment.model;
 
-import com.example.gasip.board.model.Board;
+import com.example.gasip.profboard.model.ProfBoard;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.member.model.Member;
 import jakarta.persistence.*;
@@ -36,7 +36,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Board board;
+    private ProfBoard profBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

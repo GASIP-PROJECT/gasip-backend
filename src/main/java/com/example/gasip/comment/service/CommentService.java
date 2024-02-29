@@ -1,7 +1,7 @@
 package com.example.gasip.comment.service;
 
-import com.example.gasip.board.model.Board;
-import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.profboard.model.ProfBoard;
+import com.example.gasip.profboard.repository.ProfBoardRepository;
 import com.example.gasip.comment.dto.*;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final BoardRepository boardRepository;
+    private final ProfBoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
     // 댓글 create
     @Transactional
     public CommentCreateResponse createComment(MemberDetails memberDetails, CommentCreateRequest commentCreateRequest, Long boardId) {
         Member member = memberRepository.getReferenceById(memberDetails.getId());
-        Board board = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
-        Comment comment = commentRepository.save(commentCreateRequest.toEntity(board,member));
+        ProfBoard profBoard = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
+        Comment comment = commentRepository.save(commentCreateRequest.toEntity(profBoard,member));
 
         Comment parentComment;
         if (commentCreateRequest.getParentId() != null) {
@@ -50,8 +50,8 @@ public class CommentService {
     // 특정 게시글 댓글 조회
     @Transactional(readOnly = true)
     public List<CommentReadResponse> findCommentByBoard(Long postId) {
-        Board board = boardRepository.getReferenceById(postId);
-        List<CommentReadResponse> commentlist = commentRepository.findAllByBoard(board)
+        ProfBoard profBoard = boardRepository.getReferenceById(postId);
+        List<CommentReadResponse> commentlist = commentRepository.findAllByBoard(profBoard)
             .stream()
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());

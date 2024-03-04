@@ -30,13 +30,16 @@ public class Board extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "게시글 ID")
     private Long postId;
+
     @Column(nullable = false,length = 500)
     @Schema(description = "게시글 내용")
     private String content;
+
     @Column(nullable = false)
     @Schema(description = "게시글 조회수")
     @ColumnDefault("0")
     private Long clickCount;
+
     @Column(nullable = false)
     @Schema(description = "게시글 좋아요")
     @ColumnDefault("0")

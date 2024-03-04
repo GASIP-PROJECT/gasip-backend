@@ -36,7 +36,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+        return boardRepository.findAllByOrderByRegDateDesc(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
@@ -49,6 +49,7 @@ public class BoardService {
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId) {
+        insertView(postId);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
     }
@@ -85,23 +86,10 @@ public class BoardService {
      * 조회수
      */
     @Transactional
-    public void insertView(BoardReadRequest boardReadRequest) throws Exception {
+    public void insertView(Long postId) {
 
-//        Member member = memberRepository.findById(boardReadResponse.getMemberId())
-//                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
-
-        Board board = boardRepository.findById(boardReadRequest.getPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReadRequest.getPostId()));
-
-//        // 이미 좋아요되어있으면 에러 반환
-//        if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
-//            //TODO 409에러로 변경
-//            throw new NotFoundException("Wrong postId : " + boardReadRequest.getPostId());
-//        }
-
-//        Likes likes = Likes.builder()
-//                .board(board)
-//                .build();
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
 
         boardRepository.save(board);
         boardRepository.addViewCount(board);

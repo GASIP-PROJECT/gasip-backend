@@ -49,33 +49,13 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
-        boardService.insertView(boardReadRequest);
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) throws Exception {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardId(boardReadRequest.getPostId()))
+                ApiUtils.success(boardService.findBoardId(postId))
             );
     }
-
-//    @GetMapping("/details/{postId}")
-//    @Operation(summary = "게시글 상세 조회 요청", description = "게시글의 상세 내용을 조회를 요청합니다.", tags = { "Board Controller" })
-//    public ResponseEntity<?> findByBoardId(@PathVariable Long postId) {
-//        return ResponseEntity
-//            .ok()
-//            .body(
-//                ApiUtils.success(
-//                    boardService.findBoardId(postId)
-//                )
-//            );
-//    }
-
-//    @GetMapping("{postId}")
-//    public HttpResponseEntity.ResponseResult<?> insertView(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
-//        boardService.insertView(boardReadRequest);
-//        return success();
-//            }
-
 
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 요청", description = "게시글을 수정을 요청합니다.", tags = { "Board Controller" })
@@ -90,7 +70,6 @@ public class BoardController {
                     boardService.editBoard(memberDetails,boardId,boardUpdateRequest)
                 )
             );
-
     }
 
     @DeleteMapping("/{boardId}")
@@ -105,6 +84,5 @@ public class BoardController {
                     boardService.deleteBoard(memberDetails,boardId)
                 )
             );
-
     }
 }

@@ -49,7 +49,7 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) throws Exception {
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) {
         return ResponseEntity
             .ok()
             .body(
@@ -83,6 +83,16 @@ public class BoardController {
                 ApiUtils.success(
                     boardService.deleteBoard(memberDetails,boardId)
                 )
+            );
+    }
+
+    @GetMapping("/best/{profId}")
+    public ResponseEntity<?> getBestBoard(@PathVariable Long profId,
+    Pageable pageable) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(boardService.findBestBoard(profId,pageable))
             );
     }
 }

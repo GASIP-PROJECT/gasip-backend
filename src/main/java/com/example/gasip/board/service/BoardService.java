@@ -65,6 +65,14 @@ public class BoardService {
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
     }
+    @Transactional
+    public List<BoardReadResponse> findBestBoard(Long profId, Pageable pageable) {
+        Professor professor = professorRepository.getReferenceById(profId);
+        return boardRepository.findByProfessorOrderByLikeCountDesc(professor, pageable)
+            .stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
 
     private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
         Board board = validateBoardEmpty(boardId);

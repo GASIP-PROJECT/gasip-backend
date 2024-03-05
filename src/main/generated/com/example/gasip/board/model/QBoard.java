@@ -30,6 +30,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath content = createString("content");
 
+    public final NumberPath<Integer> gradePoint = createNumber("gradePoint", Integer.class);
+
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
     public final com.example.gasip.member.model.QMember member;

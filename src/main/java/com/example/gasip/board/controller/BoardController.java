@@ -1,7 +1,6 @@
 package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
-import com.example.gasip.board.dto.BoardReadRequest;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;

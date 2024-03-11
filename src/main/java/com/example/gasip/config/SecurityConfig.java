@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,15 +38,6 @@ public class SecurityConfig {
      * Swagger 접근 관련 URL 제외
      */
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/",
-                                                                 "/swagger/**",
-                                                                 "/swagger-ui.html",
-                                                                 "/swagger-resources/**",
-                                                                 "/V3/api-docs");
-    }
-
-    @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
 
         http.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
@@ -63,6 +54,17 @@ public class SecurityConfig {
             .securityMatcher("/**")
             .authorizeHttpRequests(
                 registry -> registry
+                        .requestMatchers("/",
+                                "/swagger/**",
+                                "/swagger-ui/**",
+                                "/api-docs/swagger-config",
+                                "/api-docs/**",
+                                "/configuration/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui.html/index.html",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/all-professors/**").permitAll()

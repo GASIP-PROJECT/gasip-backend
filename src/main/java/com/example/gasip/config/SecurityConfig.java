@@ -35,7 +35,7 @@ public class SecurityConfig {
     private final UnauthorizedHandler unauthorizedHandler;
 
     /**
-     * Swagger 접근 관련 URL 제외
+     * Swagger 접근 관련 URL 제외 코드 추가
      */
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {

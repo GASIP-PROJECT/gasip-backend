@@ -35,23 +35,6 @@ public class swaggerConfig {
     }
 
     /**
-     * JWT 관련 설정
-     */
-    @Bean
-    public OpenAPI openAPI(){
-        SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
-                .in(SecurityScheme.In.HEADER).name("Authorization");
-
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
-
-        return new OpenAPI()
-                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
-                .security(Arrays.asList(securityRequirement));
-    }
-
-
-    /**
      * 교수 정보 그룹
      */
     @Bean
@@ -115,4 +98,21 @@ public class swaggerConfig {
             .pathsToMatch(paths)
             .build();
     }
+
+    /**
+     * JWT 관련 설정
+     */
+    @Bean
+    public OpenAPI openAPI(){
+        SecurityScheme securityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
+                .in(SecurityScheme.In.HEADER).name("Authorization");
+
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("BearerAuth");
+
+        return new OpenAPI()
+                .components(new Components().addSecuritySchemes("BearerAuth", securityScheme))
+                .security(Arrays.asList(securityRequirement));
+    }
+
 }

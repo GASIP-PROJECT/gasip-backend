@@ -1,5 +1,6 @@
 package com.example.gasip.board.controller;
 
+import com.example.gasip.board.dto.BoardCreateRequest;
 import com.example.gasip.board.service.BoardService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,12 @@ class BoardControllerTest {
     private BoardService boardService;
     @Test
     void createBoard() {
+        //given
+        BoardCreateRequest request = new BoardCreateRequest();
+        Long profId = 1L;
+        //when
+
+        //then
 
     }
 

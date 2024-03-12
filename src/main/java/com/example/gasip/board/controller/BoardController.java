@@ -42,7 +42,7 @@ public class BoardController {
     }
 
     @GetMapping("")
-    @Operation(summary = "전체 게시글 조회 요청", description = "전체 게시글을 조회를 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "전체 게시글 조회 요청", description = "작성된 전체 게시글을 조회합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> findAllBoard(Pageable pageable) {
         return ResponseEntity
             .ok()

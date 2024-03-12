@@ -93,15 +93,40 @@ public class BoardService {
      *
      * 조회수
      */
-    @Transactional
     public void insertView(Long postId) {
 
         Board board = boardRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
 
-        boardRepository.save(board);
-        boardRepository.addViewCount(board);
     }
+    /**
+     *
+     *     @Transactional
+     *     public void insertView(Long postId) throws Exception {
+     *
+     *         Board board = boardRepository.findById(postId)
+     *                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+     *
+     *         boardRepository.save(board);
+     *         boardRepository.addViewCount(board);
+     *
+     *         Member member = memberRepository.findById(boardReadResponse.getMemberId())
+     *                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
+     *
+     *
+     *         // 이미 좋아요되어있으면 에러 반환
+     *         if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
+     *             //TODO 409에러로 변경
+     *             throw new NotFoundException("Wrong postId : " + boardReadRequest.getPostId());
+     *         }
+     *
+     *         Likes likes = Likes.builder()
+     *                 .board(board)
+     *                 .build();
+     *
+     *     }
+     */
+
 }
 
 

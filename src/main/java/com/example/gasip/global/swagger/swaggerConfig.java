@@ -11,6 +11,7 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.awt.*;
 import java.util.Arrays;
 
 @OpenAPIDefinition(
@@ -97,6 +98,19 @@ public class swaggerConfig {
             .group("member")
             .pathsToMatch(paths)
             .build();
+    }
+
+    /**
+     * 카테고리 그룹
+     */
+    @Bean
+    public GroupedOpenApi categoryOpenApi() {
+        String[] paths = {"/all-colleges/**"};
+
+        return GroupedOpenApi.builder()
+                .group("category")
+                .pathsToMatch(paths)
+                .build();
     }
 
     /**

@@ -55,7 +55,7 @@ public class BoardController {
 
 
     @GetMapping("/details/{postId}")
-    @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
+    @Operation(summary = "교수별 게시글 상세 정보 요청", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 게시글 목록을 조회합니다.")
     public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) throws Exception {
         boardService.insertView(postId);
@@ -86,7 +86,8 @@ public class BoardController {
 
 
     @PutMapping("/{boardId}")
-    @Operation(summary = "게시글 수정 요청", description = "게시글을 수정을 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "게시글 수정 요청", description = "작성된 게시글을 수정을 요청합니다.", tags = { "Board Controller" })
+    @Parameter(name = "content", description = "작성된 게시글의 내용을 수정 할 content를 입력받아 수정합니다.")
     public ResponseEntity<?> editBoard(
             @AuthenticationPrincipal MemberDetails memberDetails,
             @PathVariable Long boardId,

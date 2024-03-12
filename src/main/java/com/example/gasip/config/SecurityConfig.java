@@ -54,17 +54,17 @@ public class SecurityConfig {
             .securityMatcher("/**")
             .authorizeHttpRequests(
                 registry -> registry
-                        .requestMatchers("/",
-                                "/swagger/**",
-                                "/swagger-ui/**",
-                                "/api-docs/swagger-config",
-                                "/api-docs/**",
-                                "/configuration/**",
-                                "/swagger-ui.html",
-                                "/swagger-ui.html/index.html",
-                                "/swagger-resources/**",
-                                "/webjars/**",
-                                "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/",
+                            "/swagger/**",
+                            "/swagger-ui/**",
+                            "/api-docs/swagger-config",
+                            "/api-docs/**",
+                            "/configuration/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui.html/index.html",
+                            "/swagger-resources/**",
+                            "/webjars/**",
+                            "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/all-professors/**").permitAll()

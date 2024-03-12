@@ -98,8 +98,6 @@ public class BoardService {
 
         Board board = boardRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
-
-        boardRepository.save(board);
         boardRepository.addViewCount(board);
     }
 }

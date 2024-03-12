@@ -1,8 +1,6 @@
 package com.example.gasip.board.controller;
 
-import com.example.gasip.board.dto.BoardCreateRequest;
-import com.example.gasip.board.dto.BoardCreateResponse;
-import com.example.gasip.board.dto.BoardReadResponse;
+import com.example.gasip.board.dto.*;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.college.model.College;
 import com.example.gasip.global.constant.Role;
@@ -10,6 +8,7 @@ import com.example.gasip.global.security.WithMockMember;
 import com.example.gasip.major.model.Major;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.professor.model.Professor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,6 +30,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -92,18 +92,82 @@ class BoardControllerTest {
     }
 
     @Test
-    void getBoardDetail() {
+    void getBoardDetail() throws Exception {
+        //given
+        BoardReadResponse boardReadResponse = new BoardReadResponse(1L, "a", 1L,1L,1L, 2);
+        doReturn(boardReadResponse).when(boardService)
+            .findBoardId(anyLong());
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+            get("/boards/details/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 
     @Test
-    void editBoard() {
+    @WithMockMember
+    void editBoard() throws Exception {
+        //given
+        College college = new College(1L,"AI융합대학");
+        Major major = new Major(1L,"컴퓨터공학과",college);
+        Professor professor = new Professor(1L,"김길동",major);
+        Member member = new Member(1L,"test@test.com","hyemin","123password", Role.MEMBER);
+        BoardUpdateRequest request = new BoardUpdateRequest("change");
+        BoardUpdateResponse response = new BoardUpdateResponse(1L, "change", 1L, 1L, professor);
+
+        doReturn(response).when(boardService)
+            .editBoard(any(),any(),any(BoardUpdateRequest.class));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+            MockMvcRequestBuilders.put("/boards/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        );
+
+        //then
+        MvcResult mvcResult = resultActions.andExpect(status().isOk()).andReturn();
     }
 
     @Test
-    void deleteBoard() {
+    @WithMockMember
+    void deleteBoard() throws Exception {
+        //given
+        String result = "삭제되었습니다.";
+        doReturn(result).when(boardService)
+            .deleteBoard(any(),anyLong());
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+            MockMvcRequestBuilders.delete("/boards/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        MvcResult mvcResult = resultActions.andExpect(status().isOk())
+            .andReturn();
     }
 
     @Test
-    void getBestBoard() {
+    void getBestBoard() throws Exception {
+        //given
+        BoardReadResponse boardReadResponse1 = new BoardReadResponse(1L, "a", 1L,1L,1L, 2);
+        BoardReadResponse boardReadResponse2 = new BoardReadResponse(2L, "b", 1L,1L,1L, 2);
+        List<BoardReadResponse> response = new ArrayList<>();
+        doReturn(response).when(boardService)
+            .findBestBoard(anyLong(),any());
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+            get("/boards/best/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk()).andDo(print());
     }
 }

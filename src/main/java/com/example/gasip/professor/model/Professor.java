@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Table(name = "prof")
@@ -19,7 +21,7 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "교수 ID")
     private Long profId;
-    @Column(nullable = false,length = 40)
+    @Column(nullable = false, length = 40)
     @Schema(description = "교수 이름")
     private String profName;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,11 +29,20 @@ public class Professor {
     @Schema(description = "교수 전공")
     private Major major;
 
+    @Transient
+    private String averageGradePoint;
+
+
     @Builder
-    public Professor(Long profId, String profName,Major major) {
+
+    public Professor(Long profId, String profName, Major major) {
         this.profId = profId;
         this.profName = profName;
         this.major = major;
+    }
+
+    public void updateProfessor(String averagePoint) {
+        this.averageGradePoint = averagePoint;
     }
 
 }

@@ -36,7 +36,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+        return boardRepository.findAllByOrderByRegDateDesc(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
@@ -49,6 +49,7 @@ public class BoardService {
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId) {
+        insertView(postId);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
     }
@@ -63,6 +64,14 @@ public class BoardService {
         validatedBoardWritter(memberDetails, boardId);
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
+    }
+    @Transactional
+    public List<BoardReadResponse> findBestBoard(Long profId, Pageable pageable) {
+        Professor professor = professorRepository.getReferenceById(profId);
+        return boardRepository.findByProfessorOrderByLikeCountDescClickCountDesc(professor, pageable)
+            .stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
     }
 
     private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
@@ -117,7 +126,6 @@ public class BoardService {
      *
      *     }
      */
-
 
 }
 

@@ -30,13 +30,16 @@ public class Board extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "게시글 ID")
     private Long postId;
+
     @Column(nullable = false,length = 500)
     @Schema(description = "게시글 내용")
     private String content;
+
     @Column(nullable = false)
     @Schema(description = "게시글 조회수")
     @ColumnDefault("0")
     private Long clickCount;
+
     @Column(nullable = false)
     @Schema(description = "게시글 좋아요")
     @ColumnDefault("0")
@@ -54,7 +57,13 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member) {
+    @Column(nullable = false)
+    @Schema(description = "교수 평점")
+    @ColumnDefault("0")
+    private int gradePoint;
+
+
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -62,6 +71,7 @@ public class Board extends BaseTimeEntity {
         this.likeCount = likeCount;
         this.professor = professor;
         this.member = member;
+        this.gradePoint = gradePoint;
     }
     public void updateBoard(String content) {
         this.content = content;

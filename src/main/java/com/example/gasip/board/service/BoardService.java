@@ -68,7 +68,7 @@ public class BoardService {
     @Transactional
     public List<BoardReadResponse> findBestBoard(Long profId, Pageable pageable) {
         Professor professor = professorRepository.getReferenceById(profId);
-        return boardRepository.findByProfessorOrderByLikeCountDesc(professor, pageable)
+        return boardRepository.findByProfessorOrderByLikeCountDescClickCountDesc(professor, pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());

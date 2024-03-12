@@ -42,6 +42,13 @@ public class BoardCreateResponse extends BaseTimeEntity {
         this.gradePoint = gradePoint;
     }
 
+    public BoardCreateResponse(Long postId, String content,Long profId, int gradePoint) {
+        this.postId = postId;
+        this.content = content;
+        this.profId = profId;
+        this.gradePoint = gradePoint;
+    }
+
     //fromEntity메서드 개발
     public static BoardCreateResponse fromEntity(Board board) {
         return BoardCreateResponse.builder()

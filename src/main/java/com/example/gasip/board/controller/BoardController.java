@@ -8,6 +8,8 @@ import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +18,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "board 관련 API", description = "게시글 CRUD와 관련된 API입니다.")
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+
     @PostMapping("{profId}")
-    @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "게시글 생성 요청", description = "특정 교수의 profId를 받아 게시글을 생성을 요청합니다.", tags = { "Board Controller" })
+    @Parameter(name = "content", description = "게시글에 들어갈 내용")
     public ResponseEntity<?> createBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
         @RequestBody @Valid BoardCreateRequest boardCreateRequest,

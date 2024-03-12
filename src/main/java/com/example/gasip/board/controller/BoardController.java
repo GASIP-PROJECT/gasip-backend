@@ -104,6 +104,7 @@ public class BoardController {
 
     @DeleteMapping("/{boardId}")
     @Operation(summary = "게시글 삭제 요청", description = "게시글 삭제를 요청합니다.", tags = { "Board Controller" })
+    @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 삭제합니다.")
     public ResponseEntity<?> deleteBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
         @PathVariable Long boardId) {

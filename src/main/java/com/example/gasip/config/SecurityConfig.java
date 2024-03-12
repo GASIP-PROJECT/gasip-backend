@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -34,9 +33,6 @@ public class SecurityConfig {
     private final MemberDetailsService memberDetailsService;
     private final UnauthorizedHandler unauthorizedHandler;
 
-    /**
-     * Swagger 접근 관련 URL 제외 코드 추가
-     */
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
 
@@ -54,17 +50,6 @@ public class SecurityConfig {
             .securityMatcher("/**")
             .authorizeHttpRequests(
                 registry -> registry
-                    .requestMatchers("/",
-                            "/swagger/**",
-                            "/swagger-ui/**",
-                            "/api-docs/swagger-config",
-                            "/api-docs/**",
-                            "/configuration/**",
-                            "/swagger-ui.html",
-                            "/swagger-ui.html/index.html",
-                            "/swagger-resources/**",
-                            "/webjars/**",
-                            "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/all-professors/**").permitAll()

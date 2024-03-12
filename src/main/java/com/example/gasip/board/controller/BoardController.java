@@ -56,6 +56,7 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
+    @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 게시글 목록을 조회합니다.")
     public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) throws Exception {
         boardService.insertView(postId);
         return ResponseEntity

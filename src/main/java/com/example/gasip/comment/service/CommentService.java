@@ -27,11 +27,16 @@ public class CommentService {
     public CommentCreateResponse createComment(MemberDetails memberDetails, CommentCreateRequest commentCreateRequest, Long boardId) {
         Member member = memberRepository.getReferenceById(memberDetails.getId());
         Board board = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
-        Comment comment = commentRepository.save(commentCreateRequest.toEntity(board,member));
-
-        Comment parentComment;
+        Comment comment = null;
+        Comment parentComment = null;
         if (commentCreateRequest.getParentId() != null) {
-            parentComment = commentRepository.findById(commentCreateRequest.getParentId()).orElseThrow(IllegalArgumentException::new);
+            parentComment = commentRepository.getReferenceById(commentCreateRequest.getParentId());
+        }
+
+        if (commentCreateRequest.getParentId() != null &&
+            parentComment.getCommentChildren() != null &&
+            boardId.equals(parentComment.getBoard().getPostId())) {
+            comment = commentRepository.save(commentCreateRequest.toEntity(board,member));
             comment.updateParent(parentComment);
             parentComment.updateCommentChildren(comment);
         }

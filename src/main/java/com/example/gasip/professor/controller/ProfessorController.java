@@ -23,7 +23,6 @@ public class ProfessorController {
 
     private final ProfessorService professorService;
 
-
     /**
      * 교수 조회
      */

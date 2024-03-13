@@ -17,6 +17,7 @@ public class CommentCreateRequest{
                 .board(board)
                 .member(member)
                 .content(content)
+                .commentLike(0L)
                 .build();
     }
 }

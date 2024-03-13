@@ -36,9 +36,11 @@ public class CommentService {
         if (commentCreateRequest.getParentId() != null &&
             parentComment.getCommentChildren() != null &&
             boardId.equals(parentComment.getBoard().getPostId())) {
-            comment = commentRepository.save(commentCreateRequest.toEntity(board,member));
+            comment = commentRepository.save(commentCreateRequest.toEntity(board, member));
             comment.updateParent(parentComment);
             parentComment.updateCommentChildren(comment);
+        } else {
+            comment = commentRepository.save(commentCreateRequest.toEntity(board, member));
         }
         return CommentCreateResponse.fromEntity(comment);
     }

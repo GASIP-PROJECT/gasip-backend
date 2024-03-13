@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    @PostMapping("{profId}")
+    @PostMapping("{profId}") // 전체 게시글 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> createBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,

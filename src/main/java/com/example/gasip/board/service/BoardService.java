@@ -95,7 +95,6 @@ public class BoardService {
      */
     @Transactional
     public void insertView(Long postId) {
-
         Board board = boardRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
         boardRepository.addViewCount(board);

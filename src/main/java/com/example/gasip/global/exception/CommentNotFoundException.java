@@ -1,4 +1,4 @@
-package com.example.gasip.exception;
+package com.example.gasip.global.exception;
 
 public class CommentNotFoundException extends RuntimeException{
     public CommentNotFoundException() {

@@ -48,11 +48,13 @@ public class BoardController {
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "교수별 게시글 상세 정보 불러오기", description = "교수별 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBoardDetail(@PathVariable Long postId) {
+    public ResponseEntity<?> getBoardDetail(
+        @PathVariable Long postId,
+        @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardId(postId))
+                ApiUtils.success(boardService.findBoardId(postId,memberDetails))
             );
     }
 

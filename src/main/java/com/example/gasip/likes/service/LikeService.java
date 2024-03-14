@@ -2,7 +2,7 @@ package com.example.gasip.likes.service;
 
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
-import com.example.gasip.exception.DuplicateResourceException;
+import com.example.gasip.global.exception.DuplicateResourceException;
 import com.example.gasip.likes.dto.LikeRequestDto;
 import com.example.gasip.likes.model.Likes;
 import com.example.gasip.likes.repository.LikeRepository;

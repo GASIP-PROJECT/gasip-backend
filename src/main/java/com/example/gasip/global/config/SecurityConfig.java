@@ -1,4 +1,4 @@
-package com.example.gasip.config;
+package com.example.gasip.global.config;
 
 import com.example.gasip.global.security.JwtAuthenticationFilter;
 import com.example.gasip.global.security.MemberDetailsService;

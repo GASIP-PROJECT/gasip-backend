@@ -94,7 +94,7 @@ class BoardControllerTest {
         //given
         BoardReadResponse boardReadResponse = new BoardReadResponse(1L, "a", 1L,1L,1L, 2);
         doReturn(boardReadResponse).when(boardService)
-            .findBoardId(anyLong());
+            .findBoardId(anyLong(),any());
 
         //when
         ResultActions resultActions = mockMvc.perform(

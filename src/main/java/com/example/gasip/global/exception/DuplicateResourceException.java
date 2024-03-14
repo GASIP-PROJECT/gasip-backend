@@ -1,4 +1,4 @@
-package com.example.gasip.exception;
+package com.example.gasip.global.exception;
 
 public class DuplicateResourceException extends RuntimeException{
     public DuplicateResourceException(String message) {

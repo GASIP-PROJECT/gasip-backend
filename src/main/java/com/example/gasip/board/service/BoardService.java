@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
+    private final RedisViewCountService redisViewCountService;
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -48,8 +52,9 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardReadResponse findBoardId(Long postId) {
-        insertView(postId);
+    public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
+        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        insertView(postId,member);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
     }
@@ -94,10 +99,37 @@ public class BoardService {
      * 조회수
      */
     @Transactional
-    public void insertView(Long postId) {
+    public void insertView(Long postId,Member member) {
+        String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));
         Board board = boardRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
-        boardRepository.addViewCount(board);
+            .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+        if (viewCount == null) {
+            redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()), postId + "_", calculateTimeUntil5Minutes());
+            boardRepository.addViewCount(board);
+        } else {
+            String[] strArray = viewCount.split("_");
+            List<String> redisBoardList = Arrays.asList(strArray);
+
+            boolean isview = false;
+            if (!redisBoardList.isEmpty()) {
+                for (String redisPostId : redisBoardList) {
+                    if (String.valueOf(postId).equals(redisPostId)) {
+                        isview = true;
+                        break;
+                    }
+                }
+                if (!isview) {
+                    viewCount += postId + "_";
+                    redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()),viewCount,calculateTimeUntil5Minutes());
+                    boardRepository.addViewCount(board);
+                }
+            }
+        }
+    }
+    public static long calculateTimeUntil5Minutes() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(5);
+        return ChronoUnit.SECONDS.between(now, midnight);
     }
 }
 

@@ -10,7 +10,6 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,8 +62,7 @@ public class BoardService {
     }
     @Transactional
     public BoardReadResponse findBoardIdWithOutMember(Long postId) {
-        Board board = insertViewWithoutMember(postId);
-        return BoardReadResponse.fromEntity(board);
+        return addViewWithoutMember(postId);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
@@ -142,23 +139,10 @@ public class BoardService {
     }
 
     @Transactional
-    public Board insertViewWithoutMember(Long postId) {
-        RLock lock = redissonClient.getLock(String.format("click:%d", postId));
-        Board board;
-        try {
-            boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
-            if (!available) {
-                System.out.println("redisson getLock timeout");
-            }
-            board = boardRepository.getReferenceById(postId);
-            board.increaseView();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }finally {
-            lock.unlock();
-        }
-
-        return board;
+    public BoardReadResponse addViewWithoutMember(Long postId) {
+        Board board = boardRepository.getReferenceById(postId);
+        board.increaseView();
+        return BoardReadResponse.fromEntity(board);
     }
 }
 

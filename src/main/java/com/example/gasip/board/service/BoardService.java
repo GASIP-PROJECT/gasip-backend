@@ -10,6 +10,8 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +32,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
+    private final RedissonClient redissonClient;
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -56,6 +60,11 @@ public class BoardService {
         Member member = memberRepository.getReferenceById(memberDetails.getId());
         insertView(postId,member);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
+        return BoardReadResponse.fromEntity(board);
+    }
+    @Transactional
+    public BoardReadResponse findBoardIdWithOutMember(Long postId) {
+        Board board = insertViewWithoutMember(postId);
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
@@ -130,6 +139,26 @@ public class BoardService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(5);
         return ChronoUnit.SECONDS.between(now, midnight);
+    }
+
+    @Transactional
+    public Board insertViewWithoutMember(Long postId) {
+        RLock lock = redissonClient.getLock(String.format("click:%d", postId));
+        Board board;
+        try {
+            boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
+            if (!available) {
+                System.out.println("redisson getLock timeout");
+            }
+            board = boardRepository.getReferenceById(postId);
+            board.increaseView();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }finally {
+            lock.unlock();
+        }
+
+        return board;
     }
 }
 

@@ -77,4 +77,8 @@ public class Board extends BaseTimeEntity {
         this.content = content;
         this.updateDate = LocalDateTime.now();
     }
+
+    public void increaseView() {
+        clickCount++;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
 import com.example.gasip.board.dto.BoardUpdateRequest;
+import com.example.gasip.board.service.BoardLockFacade;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final BoardLockFacade boardLockFacade;
     @PostMapping("{profId}") // 전체 게시글 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> createBoard(
@@ -54,7 +56,7 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardId(postId,memberDetails))
+                ApiUtils.success(boardLockFacade.insertView(postId))
             );
     }
 

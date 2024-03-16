@@ -4,20 +4,15 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.repository.ProfessorRepository;
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RequiredArgsConstructor
-@DataJpaTest
-@ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureMockMvc
+@SpringBootTest
 class BoardServiceTest {
     @Autowired
     private BoardRepository boardRepository;

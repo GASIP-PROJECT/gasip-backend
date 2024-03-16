@@ -10,6 +10,7 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
+    private final RedissonClient redissonClient;
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -57,6 +59,10 @@ public class BoardService {
         insertView(postId,member);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
+    }
+    @Transactional
+    public BoardReadResponse findBoardIdWithOutMember(Long postId) {
+        return addViewWithoutMember(postId);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
@@ -130,6 +136,13 @@ public class BoardService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(5);
         return ChronoUnit.SECONDS.between(now, midnight);
+    }
+
+    @Transactional
+    public BoardReadResponse addViewWithoutMember(Long postId) {
+        Board board = boardRepository.getReferenceById(postId);
+        board.increaseView();
+        return BoardReadResponse.fromEntity(board);
     }
 }
 

@@ -3,6 +3,7 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.model.Board;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardLockFacade {
     private final BoardService boardService;
     private final RedissonClient redissonClient;
@@ -21,7 +23,7 @@ public class BoardLockFacade {
         try {
             boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
             if (!available) {
-                System.out.println("redisson getLock timeout");
+                log.warn("redisson getLock timeout");
                 throw new IllegalArgumentException();
             }
             boardReadResponse = boardService.addViewWithoutMember(postId);

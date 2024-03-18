@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/all-professors")
+@RequestMapping("professors")
 public class ProfessorController {
 
     private final ProfessorService professorService;
@@ -62,7 +62,7 @@ public class ProfessorController {
     /**
      * 특정 학과 교수
      */
-    @GetMapping("/major/{majorId}")
+    @GetMapping("/majors/{majorId}")
     @Operation(summary = "학과별 교수 정보 불러오기", description = "학과별 교수 정보를 불러옵니다.", tags = { "Professor Controller" })
     public ResponseEntity<?> findAllById(@PathVariable Major majorId) {
         return ResponseEntity

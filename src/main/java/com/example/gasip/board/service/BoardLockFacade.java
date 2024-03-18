@@ -1,7 +1,6 @@
 package com.example.gasip.board.service;
 
 import com.example.gasip.board.dto.BoardReadResponse;
-import com.example.gasip.board.model.Board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

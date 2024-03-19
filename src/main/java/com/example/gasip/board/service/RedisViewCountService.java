@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +34,10 @@ public class RedisViewCountService {
             valueOperations.set(key,"0");
             setOperations.add("keyList", key);
         }
-        valueOperations.increment(key);
-
         if (!setOperations.isMember("keyList",getData(key))) {
             setOperations.add("keyList",key);
         }
+        valueOperations.increment(key);
     }
 
     public List<String> deleteViewCountInRedis() {
@@ -48,8 +47,8 @@ public class RedisViewCountService {
         return value;
     }
 
-    public void deleteData(String key) {
+    public String getAnddeleteData(String key) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-        valueOperations.getAndDelete(key);
+        return valueOperations.getAndDelete(key);
     }
 }

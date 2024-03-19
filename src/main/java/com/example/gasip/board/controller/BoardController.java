@@ -56,7 +56,9 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardLockFacade.insertView(postId))
+//                ApiUtils.success(boardLockFacade.insertView(postId))
+                ApiUtils.success(boardService.findBoardIdWithOutMember(postId))
+
             );
     }
 

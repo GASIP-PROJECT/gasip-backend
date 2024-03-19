@@ -12,6 +12,7 @@ import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -61,8 +62,8 @@ public class BoardService {
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
-    public BoardReadResponse findBoardIdWithOutMember(Long postId) {
-        return addViewWithoutMember(postId);
+    public BoardReadResponse findBoardIdWithOutMember(Long boardId) {
+        return addViewWithoutMember(boardId);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
@@ -99,18 +100,13 @@ public class BoardService {
                 IllegalArgumentException::new
         );
     }
-
-    /**
-     *
-     * 조회수
-     */
     @Transactional
     public void insertView(Long postId,Member member) {
         String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));
         Board board = boardRepository.findById(postId)
             .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
         if (viewCount == null) {
-            redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()), postId + "_", calculateTimeUntil5Minutes());
+            redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()), postId + "_", calculateTimeOut(5));
             boardRepository.addViewCount(board);
         } else {
             String[] strArray = viewCount.split("_");
@@ -126,23 +122,36 @@ public class BoardService {
                 }
                 if (!isview) {
                     viewCount += postId + "_";
-                    redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()),viewCount,calculateTimeUntil5Minutes());
+                    redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()),viewCount,calculateTimeOut(5));
                     boardRepository.addViewCount(board);
                 }
             }
         }
     }
-    public static long calculateTimeUntil5Minutes() {
+    public static long calculateTimeOut(int time) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(5);
+        LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(time);
         return ChronoUnit.SECONDS.between(now, midnight);
     }
 
     @Transactional
-    public BoardReadResponse addViewWithoutMember(Long postId) {
-        Board board = boardRepository.getReferenceById(postId);
-        board.increaseView();
+    public BoardReadResponse addViewWithoutMember(Long boardId) {
+        Board board = boardRepository.getReferenceById(boardId);
+        redisViewCountService.addViewCountInRedis(boardId);
         return BoardReadResponse.fromEntity(board);
+    }
+
+    @Scheduled(cron = "0 * * * * *",zone = "Asia/Seoul")
+    @Transactional
+    public void combineViewCount() {
+        System.out.println("시작");
+        List<String> viewCountList = redisViewCountService.deleteViewCountInRedis();
+        for (String key : viewCountList) {
+            Board board = boardRepository.getReferenceById(Long.valueOf(key));
+            board.increaseView(Long.valueOf(redisViewCountService.getData(key)));
+            redisViewCountService.deleteData(key);
+        }
+
     }
 }
 

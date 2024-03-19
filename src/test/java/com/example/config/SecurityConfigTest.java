@@ -1,6 +1,6 @@
 package com.example.config;
 
-import com.example.gasip.config.SecurityConfig;
+import com.example.gasip.global.config.SecurityConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

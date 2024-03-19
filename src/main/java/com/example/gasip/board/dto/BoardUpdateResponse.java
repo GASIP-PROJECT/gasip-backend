@@ -5,6 +5,7 @@ import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Schema(description = "게시글 수정 Response DTO 관련 VO")
+@AllArgsConstructor
 public class BoardUpdateResponse extends BaseTimeEntity {
 
     @NotNull

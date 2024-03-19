@@ -10,11 +10,16 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +30,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
+    private final RedisViewCountService redisViewCountService;
+    private final RedissonClient redissonClient;
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -36,7 +43,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+        return boardRepository.findAllByOrderByRegDateDesc(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
@@ -48,9 +55,15 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardReadResponse findBoardId(Long postId) {
+    public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
+        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        insertView(postId,member);
         Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
         return BoardReadResponse.fromEntity(board);
+    }
+    @Transactional
+    public BoardReadResponse findBoardIdWithOutMember(Long boardId) {
+        return addViewWithoutMember(boardId);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
@@ -63,6 +76,14 @@ public class BoardService {
         validatedBoardWritter(memberDetails, boardId);
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
+    }
+    @Transactional
+    public List<BoardReadResponse> findBestBoard(Long profId, Pageable pageable) {
+        Professor professor = professorRepository.getReferenceById(profId);
+        return boardRepository.findByProfessorOrderByLikeCountDescClickCountDesc(professor, pageable)
+            .stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
     }
 
     private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
@@ -79,36 +100,59 @@ public class BoardService {
                 IllegalArgumentException::new
         );
     }
-
-    /**
-     *
-     * 조회수
-     */
     @Transactional
-    public void insertView(Long postId) throws Exception {
-
+    public void insertView(Long postId,Member member) {
+        String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));
         Board board = boardRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+            .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+        if (viewCount == null) {
+            redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()), postId + "_", calculateTimeOut(5));
+            boardRepository.addViewCount(board);
+        } else {
+            String[] strArray = viewCount.split("_");
+            List<String> redisBoardList = Arrays.asList(strArray);
 
-        boardRepository.save(board);
-        boardRepository.addViewCount(board);
-
-//        Member member = memberRepository.findById(boardReadResponse.getMemberId())
-//                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardReadResponse.getMemberId()));
-
-
-//        // 이미 좋아요되어있으면 에러 반환
-//        if (boardRepository.findAllByPostId(boardReadRequest.getPostId()).equals(board.getPostId())){
-//            //TODO 409에러로 변경
-//            throw new NotFoundException("Wrong postId : " + boardReadRequest.getPostId());
-//        }
-
-//        Likes likes = Likes.builder()
-//                .board(board)
-//                .build();
-
+            boolean isview = false;
+            if (!redisBoardList.isEmpty()) {
+                for (String redisPostId : redisBoardList) {
+                    if (String.valueOf(postId).equals(redisPostId)) {
+                        isview = true;
+                        break;
+                    }
+                }
+                if (!isview) {
+                    viewCount += postId + "_";
+                    redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()),viewCount,calculateTimeOut(5));
+                    boardRepository.addViewCount(board);
+                }
+            }
+        }
+    }
+    public static long calculateTimeOut(int time) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midnight = now.truncatedTo(ChronoUnit.MINUTES).plusMinutes(time);
+        return ChronoUnit.SECONDS.between(now, midnight);
     }
 
+    @Transactional
+    public BoardReadResponse addViewWithoutMember(Long boardId) {
+        Board board = boardRepository.getReferenceById(boardId);
+        redisViewCountService.addViewCountInRedis(boardId);
+        return BoardReadResponse.fromEntity(board);
+    }
+
+    @Scheduled(cron = "0 * * * * *",zone = "Asia/Seoul")
+    @Transactional
+    public void combineViewCount() {
+        System.out.println("시작");
+        List<String> viewCountList = redisViewCountService.deleteViewCountInRedis();
+        for (String key : viewCountList) {
+            Board board = boardRepository.getReferenceById(Long.valueOf(key));
+            board.increaseView(Long.valueOf(redisViewCountService.getData(key)));
+            redisViewCountService.deleteData(key);
+        }
+
+    }
 }
 
 

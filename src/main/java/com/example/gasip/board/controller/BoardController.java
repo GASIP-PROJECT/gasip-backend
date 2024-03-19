@@ -2,6 +2,7 @@ package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
 import com.example.gasip.board.dto.BoardUpdateRequest;
+import com.example.gasip.board.service.BoardLockFacade;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
@@ -23,9 +24,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final BoardLockFacade boardLockFacade;
 
-    @PostMapping("{profId}")
-    @Operation(summary = "게시글 생성 요청", description = "특정 교수의 profId를 받아 게시글을 생성을 요청합니다.", tags = { "Board Controller" })
+    @PostMapping("{profId}") // 전체 게시글 작성 시 profId = 0
+    @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")
     public ResponseEntity<?> createBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
@@ -42,7 +44,7 @@ public class BoardController {
     }
 
     @GetMapping("")
-    @Operation(summary = "전체 게시글 조회 요청", description = "작성된 전체 게시글을 조회합니다.", tags = { "Board Controller" })
+    @Operation(summary = "전체 게시글 조회 요청", description = "전체 게시글을 조회를 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> findAllBoard(Pageable pageable) {
         return ResponseEntity
             .ok()
@@ -53,37 +55,19 @@ public class BoardController {
             );
     }
 
-
     @GetMapping("/details/{postId}")
     @Operation(summary = "게시글 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
-    public ResponseEntity<?> getBoardDetail(@Parameter(name = "postId", description = "조회할 postId를 입력받아 해당 게시글을 조회합니다.", in = ParameterIn.PATH) @PathVariable Long postId) throws Exception {
-        boardService.insertView(postId);
+    public ResponseEntity<?> getBoardDetail(@Parameter(name = "postId", description = "조회할 postId를 입력받아 해당 게시글을 조회합니다.", in = ParameterIn.PATH) @PathVariable Long postId,
+                                            @AuthenticationPrincipal MemberDetails memberDetails) throws Exception {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(boardService.findBoardId(postId))
-                );
+            .ok()
+            .body(
+//                ApiUtils.success(boardLockFacade.insertView(postId))
+                ApiUtils.success(boardService.findBoardIdWithOutMember(postId))
+
+            );
     }
-
-//    @GetMapping("/details/{postId}")
-//    @Operation(summary = "게시글 상세 조회 요청", description = "게시글의 상세 내용을 조회를 요청합니다.", tags = { "Board Controller" })
-//    public ResponseEntity<?> findByBoardId(@PathVariable Long postId) {
-//        return ResponseEntity
-//            .ok()
-//            .body(
-//                ApiUtils.success(
-//                    boardService.findBoardId(postId)
-//                )
-//            );
-//    }
-
-//    @GetMapping("{postId}")
-//    public HttpResponseEntity.ResponseResult<?> insertView(@RequestBody @Valid BoardReadRequest boardReadRequest) throws Exception {
-//        boardService.insertView(boardReadRequest);
-//        return success();
-//            }
-
 
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 요청", description = "작성된 게시글을 수정을 요청합니다.", tags = { "Board Controller" })
@@ -105,9 +89,9 @@ public class BoardController {
 
     @DeleteMapping("/{boardId}")
     @Operation(summary = "게시글 삭제 요청", description = "게시글 삭제를 요청합니다.", tags = { "Board Controller" })
+    @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 삭제합니다.")
     public ResponseEntity<?> deleteBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
-        @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 삭제합니다.", in = ParameterIn.PATH)
         @PathVariable Long boardId) {
         return ResponseEntity
             .ok()
@@ -116,6 +100,15 @@ public class BoardController {
                     boardService.deleteBoard(memberDetails,boardId)
                 )
             );
+    }
 
+    @GetMapping("/best/{profId}")
+    public ResponseEntity<?> getBestBoard(@PathVariable Long profId,
+    Pageable pageable) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(boardService.findBestBoard(profId,pageable))
+            );
     }
 }

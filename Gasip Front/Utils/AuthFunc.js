@@ -29,6 +29,18 @@ const restoreToken = async () => { // 추후에 id로 얻어오도록
     return restoreToken;
 };
 
+const checkToken = async (token) => {
+    const res = await fetch('http://'+HOSTADDR+':'+PORT+'/members/authcheck', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer '+token,
+                    },
+                });
+    const data = res.status;
+
+    return data;
+};
+
 const postSignIn = async ({email, password}) => {
     const res = await fetch('http://'+HOSTADDR+':'+PORT+'/members/login', {
                     method: 'POST',
@@ -74,4 +86,4 @@ const getUserProfile = async (token) => {
     return data;
 }
 
-export {storeToken, removeToken, restoreToken, postSignIn, getUserProfile, postSignUp}
+export {storeToken, removeToken, checkToken, restoreToken, postSignIn, getUserProfile, postSignUp}

@@ -1,4 +1,4 @@
-package com.example.gasip.config;
+package com.example.gasip.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

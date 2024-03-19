@@ -148,10 +148,8 @@ public class BoardService {
         List<String> viewCountList = redisViewCountService.deleteViewCountInRedis();
         for (String key : viewCountList) {
             Board board = boardRepository.getReferenceById(Long.valueOf(key));
-            board.increaseView(Long.valueOf(redisViewCountService.getData(key)));
-            redisViewCountService.deleteData(key);
+            board.increaseView(Long.valueOf(redisViewCountService.getAnddeleteData(key)));
         }
-
     }
 }
 

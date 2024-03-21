@@ -27,9 +27,6 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Professor professor;
     @Schema(description = "게시글 작성한 사용자")
     private Member member;
-    @NotNull
-    @Schema(description = "교수 평점")
-    private int gradePoint;
 
 
     public Board toEntity(Professor prof, Member mem) {
@@ -39,7 +36,6 @@ public class BoardCreateRequest extends BaseTimeEntity {
                 .likeCount(likeCount)
                 .professor(prof)
                 .member(mem)
-                .gradePoint(gradePoint)
                 .build();
     }
 

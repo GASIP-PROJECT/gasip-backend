@@ -1,6 +1,5 @@
 package com.example.gasip.category.model;
 
-import com.example.gasip.college.model.College;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -49,7 +48,6 @@ public class Category{
         this.majorId = majorId;
         this.majorName = majorName;
         this.parentCategory = parentCategory;
-//        this.level = level;
     }
 
 }

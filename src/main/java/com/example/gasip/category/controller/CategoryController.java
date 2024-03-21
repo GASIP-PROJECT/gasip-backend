@@ -3,7 +3,6 @@ package com.example.gasip.category.controller;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.category.service.CategoryService;
 import com.example.gasip.global.api.ApiUtils;
-import com.example.gasip.major.model.Major;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    @GetMapping("/college")
+    public ResponseEntity<?> findCollege() {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                categoryService.findCollege()
+                        )
+                );
+    }
+
     @GetMapping("/categories")
     public ResponseEntity<?> findCategory() {
         return ResponseEntity

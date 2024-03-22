@@ -1,5 +1,10 @@
 package com.example.gasip.category.repository;
 
+
+import com.example.gasip.category.dto.CategoryResponse;
+
+import java.util.List;
+
 public interface CategoryRepositoryCustom {
-//    List<CategoryDTO> findAllByParentCategory();
+    List<CategoryResponse> findAllByParentCategory();
 }

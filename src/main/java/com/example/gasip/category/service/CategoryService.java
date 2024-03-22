@@ -1,9 +1,9 @@
 package com.example.gasip.category.service;
 
 import com.example.gasip.category.dto.CategoryDTO;
+import com.example.gasip.category.dto.CategoryResponse;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.category.repository.CategoryRepository;
-import com.example.gasip.major.model.Major;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +15,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+
+    /**
+     * college 목록 불러오기
+     *
+     */
+    @Transactional
+    public List<CategoryResponse> findCollege() {
+        return categoryRepository.findCollege()
+                .stream()
+                .map(CategoryResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public List<CategoryDTO> findCategory() {

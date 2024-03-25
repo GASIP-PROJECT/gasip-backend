@@ -1,7 +1,7 @@
 package com.example.gasip.professor.service;
 
-import com.example.gasip.board.model.Board;
-import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.grade.dto.response.GradeGetDto;
+import com.example.gasip.grade.repository.GradeRepository;
 import com.example.gasip.major.model.Major;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.model.Professor;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProfessorService {
     private final ProfessorRepository professorRepository;
-    private final BoardRepository boardRepository;
+    private final GradeRepository gradeRepository;
 
     /**
      * 교수 조회
@@ -39,16 +38,8 @@ public class ProfessorService {
     public ProfessorResponse findByProfId(Long profId) {
         Professor professor = professorRepository.findById(profId)
                 .orElseThrow(IllegalArgumentException::new);
-        List<Board> boardList = boardRepository.findAllByProfessor(professor);
-        Double professorAverageGradePoint = 0.0;
-        int count = 0;
-        for (Board board : boardList) {
-            if (board.getGradePoint() != 0) {
-                professorAverageGradePoint += board.getGradePoint();
-                count += 1;
-            }
-        }
-        professor.updateProfessor(String.valueOf(professorAverageGradePoint/count));
+        String gradePoint = gradeRepository.professorAverageGradepoint(profId).get(0).toString();
+        professor.updateProfessor(gradePoint);
         return ProfessorResponse.fromEntity(professor);
     }
 

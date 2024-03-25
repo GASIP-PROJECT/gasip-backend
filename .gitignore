@@ -2,15 +2,11 @@ HELP.md
 .gradle
 build/
 #!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### setiing files
 .DS_Store
 src/main/resources/application.yml
 src/test/resources/application.yml
-gradlew
-gradlew.bat
 gradle/
 
 ### STS ###

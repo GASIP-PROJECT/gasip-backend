@@ -51,8 +51,8 @@ class BoardControllerTest {
         Major major = new Major(1L,"컴퓨터공학과",college);
         Professor professor = new Professor(1L,"김길동",major);
         Member member = new Member(1L,"test@test.com","hyemin","123password", Role.MEMBER);
-        BoardCreateRequest request = new BoardCreateRequest("a",1L,2L,professor,member,2);
-        BoardCreateResponse response = new BoardCreateResponse(1L, "a", 1L, 2);
+        BoardCreateRequest request = new BoardCreateRequest("a",1L,2L,professor,member);
+        BoardCreateResponse response = new BoardCreateResponse(1L, "a", 1L);
 
         doReturn(response).when(boardService)
             .createBoard(any(BoardCreateRequest.class),any(),anyLong());

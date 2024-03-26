@@ -43,7 +43,6 @@ public class RedisViewCountService {
     public List<String> deleteViewCountInRedis() {
         SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
         List<String> value = setOperations.pop("keyList",setOperations.size("keyList"));
-        System.out.println(value);
         return value;
     }
 

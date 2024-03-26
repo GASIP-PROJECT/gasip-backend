@@ -142,7 +142,6 @@ public class BoardService {
     @Scheduled(cron = "0 * * * * *",zone = "Asia/Seoul")
     @Transactional
     public void combineViewCount() {
-        System.out.println("시작");
         List<String> viewCountList = redisViewCountService.deleteViewCountInRedis();
         for (String key : viewCountList) {
             Board board = boardRepository.getReferenceById(Long.valueOf(key));

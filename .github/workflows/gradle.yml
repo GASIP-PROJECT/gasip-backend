@@ -39,7 +39,6 @@ jobs:
       - name: Make Directory for deliver
         run: mkdir deploy
 
-
       # Jar 파일 copy
       - name: Copy Jar
         run: cp ./build/libs/*.jar ./deploy/

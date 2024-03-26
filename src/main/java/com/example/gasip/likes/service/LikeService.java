@@ -69,17 +69,34 @@ public class LikeService {
      *
      */
     @Transactional
-    public LikeRequestDto addLikeWithoutMember(LikeRequestDto likeRequestDto) {
-        Likes likes = likeRepository.getReferenceById(likeRequestDto.getPostId());
+    public void addLikeWithoutMember(LikeRequestDto likeRequestDto) throws Exception {
+
         Board board = boardRepository.findById(likeRequestDto.getPostId())
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + likeRequestDto.getPostId()));
 
+
+        Likes likes = Likes.builder()
+                .board(board)
+                .build();
+
         likeRepository.save(likes);
         boardRepository.addLikeCount(board);
-        return LikeRequestDto.fromEntity(likes);
     }
 
-    @Transactional public LikeRequestDto insertLikeWithoutMember(LikeRequestDto likeRequestDto) {
-        return addLikeWithoutMember(likeRequestDto);
-    }
+    //    @Transactional
+//    public LikeRequestDto addLikeWithoutMember(Long postId) {
+//        Likes likes = likeRepository.getReferenceById(postId);
+//        Board board = boardRepository.findById(postId)
+//                .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+//
+//        likeRepository.save(likes);
+//        boardRepository.addLikeCount(board);
+//
+//        return LikeRequestDto.fromEntity(likes);
+//    }
+
+//    @Transactional
+//    public LikeRequestDto insertLikeWithoutMember(Long postId) {
+//        return addLikeWithoutMember(postId);
+//    }
 }

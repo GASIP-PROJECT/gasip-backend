@@ -1,6 +1,5 @@
 package com.example.gasip.likes.controller;
 
-import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.entity.HttpResponseEntity;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.dto.LikeRequestDto;
@@ -23,9 +22,7 @@ public class LikeController {
     @PostMapping
     public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid LikeRequestDto likeRequestDto,
                                                        @AuthenticationPrincipal MemberDetails memberDetails) throws Exception {
-//        likeService.insert(likeRequestDto, memberDetails);
-        // API 부하테스트용
-        ApiUtils.success(likeService.addLikeWithoutMember(likeRequestDto));
+        likeService.insert(likeRequestDto, memberDetails);
         return success();
     }
 
@@ -35,4 +32,20 @@ public class LikeController {
         likeService.delete(likeRequestDto, memberDetails);
         return success();
     }
+
+
+    @PostMapping("/{postId}")
+    public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+        likeService.addLikeWithoutMember(likeRequestDto);
+        return success();
+    }
+//    @PostMapping("/{postId}")
+//    public ResponseEntity<?> insertWithoutMem(@PathVariable Long postId) throws Exception {
+//        return ResponseEntity
+//                .ok()
+//                .body(
+//                    ApiUtils.success(likeService.insertLikeWithoutMember(postId))
+//                );
+//    }
 }
+

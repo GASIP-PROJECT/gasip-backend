@@ -1,8 +1,7 @@
 package com.example.gasip.professor.service;
 
-import com.example.gasip.grade.dto.response.GradeGetDto;
+import com.example.gasip.category.model.Category;
 import com.example.gasip.grade.repository.GradeRepository;
-import com.example.gasip.major.model.Major;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
@@ -47,8 +46,8 @@ public class ProfessorService {
      * 특정 학과 교수 불러오기
      */
     @Transactional
-    public List<ProfessorResponse> findProfByMajor(Major majorId) {
-        return professorRepository.findProfessorByMajor(majorId)
+    public List<ProfessorResponse> findProfByMajor(Category Id) {
+        return professorRepository.findProfessorByCategory(Id)
                 .stream()
                 .map(ProfessorResponse::fromEntity)
                 .collect(Collectors.toList());

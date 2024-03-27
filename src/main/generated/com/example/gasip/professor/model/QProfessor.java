@@ -22,7 +22,7 @@ public class QProfessor extends EntityPathBase<Professor> {
 
     public static final QProfessor professor = new QProfessor("professor");
 
-    public final com.example.gasip.major.model.QMajor major;
+    public final com.example.gasip.category.model.QCategory category;
 
     public final NumberPath<Long> profId = createNumber("profId", Long.class);
 
@@ -46,7 +46,7 @@ public class QProfessor extends EntityPathBase<Professor> {
 
     public QProfessor(Class<? extends Professor> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.major = inits.isInitialized("major") ? new com.example.gasip.major.model.QMajor(forProperty("major"), inits.get("major")) : null;
+        this.category = inits.isInitialized("category") ? new com.example.gasip.category.model.QCategory(forProperty("category"), inits.get("category")) : null;
     }
 
 }

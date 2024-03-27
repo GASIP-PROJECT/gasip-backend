@@ -47,18 +47,18 @@ public class swaggerConfig {
                 .build();
     }
 
-    /**
-     * 교수 상세정보 그룹
-     */
-    @Bean
-    public GroupedOpenApi professorDetailsOpenApi() {
-        String[] paths = {"/professors/**"};
-
-        return GroupedOpenApi.builder()
-                .group("professorDetails")
-                .pathsToMatch(paths)
-                .build();
-    }
+//    /**
+//     * 교수 상세정보 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi professorDetailsOpenApi() {
+//        String[] paths = {"/professors/**"};
+//
+//        return GroupedOpenApi.builder()
+//                .group("professorDetails")
+//                .pathsToMatch(paths)
+//                .build();
+//    }
 
     /**
      * 게시글 CRUD 그룹

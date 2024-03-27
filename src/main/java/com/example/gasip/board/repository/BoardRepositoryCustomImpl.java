@@ -47,7 +47,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     /**
-     *
      * 좋아요 기능
      */
 

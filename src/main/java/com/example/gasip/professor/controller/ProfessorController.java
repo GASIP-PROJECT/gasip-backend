@@ -62,14 +62,14 @@ public class ProfessorController {
     /**
      * 특정 학과 교수
      */
-    @GetMapping("/majors/{Id}")
+    @GetMapping("/majors/{majorId}")
     @Operation(summary = "학과별 교수 정보 불러오기", description = "학과별 교수 정보를 불러옵니다.", tags = { "Professor Controller" })
-    public ResponseEntity<?> findAllById(@PathVariable Category Id) {
+    public ResponseEntity<?> findAllById(@PathVariable Category majorId) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                professorService.findProfByMajor(Id)
+                                professorService.findProfByMajor(majorId)
                         )
                 );
     }

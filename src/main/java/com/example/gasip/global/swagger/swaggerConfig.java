@@ -35,71 +35,6 @@ public class swaggerConfig {
     }
 
     /**
-     * 교수 정보 그룹
-     */
-    @Bean
-    public GroupedOpenApi professorOpenApi() {
-        String[] paths = {"/all-professors/**"};
-
-        return GroupedOpenApi.builder()
-                .group("professors")
-                .pathsToMatch(paths)
-                .build();
-    }
-
-//    /**
-//     * 교수 상세정보 그룹
-//     */
-//    @Bean
-//    public GroupedOpenApi professorDetailsOpenApi() {
-//        String[] paths = {"/professors/**"};
-//
-//        return GroupedOpenApi.builder()
-//                .group("professorDetails")
-//                .pathsToMatch(paths)
-//                .build();
-//    }
-
-    /**
-     * 게시글 CRUD 그룹
-     */
-    @Bean
-    public GroupedOpenApi boardOpenApi() {
-        String[] paths = {"/boards/**"};
-
-        return GroupedOpenApi.builder()
-                .group("boards")
-                .pathsToMatch(paths)
-                .build();
-    }
-
-    /**
-     * 댓글 그룹
-     */
-    @Bean
-    public GroupedOpenApi commentOpenApi() {
-        String[] paths = {"/comments/**"};
-
-        return GroupedOpenApi.builder()
-                .group("comment")
-                .pathsToMatch(paths)
-                .build();
-    }
-
-    /**
-     * 멤버 그룹
-     */
-    @Bean
-    public GroupedOpenApi memberOpenApi() {
-        String[] paths = {"/members/**"};
-
-        return GroupedOpenApi.builder()
-            .group("member")
-            .pathsToMatch(paths)
-            .build();
-    }
-
-    /**
      * JWT 관련 설정
      */
     @Bean
@@ -114,5 +49,72 @@ public class swaggerConfig {
                 .components(new Components().addSecuritySchemes("BearerAuth", securityScheme))
                 .security(Arrays.asList(securityRequirement));
     }
+
+
+//    /**
+//     * 교수 정보 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi professorOpenApi() {
+//        String[] paths = {"/all-professors/**"};
+//
+//        return GroupedOpenApi.builder()
+//                .group("professors")
+//                .pathsToMatch(paths)
+//                .build();
+//    }
+//
+//    /**
+//     * 교수 상세정보 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi professorDetailsOpenApi() {
+//        String[] paths = {"/professors/**"};
+//
+//        return GroupedOpenApi.builder()
+//                .group("professorDetails")
+//                .pathsToMatch(paths)
+//                .build();
+//    }
+//
+//    /**
+//     * 게시글 CRUD 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi boardOpenApi() {
+//        String[] paths = {"/boards/**"};
+//
+//        return GroupedOpenApi.builder()
+//                .group("boards")
+//                .pathsToMatch(paths)
+//                .build();
+//    }
+//
+//    /**
+//     * 댓글 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi commentOpenApi() {
+//        String[] paths = {"/comments/**"};
+//
+//        return GroupedOpenApi.builder()
+//                .group("comment")
+//                .pathsToMatch(paths)
+//                .build();
+//    }
+//
+//    /**
+//     * 멤버 그룹
+//     */
+//    @Bean
+//    public GroupedOpenApi memberOpenApi() {
+//        String[] paths = {"/members/**"};
+//
+//        return GroupedOpenApi.builder()
+//            .group("member")
+//            .pathsToMatch(paths)
+//            .build();
+//    }
+//
 
 }

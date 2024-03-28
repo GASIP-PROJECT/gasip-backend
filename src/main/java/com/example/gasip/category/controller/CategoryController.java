@@ -50,14 +50,14 @@ public class CategoryController {
             );
     }
 
-    @GetMapping("/categories/{parentCategory_id}/{major_id}")
-    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long major_id) {
-        return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(
-                                categoryService.findCategoryByMajorId(major_id)
-                        )
-                );
-    }
+//    @GetMapping("/categories/{parentCategory_id}/{major_id}")
+//    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long major_id) {
+//        return ResponseEntity
+//                .ok()
+//                .body(
+//                        ApiUtils.success(
+//                                categoryService.findCategoryByMajorId(major_id)
+//                        )
+//                );
+//    }
 }

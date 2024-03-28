@@ -1,6 +1,6 @@
 package com.example.gasip.category.service;
 
-import com.example.gasip.category.dto.CategoryDTO;
+import com.example.gasip.category.dto.CategoryDto;
 import com.example.gasip.category.dto.CategoryResponse;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.category.repository.CategoryRepository;
@@ -29,26 +29,26 @@ public class CategoryService {
     }
 
     @Transactional
-    public List<CategoryDTO> findCategory() {
+    public List<CategoryDto> findCategory() {
         return categoryRepository.findCategory()
             .stream()
-            .map(CategoryDTO::toEntity)
+            .map(CategoryDto::toEntity)
             .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<CategoryDTO> findCategoryByParentCategory(Category parentCategory_id) {
+    public List<CategoryDto> findCategoryByParentCategory(Category parentCategory_id) {
         return categoryRepository.findCategoryByParentCategory(parentCategory_id)
             .stream()
-            .map(CategoryDTO::toEntity)
+            .map(CategoryDto::toEntity)
             .collect(Collectors.toList());
     }
 
-    @Transactional
-    public List<CategoryDTO> findCategoryByMajorId(Long major_id) {
-        return categoryRepository.findCategoryByMajorId(major_id)
-                .stream()
-                .map(CategoryDTO::toEntity)
-                .collect(Collectors.toList());
-    }
+//    @Transactional
+//    public List<CategoryDTO> findCategoryByMajorId(Long major_id) {
+//        return categoryRepository.findCategoryByMajorId(major_id)
+//                .stream()
+//                .map(CategoryDTO::toEntity)
+//                .collect(Collectors.toList());
+//    }
 }

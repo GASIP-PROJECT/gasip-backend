@@ -1,6 +1,7 @@
 package com.example.gasip.member.model;
 
 import com.example.gasip.global.constant.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,18 +15,23 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID", example = "1")
     private Long memberId;
 
     @Column(nullable = false)
+    @Schema(description = "이메일", example = "abc@gmail.com")
     private String email;
 
     @Column(nullable = false)
+    @Schema(description = "닉네임", example = "무한이")
     private String name;
 
     @Column(nullable = false)
+    @Schema(description = "비밀번호", example = "1234!@")
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Schema(description = "권한", example = "MEMBER")
     private Role role;
 
     @Builder

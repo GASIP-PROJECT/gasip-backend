@@ -20,8 +20,14 @@ public class Grade extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gradeId;
     private int gradepoint;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prof_id")
     private Professor professor;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    public void updateGradepoint(int point) {
+        this.gradepoint = point;
+    }
 }

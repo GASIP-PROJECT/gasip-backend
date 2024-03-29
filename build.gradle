@@ -19,6 +19,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -52,6 +53,9 @@ dependencies {
 
     // 동시성 처리
     implementation 'org.redisson:redisson-spring-boot-starter:3.19.0'
+
+    // 디스코드 웹훅
+    implementation 'com.github.napstr:logback-discord-appender:1.0.0'
 
 }
 tasks.named('bootBuildImage') {

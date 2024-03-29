@@ -18,7 +18,7 @@ public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
     public List<CategoryResponse> findAllByParentCategory() {
 
         return queryFactory
-                .select(Projections.constructor(CategoryResponse.class, category.Id, category.collegeId, category.collegeName, category.majorId, category.majorName, category.parentCategory))
+                .select(Projections.constructor(CategoryResponse.class, category.Id, category.collegeName, category.majorName, category.parentCategory))
                 .from(category)
                 .where(category.parentCategory.isNull())
                 .fetch();

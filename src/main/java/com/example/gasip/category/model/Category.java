@@ -21,14 +21,11 @@ public class Category{
     @Schema(description = "단과대 ID")
     private Long Id;
 
-    @Schema(description = "단과대 ID")
-    private Long collegeId;
     @Column(nullable = false)
     @Schema(description = "단과대 이름")
     private String collegeName;
-    @Schema(description = "전공 ID")
-    private Long majorId;
-    @Column(nullable = false, name = "name")
+
+    @Column(nullable = false, name = "major_name")
     @Schema(description = "전공 이름")
     private String majorName;
 
@@ -43,9 +40,7 @@ public class Category{
     @Builder
     public Category(Long Id, Long collegeId, String collegeName, Long majorId, String majorName, Category parentCategory) {
         this.Id = Id;
-        this.collegeId = collegeId;
         this.collegeName = collegeName;
-        this.majorId = majorId;
         this.majorName = majorName;
         this.parentCategory = parentCategory;
     }

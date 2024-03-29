@@ -1,14 +1,12 @@
 package com.example.gasip.professor.model;
 
-import com.example.gasip.major.model.Major;
+import com.example.gasip.category.model.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,20 +23,18 @@ public class Professor {
     @Schema(description = "교수 이름")
     private String profName;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "major_ID")
-    @Schema(description = "교수 전공")
-    private Major major;
+    @JoinColumn(name = "major_id")
+    private Category category;
 
     @Transient
     private String averageGradePoint;
 
 
     @Builder
-
-    public Professor(Long profId, String profName, Major major) {
+    public Professor(Long profId, String profName, Category category) {
         this.profId = profId;
         this.profName = profName;
-        this.major = major;
+        this.category = category;
     }
 
     public void updateProfessor(String averagePoint) {

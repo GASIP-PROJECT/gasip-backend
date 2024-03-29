@@ -17,6 +17,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
 
     List<Category> findCategoryByParentCategory(Category parentCategory_id);
 
-    List<Category> findCategoryByMajorId(Long major_id);
+//    List<Category> findCategoryByMajorId(Long major_id);
 
 }

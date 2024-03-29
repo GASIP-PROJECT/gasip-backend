@@ -24,13 +24,9 @@ public class QCategory extends EntityPathBase<Category> {
 
     public final ListPath<Category, QCategory> children = this.<Category, QCategory>createList("children", Category.class, QCategory.class, PathInits.DIRECT2);
 
-    public final NumberPath<Long> collegeId = createNumber("collegeId", Long.class);
-
     public final StringPath collegeName = createString("collegeName");
 
     public final NumberPath<Long> Id = createNumber("Id", Long.class);
-
-    public final NumberPath<Long> majorId = createNumber("majorId", Long.class);
 
     public final StringPath majorName = createString("majorName");
 

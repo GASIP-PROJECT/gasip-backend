@@ -13,12 +13,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Schema(description = "평점 생성 Response DTO")
-public class GradeCreateResponse {
+public class GradeUpdateResponse {
     @Schema(description = "입력 평점")
     private int gradepoint;
 
-    public static GradeCreateResponse fromEntity(Grade grade) {
-        return GradeCreateResponse.builder()
+    public static GradeUpdateResponse fromEntity(Grade grade) {
+        return GradeUpdateResponse.builder()
             .gradepoint(grade.getGradepoint())
             .build();
     }

@@ -3,6 +3,7 @@ package com.example.gasip.grade.controller;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.grade.dto.request.GradeCreateRequest;
+import com.example.gasip.grade.dto.request.GradeUpdateRequest;
 import com.example.gasip.grade.service.GradeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,6 +44,21 @@ public class GradeController {
             .body(
                 ApiUtils.success(
                     gradeService.findProfessorGradepoint(profId)
+                )
+            );
+    }
+
+    @PutMapping("{profId}")
+    @Operation(summary = "교수별 평점 수정 요청", description = "교수별 평점 수정을 요청합니다.", tags = { "Grade Controller" })
+    public ResponseEntity<?> updateProfessorGradepoint(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        @RequestBody @Valid GradeUpdateRequest gradeUpdateRequest,
+        @PathVariable Long profId) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    gradeService.updateProfessorGradepoint(memberDetails,gradeUpdateRequest,profId)
                 )
             );
     }

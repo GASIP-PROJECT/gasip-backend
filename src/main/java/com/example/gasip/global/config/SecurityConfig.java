@@ -63,12 +63,13 @@ public class SecurityConfig {
                                 "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
                     .requestMatchers(HttpMethod.POST, "/members/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/all-professors/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/professors/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/boards").permitAll()
                     .requestMatchers(HttpMethod.GET, "/boards/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/details/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/comments/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/all-colleges/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/grades/**").permitAll()
                     .anyRequest().authenticated()
             );
         return http.build();

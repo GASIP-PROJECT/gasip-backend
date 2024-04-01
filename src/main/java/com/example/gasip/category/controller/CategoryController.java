@@ -50,13 +50,13 @@ public class CategoryController {
             );
     }
 
-    @GetMapping("/majors/{parentCategory_id}/{major_id}")
-    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long major_id) {
+    @GetMapping("/majors/{parentCategory_id}/{Id}")
+    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long Id) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                categoryService.findCategoryByMajorId(major_id)
+                                categoryService.findCategoryByMajorId(Id)
                         )
                 );
     }

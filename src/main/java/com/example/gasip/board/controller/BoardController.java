@@ -109,4 +109,18 @@ public class BoardController {
                 ApiUtils.success(boardService.findBestBoard(profId,pageable))
             );
     }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/find")
+    public ResponseEntity<?> findByContentContaining(String content, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findByContentContaining(content, pageable)
+                        )
+                );
+    }
 }

@@ -5,7 +5,6 @@ import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.likes.dto.LikeRequestDto;
 import com.example.gasip.likes.model.Likes;
 import com.example.gasip.likes.repository.LikeRepository;
-import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.redisson.RedissonLock;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.webjars.NotFoundException;
 @Transactional
 public class LikeServiceInRedis {
     private final LikeRepository likeRepository;
-    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
     @RedissonLock(value = "#postId")

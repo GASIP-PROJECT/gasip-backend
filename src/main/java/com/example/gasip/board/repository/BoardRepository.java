@@ -15,4 +15,5 @@ public interface BoardRepository extends JpaRepository<Board,Long>,BoardReposito
     Page<Board> findByProfessorOrderByLikeCountDescClickCountDesc(Professor professor, Pageable pageable);
     List<Board> findAllByProfessor(Professor professor);
 
+    Page<Board> findByContentContaining(String content, Pageable pageable);
 }

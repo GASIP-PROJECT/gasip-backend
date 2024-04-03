@@ -148,6 +148,18 @@ public class BoardService {
             board.increaseView(Long.valueOf(redisViewCountService.getAnddeleteData(key)));
         }
     }
+
+    /**
+     * 게시글 검색 기능
+     */
+    @Transactional
+    public List<BoardReadResponse> findByContentContaining(String content, Pageable pageable) {
+        return boardRepository.findByContentContaining(content, pageable)
+                .stream()
+                .map(BoardReadResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }
 
 

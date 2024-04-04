@@ -59,6 +59,7 @@ dependencies {
 
     // 이메일 인증
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 }
 tasks.named('bootBuildImage') {

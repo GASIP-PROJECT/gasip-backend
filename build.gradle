@@ -57,6 +57,9 @@ dependencies {
     // 디스코드 웹훅
     implementation 'com.github.napstr:logback-discord-appender:1.0.0'
 
+    // 이메일 인증
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+
 }
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

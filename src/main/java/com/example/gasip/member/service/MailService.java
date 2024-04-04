@@ -1,10 +1,13 @@
 package com.example.gasip.member.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -13,28 +16,28 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailService {
     private final JavaMailSender emailSender;
-    public void sendEmail(String toEmail,
-                          String title,
-                          String text) {
-        SimpleMailMessage emailForm = createEmailForm(toEmail, title, text);
+    public void sendEmail(String toEmail,String text) {
+        MimeMessage emailForm = createEmailForm(toEmail,text);
         try {
             emailSender.send(emailForm);
         } catch (RuntimeException e) {
-            log.debug("MailService.sendEmail exception occur toEmail: {}, " +
-                "title: {}, text: {}", toEmail, title, text);
-            throw new IllegalArgumentException();
+            throw new RuntimeException();
         }
     }
 
-    // 발신할 이메일 데이터 세팅
-    private SimpleMailMessage createEmailForm(String toEmail,
-                                              String title,
-                                              String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject(title);
-        message.setText(text);
+    // 인증번호 발신 이메일 form 생성
+    private MimeMessage createEmailForm(String toEmail,String text) {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            messageHelper.setSubject("GASIP 회원가입 인증번호");
+            messageHelper.setTo(toEmail);
+            messageHelper.setFrom("GASIP");
+            messageHelper.setText(text, true);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
-        return message;
+        return mimeMessage;
     }
 }

@@ -98,9 +98,8 @@ public class MemberService {
     @Transactional
     public String sendCodeToEmail(String toEmail) {
         this.checkDuplicatedEmail(toEmail);
-        String title = "Gasip 이메일 인증 번호";
         String authCode = this.createCode();
-        mailService.sendEmail(toEmail, title, authCode);
+        mailService.sendEmail(toEmail, authCode);
         // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
         redisMailService.setValues(AUTH_CODE_PREFIX + toEmail,
             authCode, Duration.ofMillis(this.authCodeExpirationMillis));

@@ -46,7 +46,7 @@ public class RedisViewCountService {
         return value;
     }
 
-    public String getAnddeleteData(String key) {
+    public String getAndDeleteData(String key) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         return valueOperations.getAndDelete(key);
     }

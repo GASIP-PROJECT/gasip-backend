@@ -41,18 +41,6 @@ public class BoardController {
             );
     }
 
-    @GetMapping("")
-    @Operation(summary = "전체 게시글 조회 요청", description = "전체 게시글을 조회를 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> findAllBoard(Pageable pageable) {
-        return ResponseEntity
-            .ok()
-            .body(
-                ApiUtils.success(
-                    boardService.findAllBoard(pageable)
-                )
-            );
-    }
-
     @GetMapping("/details/{postId}")
     @Operation(summary = "게시글 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
@@ -61,25 +49,25 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-//                ApiUtils.success(boardLockFacade.insertView(postId))
                 ApiUtils.success(boardService.findBoardIdWithOutMember(postId))
+//                ApiUtils.success(boardService.findBoardId(postId,memberDetails))
 
             );
     }
 
-    @PutMapping("/{boardId}")
+    @PutMapping("/{postId}")
     @Operation(summary = "게시글 수정 요청", description = "작성된 게시글을 수정을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "작성된 게시글의 내용을 수정 할 content를 입력받아 수정합니다.")
     public ResponseEntity<?> editBoard(
             @AuthenticationPrincipal MemberDetails memberDetails,
             @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 수정합니다.", in = ParameterIn.PATH)
-            @PathVariable Long boardId,
+            @PathVariable Long postId,
             @RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.editBoard(memberDetails,boardId,boardUpdateRequest)
+                    boardService.editBoard(memberDetails, postId,boardUpdateRequest)
                 )
             );
 

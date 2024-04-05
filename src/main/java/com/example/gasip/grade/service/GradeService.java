@@ -1,5 +1,10 @@
 package com.example.gasip.grade.service;
 
+import com.example.gasip.global.constant.ErrorCode;
+import com.example.gasip.global.exception.DuplicateGradeCreateException;
+import com.example.gasip.global.exception.InvalidGradePointException;
+import com.example.gasip.global.exception.MemberNotFoundException;
+import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.grade.dto.request.GradeCreateRequest;
 import com.example.gasip.grade.dto.request.GradeUpdateRequest;
@@ -29,10 +34,10 @@ public class GradeService {
         Professor professor = professorRepository.getReferenceById(profId);
         Member member = memberRepository.getReferenceById(memberDetails.getId());
         if (gradeRepository.findByProfessorAndMember(professor, member) != null) {
-            throw new IllegalArgumentException("이미 평점 등록하셨습니다.");
+            throw new DuplicateGradeCreateException(ErrorCode.DUPLICATE_GRADE);
         }
         if (5 < gradeCreateRequest.getGradepoint() || 0 > gradeCreateRequest.getGradepoint()) {
-            throw new IllegalArgumentException("평점은 0~5점 사이로 입력해주세요.");
+            throw new InvalidGradePointException(ErrorCode.INVALID_GRADEPOINT);
         }
         Grade grade = gradeRepository.save(gradeCreateRequest.toEntity(professor,member));
         return GradeCreateResponse.fromEntity(grade);
@@ -44,10 +49,10 @@ public class GradeService {
     }
     @Transactional
     public GradeUpdateResponse updateProfessorGradepoint(MemberDetails memberDetails, GradeUpdateRequest gradeUpdateRequest, Long profId) {
-        Professor professor = professorRepository.getReferenceById(profId);
-        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));;
         if (5 < gradeUpdateRequest.getGradepoint() || 0 > gradeUpdateRequest.getGradepoint()) {
-            throw new IllegalArgumentException("평점은 0~5점 사이로 입력해주세요.");
+            throw new InvalidGradePointException(ErrorCode.INVALID_GRADEPOINT);
         }
         Grade grade = gradeRepository.findByProfessorAndMember(professor, member);
         grade.updateGradepoint(gradeUpdateRequest.getGradepoint());

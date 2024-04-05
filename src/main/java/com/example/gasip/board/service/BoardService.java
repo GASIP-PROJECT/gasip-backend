@@ -4,6 +4,11 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.global.constant.ErrorCode;
+import com.example.gasip.global.exception.BoardNotFoundException;
+import com.example.gasip.global.exception.InvaildWritterException;
+import com.example.gasip.global.exception.MemberNotFoundException;
+import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -33,30 +38,17 @@ public class BoardService {
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
-        Member member = memberRepository.getReferenceById(memberDetails.getId());
-        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
         Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
 
-    @Transactional(readOnly = true)
-    public List<BoardReadResponse> findAllBoard(Pageable pageable) {
-        return boardRepository.findAllByOrderByRegDateDesc(pageable)
-            .stream()
-            .map(BoardReadResponse::fromEntity)
-            .collect(Collectors.toList());
-    }
-    @Transactional
-    public BoardDetailResponse findById(Long postId) {
-        Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
-        return BoardDetailResponse.fromEntity(board);
-    }
-
     @Transactional
     public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
-        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         insertView(postId,member);
-        Board board = boardRepository.findById(postId).orElseThrow(IllegalArgumentException::new);
+        Board board = boardRepository.findById(postId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
@@ -85,18 +77,12 @@ public class BoardService {
     }
 
     private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
-        Board board = validateBoardEmpty(boardId);
-        Member member = memberRepository.getReferenceById(memberDetails.getId());
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         if (!member.getMemberId().equals(board.getMember().getMemberId())) {
-            throw new IllegalArgumentException();
+            throw new InvaildWritterException(ErrorCode.INVALID_WRITTER);
         }
         return board;
-    }
-
-    private Board validateBoardEmpty(Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(
-                IllegalArgumentException::new
-        );
     }
     @Transactional
     public void insertView(Long postId,Member member) {

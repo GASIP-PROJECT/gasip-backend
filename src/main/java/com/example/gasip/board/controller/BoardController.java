@@ -113,7 +113,7 @@ public class BoardController {
     /**
      * 게시글 검색
      */
-    @GetMapping("/find")
+    @GetMapping("/search")
     public ResponseEntity<?> findByContentContaining(String content, Pageable pageable) {
         return ResponseEntity
                 .ok()

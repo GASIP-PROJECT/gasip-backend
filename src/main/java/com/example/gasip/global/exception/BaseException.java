@@ -1,11 +1,15 @@
 package com.example.gasip.global.exception;
 
 import com.example.gasip.global.constant.ErrorCode;
+import lombok.Getter;
 
-public class CommentNotFoundException extends BaseException{
+@Getter
+public class BaseException extends RuntimeException {
     private final ErrorCode errorCode;
-    public CommentNotFoundException(ErrorCode errorCode) {
-        super(errorCode);
+
+    public BaseException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
+
 }

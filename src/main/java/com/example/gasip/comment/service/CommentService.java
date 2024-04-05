@@ -5,6 +5,9 @@ import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.*;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
+import com.example.gasip.global.constant.ErrorCode;
+import com.example.gasip.global.exception.BoardNotFoundException;
+import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -25,8 +28,8 @@ public class CommentService {
     // 댓글 create
     @Transactional
     public CommentCreateResponse createComment(MemberDetails memberDetails, CommentCreateRequest commentCreateRequest, Long boardId) {
-        Member member = memberRepository.getReferenceById(memberDetails.getId());
-        Board board = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
         Comment comment = null;
         Comment parentComment = null;
         if (commentCreateRequest.getParentId() != null) {
@@ -45,28 +48,15 @@ public class CommentService {
         return CommentCreateResponse.fromEntity(comment);
     }
 
-    // 댓글 목록 전체 조회
-    @Transactional(readOnly = true)
-    public List<CommentReadResponse> CommentList() {
-        return commentRepository.findComment()
-            .stream()
-            .map(CommentReadResponse::fromEntity)
-            .collect(Collectors.toList());
-    }
-
     // 특정 게시글 댓글 조회
     @Transactional(readOnly = true)
     public List<CommentReadResponse> findCommentByBoard(Long postId) {
-        Board board = boardRepository.getReferenceById(postId);
-        List<CommentReadResponse> commentlist = commentRepository.findAllByBoard(board)
+        Board board = boardRepository.findById(postId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
+        return commentRepository.findAllByBoard(board)
             .stream()
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());
-        if (commentlist.isEmpty()) {
-            throw new IllegalArgumentException("적합한 댓글이 없습니다.");
-        } else {
-            return commentlist;
-        }
+
     }
 
     // 댓글 edit

@@ -26,8 +26,19 @@ public enum ErrorCode {
     ACCESS_FORBIDDEN("권한 오류"),
     DUPLICATE_LIKE("중복 좋아요 오류"),
     NO_STOCK_ERROR("재고 부족 오류"),
-    NOT_FOUND_MEMBER("멤버 조회 불가 오류"),
-    DUPLICATE_PHONENUMBER("이미 존재하는 휴대폰 번호");
+    DUPLICATE_PHONENUMBER("이미 존재하는 휴대폰 번호"),
+
+    // Member
+    NOT_FOUND_MEMBER("회원 정보가 없습니다. 로그인 후 이용해주세요."),
+    // Professor
+    NOT_FOUND_PROFESSOR("교수 정보 조회 불가 오류"),
+    //Board
+    INVALID_WRITTER("작성자만 글을 수정하거나 삭제할 수 있습니다."),
+    NOT_FOUND_BOARD("해당 게시글을 찾을 수 없습니다."),
+
+    // Grade
+    DUPLICATE_GRADE("이미 평점을 등록했습니다."),
+    INVALID_GRADEPOINT("평점은 0~5점 사이로 입력해주세요.");
 
     private final String message;
 }

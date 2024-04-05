@@ -35,19 +35,6 @@ public class CommentController {
             );
     }
 
-    // 전체 댓글 read
-    @GetMapping("")
-    @Operation(summary = "전체 댓글 조회 요청", description = "전체 댓글 리스트를 조회합니다.", tags = { "Comment Controller" })
-    public ResponseEntity<?> findComment(){
-        return ResponseEntity
-            .ok()
-            .body(
-                ApiUtils.success(
-                    commentService.CommentList()
-                )
-            );
-    }
-
     // 특정 게시글 댓글 read
     @GetMapping("{postId}")
     @Operation(summary = "게시글에 해당하는 댓글 조회 요청", description = "특정 게시글에 작성된 댓글을 조회합니다.", tags = { "Comment Controller" })

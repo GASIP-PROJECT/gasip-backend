@@ -7,6 +7,7 @@ import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.dto.*;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,7 +100,11 @@ public class MemberService {
     public String sendCodeToEmail(String toEmail) {
         this.checkDuplicatedEmail(toEmail);
         String authCode = this.createCode();
-        mailService.sendEmail(toEmail, authCode);
+        try {
+            mailService.sendEmail(toEmail, authCode);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
         // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
         redisMailService.setValues(AUTH_CODE_PREFIX + toEmail,
             authCode, Duration.ofMillis(this.authCodeExpirationMillis));

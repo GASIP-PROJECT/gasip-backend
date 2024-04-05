@@ -1,13 +1,14 @@
 package com.example.gasip.global.exception;
 
-public class BoardNotFoundException extends RuntimeException{
-    public BoardNotFoundException() {
-    }
-    public BoardNotFoundException(String message) {
-        super(message);
+import com.example.gasip.global.constant.ErrorCode;
+import lombok.Getter;
+
+@Getter
+public class BoardNotFoundException extends BaseException{
+    private final ErrorCode errorCode;
+    public BoardNotFoundException(ErrorCode errorCode) {
+        super(errorCode);
+        this.errorCode = errorCode;
     }
 
-    public BoardNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

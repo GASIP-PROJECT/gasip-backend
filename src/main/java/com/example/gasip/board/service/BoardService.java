@@ -160,6 +160,13 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 교수 이름으로 게시글 검색
+     */
+    @Transactional
+    public List<BoardReadResponse> findProfNameLike(String profName) {
+        return boardRepository.findProfNameLike(profName);
+    }
 }
 
 

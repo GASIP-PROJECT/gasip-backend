@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.example.gasip.board.model.QBoard.board;
 import static com.example.gasip.member.model.QMember.member;
+import static com.example.gasip.professor.model.QProfessor.professor;
 
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
@@ -36,8 +37,19 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardReadResponse> findAllBoard() {
         return queryFactory
                 .select(new QBoardReadResponse(
-                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint))
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName))
                 .from(board)
+                .fetch();
+    }
+
+    @Override
+    public List<BoardReadResponse> findProfNameLike(String profName) {
+        return queryFactory
+                .select(new QBoardReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName))
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.professor.profName.like(profName))
                 .fetch();
     }
 
@@ -82,5 +94,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     private BooleanExpression idEqual(Long id) {
         return (id == null) ? null : member.memberId.eq(id);
     }
+
 
 }

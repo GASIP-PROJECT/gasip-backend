@@ -123,4 +123,18 @@ public class BoardController {
                         )
                 );
     }
+
+    /**
+     * 교수 게시글 검색
+     */
+    @GetMapping("/profsearch")
+    public ResponseEntity<?> findByProfLike(String profName) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findProfNameLike(profName)
+                        )
+                );
+    }
 }

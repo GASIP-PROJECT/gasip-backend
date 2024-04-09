@@ -19,4 +19,6 @@ public interface BoardRepositoryCustom {
     void subLikeCount(Board board);
 
     void addViewCount(Board board);
+
+    List<BoardReadResponse> findProfNameLike(String profName);
 }

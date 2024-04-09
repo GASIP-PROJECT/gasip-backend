@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @SuperBuilder
 public class CommentReadResponse implements Serializable {
     private Long postId;
+    private Long commentId;
     private Long memberId;
     private String content;
     private Long commentLike;
@@ -34,11 +35,11 @@ public class CommentReadResponse implements Serializable {
         else {
             return buildCommentDtoWithChildrenComment(comment);
         }
-
     }
     private static CommentReadResponse buildCommentDtoWithParentId(Comment comment) {
         return CommentReadResponse.builder()
             .postId(comment.getBoard().getPostId())
+            .commentId(comment.getCommentId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .parentId(comment.getParentComment().getCommentId())
@@ -47,6 +48,7 @@ public class CommentReadResponse implements Serializable {
     private static CommentReadResponse buildCommentDtoWithChildrenComment(Comment comment) {
         return CommentReadResponse.builder()
             .postId(comment.getBoard().getPostId())
+            .commentId(comment.getCommentId())
             .memberId(comment.getMember().getMemberId())
             .content(comment.getContent())
             .commentChildren(comment.getCommentChildren().stream().map(CommentReadResponse::fromEntity).collect(Collectors.toList()))

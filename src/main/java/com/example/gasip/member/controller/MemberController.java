@@ -121,4 +121,27 @@ public class MemberController {
             );
     }
 
+    @PostMapping("/emails/verification-requests")
+    public ResponseEntity sendMessage(@RequestParam("email") @Valid String email) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.sendCodeToEmail(email)
+                )
+            );
+    }
+
+    @GetMapping("/emails/verifications")
+    public ResponseEntity verificationEmail(@RequestParam("email") @Valid String email,
+                                            @RequestParam("code") String authCode) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.verifiedCode(email, authCode)
+                )
+            );
+    }
+
 }

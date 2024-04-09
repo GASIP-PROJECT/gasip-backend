@@ -88,13 +88,12 @@ public class BoardController {
             );
     }
 
-    @GetMapping("/best/{profId}")
-    public ResponseEntity<?> getBestBoard(@PathVariable Long profId,
-    Pageable pageable) {
+    @GetMapping("/best")
+    public ResponseEntity<?> getBestBoard(Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBestBoard(profId,pageable))
+                ApiUtils.success(boardService.findBestBoard(pageable))
             );
     }
 

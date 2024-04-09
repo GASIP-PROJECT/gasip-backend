@@ -97,4 +97,32 @@ public class BoardController {
                 ApiUtils.success(boardService.findBestBoard(profId,pageable))
             );
     }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> findByContentContaining(String content, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findByContentContaining(content, pageable)
+                        )
+                );
+    }
+
+    /**
+     * 교수 게시글 검색
+     */
+    @GetMapping("/profsearch")
+    public ResponseEntity<?> findByProfNameLike(String profName) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findByProfNameLike(profName)
+                        )
+                );
+    }
 }

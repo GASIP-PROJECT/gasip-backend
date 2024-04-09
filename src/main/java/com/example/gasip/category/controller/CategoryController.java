@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("all-colleges")
+@RequestMapping("colleges")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/college")
+    @GetMapping("")
     public ResponseEntity<?> findCollege() {
         return ResponseEntity
                 .ok()
@@ -28,7 +28,7 @@ public class CategoryController {
                 );
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/majors")
     public ResponseEntity<?> findCategory() {
         return ResponseEntity
             .ok()
@@ -39,7 +39,7 @@ public class CategoryController {
             );
     }
 
-    @GetMapping("/categories/{parentCategory_id}")
+    @GetMapping("/majors/{parentCategory_id}")
     public ResponseEntity<?> findCategoryByParentCategory(@PathVariable Category parentCategory_id) {
         return ResponseEntity
             .ok()
@@ -50,14 +50,14 @@ public class CategoryController {
             );
     }
 
-//    @GetMapping("/categories/{parentCategory_id}/{major_id}")
-//    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long major_id) {
-//        return ResponseEntity
-//                .ok()
-//                .body(
-//                        ApiUtils.success(
-//                                categoryService.findCategoryByMajorId(major_id)
-//                        )
-//                );
-//    }
+    @GetMapping("/majors/{parentCategory_id}/{Id}")
+    public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long Id) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                categoryService.findCategoryByMajorId(Id)
+                        )
+                );
+    }
 }

@@ -25,7 +25,7 @@ public class Category{
     @Schema(description = "단과대 이름")
     private String collegeName;
 
-    @Column(nullable = false, name = "major_name")
+    @Column(nullable = false, name = "name")
     @Schema(description = "전공 이름")
     private String majorName;
 

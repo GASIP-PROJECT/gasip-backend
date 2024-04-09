@@ -4,6 +4,7 @@ import com.example.gasip.global.entity.HttpResponseEntity;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.dto.LikeRequestDto;
 import com.example.gasip.likes.service.LikeService;
+import com.example.gasip.likes.service.LikeServiceInRedis;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import static com.example.gasip.global.entity.HttpResponseEntity.success;
 @RequestMapping("boards/likes")
 public class LikeController {
     private final LikeService likeService;
+    private final LikeServiceInRedis likeServiceInRedis;
 
     @PostMapping
     public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid LikeRequestDto likeRequestDto,
@@ -39,13 +41,12 @@ public class LikeController {
         likeService.addLikeWithoutMember(likeRequestDto);
         return success();
     }
-//    @PostMapping("/{postId}")
-//    public ResponseEntity<?> insertWithoutMem(@PathVariable Long postId) throws Exception {
-//        return ResponseEntity
-//                .ok()
-//                .body(
-//                    ApiUtils.success(likeService.insertLikeWithoutMember(postId))
-//                );
-//    }
+
+    @PostMapping("/redisson/{postId}")
+    public HttpResponseEntity.ResponseResult<?> insertredisson(@RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+        likeServiceInRedis.redissonAddLike(likeRequestDto);
+        return success();
+    }
+
 }
 

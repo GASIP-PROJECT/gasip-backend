@@ -164,8 +164,8 @@ public class BoardService {
      * 교수 이름으로 게시글 검색
      */
     @Transactional
-    public List<BoardReadResponse> findProfNameLike(String profName) {
-        return boardRepository.findProfNameLike(profName);
+    public List<BoardReadResponse> findByProfNameLike(String profName) {
+        return boardRepository.findByProfNameLike(profName);
     }
 }
 

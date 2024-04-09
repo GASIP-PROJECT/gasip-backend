@@ -43,7 +43,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<BoardReadResponse> findProfNameLike(String profName) {
+    public List<BoardReadResponse> findByProfNameLike(String profName) {
         return queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName))

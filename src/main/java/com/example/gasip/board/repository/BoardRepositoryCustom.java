@@ -20,5 +20,5 @@ public interface BoardRepositoryCustom {
 
     void addViewCount(Board board);
 
-    List<BoardReadResponse> findProfNameLike(String profName);
+    List<BoardReadResponse> findByProfNameLike(String profName);
 }

@@ -128,12 +128,12 @@ public class BoardController {
      * 교수 게시글 검색
      */
     @GetMapping("/profsearch")
-    public ResponseEntity<?> findByProfLike(String profName) {
+    public ResponseEntity<?> findByProfNameLike(String profName) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findProfNameLike(profName)
+                                boardService.findByProfNameLike(profName)
                         )
                 );
     }

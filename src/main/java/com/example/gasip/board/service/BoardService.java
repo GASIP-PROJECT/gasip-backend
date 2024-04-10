@@ -43,6 +43,13 @@ public class BoardService {
         Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
+    @Transactional
+    public List<BoardReadResponse> findBoardByProfessor(Long profId, Pageable pageable) {
+        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
+        return boardRepository.findAllByProfessor(professor,pageable).stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
@@ -153,6 +160,7 @@ public class BoardService {
     public List<BoardReadResponse> findByProfNameLike(String profName) {
         return boardRepository.findByProfNameLike(profName);
     }
+
 }
 
 

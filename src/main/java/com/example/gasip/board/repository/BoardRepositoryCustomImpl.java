@@ -9,6 +9,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -51,6 +53,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profName.like(profName))
                 .fetch();
+    }
+
+    @Override
+    public List<BoardReadResponse> findBestBoard(Pageable pageable) {
+        return queryFactory
+            .select(new QBoardReadResponse(
+                board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName))
+            .from(board)
+            .leftJoin(board.professor, professor)
+            .where(board.likeCount.goe(5))
+            .orderBy(board.likeCount.desc(),board.clickCount.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
     }
 
     @Override

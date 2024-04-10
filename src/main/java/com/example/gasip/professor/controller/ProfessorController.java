@@ -79,12 +79,12 @@ public class ProfessorController {
      */
     @GetMapping("/search")
     @Operation(summary = "교수 이름으로 교수 목록을 조회합니다.", description = "교수 이름으로 검색된 교수 목록을 불러옵니다.", tags = {"Professor Controller"})
-    public ResponseEntity<?> findByProfNameLike(String profName) {
+    public ResponseEntity<?> findByProfNameContaining(String profName) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                professorService.findByProfNameLike(profName)
+                                professorService.findProfessorByProfNameContaining(profName)
                         )
                 );
     }

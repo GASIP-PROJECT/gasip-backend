@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("{profId}") // 전체 게시글 작성 시 profId = 0
+    @PostMapping("/{profId}") // 전체 게시글 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")
     public ResponseEntity<?> createBoard(

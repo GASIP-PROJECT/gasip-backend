@@ -57,8 +57,8 @@ public class ProfessorService {
      * 교수 이름으로 교수 상세페이지 조회
      */
     @Transactional
-    public List<ProfessorResponse> findByProfNameLike(String profName) {
-        return professorRepository.findByProfNameLike(profName)
+    public List<ProfessorResponse> findProfessorByProfNameContaining(String profName) {
+        return professorRepository.findProfessorByProfNameContaining(profName)
                 .stream()
                 .map(ProfessorResponse::fromEntity)
                 .collect(Collectors.toList());

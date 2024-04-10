@@ -46,7 +46,7 @@ public class BoardService {
     @Transactional
     public List<BoardReadResponse> findBoardByProfessor(Long profId, Pageable pageable) {
         Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
-        return boardRepository.findAllByProfessor(professor,pageable).stream()
+        return boardRepository.findAllByProfessorOrderByRegDateDesc(professor,pageable).stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
     }

@@ -12,7 +12,9 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long>,BoardRepositoryCustom {
     Page<Board> findAllByOrderByRegDateDesc(Pageable pageable);
-    Page<Board> findByProfessorOrderByLikeCountDescClickCountDesc(Professor professor, Pageable pageable);
-    List<Board> findAllByProfessor(Professor professor);
+    Page<Board> findByOrderByLikeCountDescClickCountDesc(Pageable pageable);
+    // 게시글 내용 검색
+    Page<Board> findByContentContaining(String content, Pageable pageable);
 
+    Page<Board> findAllByProfessor(Professor professor, Pageable pageable);
 }

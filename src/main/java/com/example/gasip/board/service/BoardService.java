@@ -43,6 +43,13 @@ public class BoardService {
         Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
+    @Transactional
+    public List<BoardReadResponse> findBoardByProfessor(Long profId, Pageable pageable) {
+        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
+        return boardRepository.findAllByProfessor(professor,pageable).stream()
+            .map(BoardReadResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
@@ -68,9 +75,9 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional
-    public List<BoardReadResponse> findBestBoard(Long profId, Pageable pageable) {
-        Professor professor = professorRepository.getReferenceById(profId);
-        return boardRepository.findByProfessorOrderByLikeCountDescClickCountDesc(professor, pageable)
+    public List<BoardReadResponse> findBestBoard(Pageable pageable) {
+
+        return boardRepository.findByOrderByLikeCountDescClickCountDesc(pageable)
             .stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
@@ -134,6 +141,26 @@ public class BoardService {
             board.increaseView(Long.valueOf(redisViewCountService.getAndDeleteData(key)));
         }
     }
+
+    /**
+     * 게시글 검색 기능
+     */
+    @Transactional
+    public List<BoardReadResponse> findByContentContaining(String content, Pageable pageable) {
+        return boardRepository.findByContentContaining(content, pageable)
+                .stream()
+                .map(BoardReadResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 교수 이름으로 게시글 검색
+     */
+    @Transactional
+    public List<BoardReadResponse> findByProfNameLike(String profName) {
+        return boardRepository.findByProfNameLike(profName);
+    }
+
 }
 
 

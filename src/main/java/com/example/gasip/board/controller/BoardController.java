@@ -40,12 +40,25 @@ public class BoardController {
                 )
             );
     }
+    @GetMapping("/{profId}")
+    @Operation(summary = "교수 페이지별 게시글 정보 요청", description = "교수의 전체 게시글 불러옵니다.", tags = { "Board Controller" })
+    @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
+    public ResponseEntity<?> getBoardDetail(@Parameter(name = "profId", description = "조회할 profId를 입력받아 교수 페이지 내 전체 게시글을 조회합니다.", in = ParameterIn.PATH)
+                                            @PathVariable Long profId,
+                                            Pageable pageable) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(boardService.findBoardByProfessor(profId,pageable))
+            );
+    }
+
 
     @GetMapping("/details/{postId}")
     @Operation(summary = "게시글 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
-    @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
+    @Parameter(name = "postId", description = "postId를 URL을 통해 입력받아 특정 게시글을 조회합니다.")
     public ResponseEntity<?> getBoardDetail(@Parameter(name = "postId", description = "조회할 postId를 입력받아 해당 게시글을 조회합니다.", in = ParameterIn.PATH) @PathVariable Long postId,
-                                            @AuthenticationPrincipal MemberDetails memberDetails) throws Exception {
+                                            @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()
             .body(
@@ -88,13 +101,40 @@ public class BoardController {
             );
     }
 
-    @GetMapping("/best/{profId}")
-    public ResponseEntity<?> getBestBoard(@PathVariable Long profId,
-    Pageable pageable) {
+    @GetMapping("/best")
+    public ResponseEntity<?> getBestBoard(Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBestBoard(profId,pageable))
+                ApiUtils.success(boardService.findBestBoard(pageable))
             );
+    }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> findByContentContaining(String content, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findByContentContaining(content, pageable)
+                        )
+                );
+    }
+
+    /**
+     * 교수 게시글 검색
+     */
+    @GetMapping("/profsearch")
+    public ResponseEntity<?> findByProfNameLike(String profName) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findByProfNameLike(profName)
+                        )
+                );
     }
 }

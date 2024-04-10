@@ -77,10 +77,7 @@ public class BoardService {
     @Transactional
     public List<BoardReadResponse> findBestBoard(Pageable pageable) {
 
-        return boardRepository.findByOrderByLikeCountDescClickCountDesc(pageable)
-            .stream()
-            .map(BoardReadResponse::fromEntity)
-            .collect(Collectors.toList());
+        return boardRepository.findBestBoard(pageable);
     }
 
     private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {

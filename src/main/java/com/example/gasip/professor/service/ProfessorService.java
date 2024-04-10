@@ -52,4 +52,15 @@ public class ProfessorService {
                 .map(ProfessorResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 교수 이름으로 교수 상세페이지 조회
+     */
+    @Transactional
+    public List<ProfessorResponse> findByProfNameLike(String profName) {
+        return professorRepository.findByProfNameLike(profName)
+                .stream()
+                .map(ProfessorResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

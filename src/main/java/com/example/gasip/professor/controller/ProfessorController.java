@@ -74,4 +74,18 @@ public class ProfessorController {
                 );
     }
 
+    /**
+     * 교수 이름으로 검색
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> findByProfNameLike(String profName) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                professorService.findByProfNameLike(profName)
+                        )
+                );
+    }
+
 }

@@ -11,5 +11,7 @@ import java.util.List;
 @Repository
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     List<Professor> findProfessorByCategory(Category Id);
+
+    List<Professor> findByProfNameLike(String profName);
 }
 

@@ -105,6 +105,7 @@ public class BoardController {
     }
 
     @GetMapping("/best")
+    @Operation(summary = "인기글 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> getBestBoard(Pageable pageable) {
         return ResponseEntity
             .ok()

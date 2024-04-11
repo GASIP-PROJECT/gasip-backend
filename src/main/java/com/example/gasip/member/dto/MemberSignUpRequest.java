@@ -24,15 +24,21 @@ public class MemberSignUpRequest {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z가-힣]{2,16}$")
-    @Schema(description = "닉네임", example = "무한이")
+    @Pattern(regexp = "^[a-zA-Z가-힣]{2,12}$")
+    @Schema(description = "이름", example = "정혜민")
     private String name;
 
-    public Member toEntity(MemberSignUpRequest memberSignUpRequest) {
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z가-힣]{2,12}$")
+    @Schema(description = "닉네임", example = "가십이")
+    private String nickName;
+
+    public Member toEntity() {
         return Member.builder()
-            .email(memberSignUpRequest.email)
-            .password(memberSignUpRequest.password)
-            .name(memberSignUpRequest.name)
+            .email(email)
+            .password(password)
+            .name(name)
+            .nickName(nickName)
             .role(Role.MEMBER)
             .build();
 

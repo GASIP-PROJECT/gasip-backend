@@ -2,6 +2,9 @@ package com.example.gasip.member.service;
 
 import com.auth0.jwt.JWT;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.global.constant.ErrorCode;
+import com.example.gasip.global.exception.MemberDuplicatedException;
+import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.dto.*;
@@ -46,7 +49,7 @@ public class MemberService {
     @Transactional
     public MemberSignUpResponse signup(MemberSignUpRequest memberSignUpRequest) {
         validateEmailDuplicated(memberSignUpRequest);
-        Member member = memberSignUpRequest.toEntity(memberSignUpRequest);
+        Member member = memberSignUpRequest.toEntity();
         member.encodePassword(passwordEncoder);
 
         return MemberSignUpResponse.fromEntity(memberRepository.save(member));
@@ -97,25 +100,25 @@ public class MemberService {
         );
     }
     @Transactional
-    public String sendCodeToEmail(String toEmail) {
-        this.checkDuplicatedEmail(toEmail);
-        String authCode = this.createCode();
+    public String sendCodeToEmail(String email) {
+        checkDuplicatedEmail(email);
+        String authCode = createCode();
         try {
-            mailService.sendEmail(toEmail, authCode);
+            mailService.sendEmail(email, authCode);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
         // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
-        redisMailService.setValues(AUTH_CODE_PREFIX + toEmail,
-            authCode, Duration.ofMillis(this.authCodeExpirationMillis));
+        redisMailService.setValues(AUTH_CODE_PREFIX + email,
+            authCode, Duration.ofMillis(authCodeExpirationMillis));
+
         return "이메일을 정상적으로 전송했습니다.";
     }
 
     private void checkDuplicatedEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
-            log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", email);
-            throw new IllegalArgumentException();
+            throw new MemberDuplicatedException(ErrorCode.DUPLICATE_MEMBER);
         }
     }
 

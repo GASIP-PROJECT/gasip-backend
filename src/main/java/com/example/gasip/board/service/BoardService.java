@@ -143,8 +143,8 @@ public class BoardService {
      * 게시글 검색 기능
      */
     @Transactional
-    public List<BoardReadResponse> findByContentContaining(String content, Pageable pageable) {
-        return boardRepository.findByContentContaining(content, pageable)
+    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
+        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
                 .stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());

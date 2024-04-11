@@ -122,7 +122,7 @@ public class MemberController {
     }
 
     @PostMapping("/emails/verification-requests")
-    public ResponseEntity sendMessage(@RequestParam("email") @Valid String email) {
+    public ResponseEntity sendMessage(@RequestParam("email") String email) {
         return ResponseEntity
             .ok()
             .body(
@@ -133,7 +133,7 @@ public class MemberController {
     }
 
     @GetMapping("/emails/verifications")
-    public ResponseEntity verificationEmail(@RequestParam("email") @Valid String email,
+    public ResponseEntity verificationEmail(@RequestParam("email") String email,
                                             @RequestParam("code") String authCode) {
         return ResponseEntity
             .ok()

@@ -30,6 +30,7 @@ public enum ErrorCode {
 
     // Member
     NOT_FOUND_MEMBER("회원 정보가 없습니다. 로그인 후 이용해주세요."),
+    DUPLICATE_MEMBER("이미 등록된 회원입니다."),
     // Professor
     NOT_FOUND_PROFESSOR("교수 정보 조회 불가 오류"),
     //Board

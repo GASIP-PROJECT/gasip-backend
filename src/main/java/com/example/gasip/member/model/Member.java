@@ -23,8 +23,12 @@ public class Member {
     private String email;
 
     @Column(nullable = false)
-    @Schema(description = "닉네임", example = "무한이")
+    @Schema(description = "이름", example = "정혜민")
     private String name;
+
+    @Column(nullable = false)
+    @Schema(description = "닉네임", example = "가십이")
+    private String nickName;
 
     @Column(nullable = false)
     @Schema(description = "비밀번호", example = "1234!@")
@@ -35,15 +39,16 @@ public class Member {
     private Role role;
 
     @Builder
-    private Member(String email, String name, String password, Role role) {
+    private Member(String email, String name, String nickName, String password, Role role) {
         this.email = email;
         this.name = name;
+        this.nickName = nickName;
         this.password = password;
         this.role = role;
     }
 
-    public static Member create(String email, String name, String password, Role role) {
-        return new Member(email, name, password, role);
+    public static Member create(String email, String name, String nickName, String password, Role role) {
+        return new Member(email, name, nickName,password, role);
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {

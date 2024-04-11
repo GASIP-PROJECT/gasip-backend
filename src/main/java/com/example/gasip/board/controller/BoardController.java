@@ -117,12 +117,12 @@ public class BoardController {
      * 게시글 검색
      */
     @GetMapping("/search")
-    public ResponseEntity<?> findByContentContaining(String content, Pageable pageable) {
+    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByContentContaining(content, pageable)
+                                boardService.findByContentContainingOrderByRegDateDesc(content, pageable)
                         )
                 );
     }
@@ -130,7 +130,7 @@ public class BoardController {
     /**
      * 교수 게시글 검색
      */
-    @GetMapping("/profsearch")
+    @GetMapping("/professor-search")
     public ResponseEntity<?> findByProfNameLike(String profName) {
         return ResponseEntity
                 .ok()

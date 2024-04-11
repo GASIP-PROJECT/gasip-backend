@@ -12,7 +12,7 @@ public interface BoardRepository extends JpaRepository<Board,Long>,BoardReposito
     Page<Board> findAllByOrderByRegDateDesc(Pageable pageable);
     Page<Board> findByOrderByLikeCountDescClickCountDesc(Pageable pageable);
     // 게시글 내용 검색
-    Page<Board> findByContentContaining(String content, Pageable pageable);
+    Page<Board> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable);
 
     Page<Board> findAllByProfessorOrderByRegDateDesc(Professor professor, Pageable pageable);
 }

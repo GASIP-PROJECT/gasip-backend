@@ -66,7 +66,7 @@ public class MemberService {
         return MemberLogInResponse.fromEntity(member,accessToken);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public MemberMyPageResponse getMyPage(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
@@ -74,7 +74,7 @@ public class MemberService {
         return MemberMyPageResponse.fromEntity(member);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<?> getBoards(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
             (IllegalArgumentException::new)
@@ -145,5 +145,13 @@ public class MemberService {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+    @Transactional
+    public MemberUpdateNicknameResponse updateNickname(MemberDetails memberDetails,MemberUpdateNicknameRequest memberUpdateNicknameRequest) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        member.updateNickname(memberUpdateNicknameRequest.getNickname());
+        return MemberUpdateNicknameResponse.fromEntity(member);
     }
 }

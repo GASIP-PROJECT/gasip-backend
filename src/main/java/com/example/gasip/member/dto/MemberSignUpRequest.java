@@ -31,14 +31,14 @@ public class MemberSignUpRequest {
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z가-힣]{2,12}$")
     @Schema(description = "닉네임", example = "가십이")
-    private String nickName;
+    private String nickname;
 
     public Member toEntity() {
         return Member.builder()
             .email(email)
             .password(password)
             .name(name)
-            .nickName(nickName)
+            .nickname(nickname)
             .role(Role.MEMBER)
             .build();
 

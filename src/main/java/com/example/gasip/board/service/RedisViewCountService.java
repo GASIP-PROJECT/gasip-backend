@@ -25,17 +25,21 @@ public class RedisViewCountService {
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
     }
+    public void addBoardId(String key, String value) {
+        ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.append(key, value);
+    }
 
     public void addViewCountInRedis(Long boardId) {
-        String key = String.valueOf(boardId);
+        String key = String.valueOf(boardId)+"board";
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
         if (getData(key) == null) {
             valueOperations.set(key,"0");
-            setOperations.add("keyList", key);
+            setOperations.add("keyList", key.replace("board",""));
         }
         if (!setOperations.isMember("keyList",getData(key))) {
-            setOperations.add("keyList",key);
+            setOperations.add("keyList",key.replace("board",""));
         }
         valueOperations.increment(key);
     }
@@ -48,6 +52,6 @@ public class RedisViewCountService {
 
     public String getAndDeleteData(String key) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-        return valueOperations.getAndDelete(key);
+        return valueOperations.getAndDelete(key+"board");
     }
 }

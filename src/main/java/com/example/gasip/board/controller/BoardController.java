@@ -75,8 +75,7 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardIdWithOutMember(postId))
-//                ApiUtils.success(boardService.findBoardId(postId,memberDetails))
+                ApiUtils.success(boardService.findBoardId(postId,memberDetails))
 
             );
     }

@@ -61,14 +61,10 @@ public class BoardService {
 
     @Transactional
     public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        insertView(postId,member);
-        Board board = boardRepository.findById(postId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Board board = insertView(postId, member);
         return BoardReadResponse.fromEntity(board);
-    }
-    @Transactional
-    public BoardReadResponse findBoardIdWithOutMember(Long boardId) {
-        return addViewWithoutMember(boardId);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
@@ -97,13 +93,13 @@ public class BoardService {
         return board;
     }
     @Transactional
-    public void insertView(Long postId,Member member) {
+    public Board insertView(Long postId,Member member) {
         String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));
         Board board = boardRepository.findById(postId)
-            .orElseThrow(() -> new NotFoundException("Could not found board id : " + postId));
+            .orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
         if (viewCount == null) {
             redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()), postId + "_", calculateTimeOut(5));
-            boardRepository.addViewCount(board);
+            redisViewCountService.addViewCountInRedis(postId);
         } else {
             String[] strArray = viewCount.split("_");
             List<String> redisBoardList = Arrays.asList(strArray);
@@ -116,13 +112,15 @@ public class BoardService {
                         break;
                     }
                 }
+                // 근데 없다면,사용자Id를 key로 가지는 곳에 게시글Id를 추가함 + 게시글 조회수 +1
                 if (!isview) {
-                    viewCount += postId + "_";
-                    redisViewCountService.setDateExpire(String.valueOf(member.getMemberId()),viewCount,calculateTimeOut(5));
-                    boardRepository.addViewCount(board);
+                    String alreadyView = postId + "_";
+                    redisViewCountService.addBoardId(String.valueOf(member.getMemberId()),alreadyView);
+                    redisViewCountService.addViewCountInRedis(postId);
                 }
             }
         }
+        return board;
     }
     public static long calculateTimeOut(int time) {
         LocalDateTime now = LocalDateTime.now();
@@ -130,12 +128,6 @@ public class BoardService {
         return ChronoUnit.SECONDS.between(now, midnight);
     }
 
-    @Transactional
-    public BoardReadResponse addViewWithoutMember(Long boardId) {
-        Board board = boardRepository.getReferenceById(boardId);
-        redisViewCountService.addViewCountInRedis(boardId);
-        return BoardReadResponse.fromEntity(board);
-    }
 
     @Scheduled(cron = "0 * * * * *",zone = "Asia/Seoul")
     @Transactional

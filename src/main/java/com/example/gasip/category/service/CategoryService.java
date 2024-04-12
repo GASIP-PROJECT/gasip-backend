@@ -22,11 +22,8 @@ public class CategoryService {
      *
      */
     @Transactional
-    public List<CategoryResponse> findCollege() {
-        return categoryRepository.findCollege()
-                .stream()
-                .map(CategoryResponse::fromEntity)
-                .collect(Collectors.toList());
+    public List<CategoryResponse> findAllByParentCategory() {
+        return categoryRepository.findAllByParentCategory();
     }
 
     @Transactional

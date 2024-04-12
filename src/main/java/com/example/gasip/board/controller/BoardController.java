@@ -24,6 +24,16 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
 
+    @GetMapping("/all-boards")
+    @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable))
+                );
+    }
+
     @PostMapping("/{profId}") // 전체 게시글 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")

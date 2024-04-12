@@ -23,7 +23,7 @@ public class CategoryController {
                 .ok()
                 .body(
                         ApiUtils.success(
-                                categoryService.findCollege()
+                                categoryService.findAllByParentCategory()
                         )
                 );
     }

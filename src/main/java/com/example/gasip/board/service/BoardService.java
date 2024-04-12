@@ -37,6 +37,14 @@ public class BoardService {
     private final RedisViewCountService redisViewCountService;
 
     @Transactional
+    public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
+//        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        return boardRepository.findAllByOrderByRegDateDesc(pageable).stream()
+                .map(BoardReadResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));

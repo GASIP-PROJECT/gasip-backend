@@ -5,6 +5,7 @@ import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.professor.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final ProfessorService professorService;
 
     @GetMapping("/all-boards")
     @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 불러옵니다.", tags = {"Board Controller"})
@@ -148,6 +150,18 @@ public class BoardController {
                         ApiUtils.success(
                                 boardService.findByProfNameLike(profName)
                         )
+                );
+    }
+
+    /**
+     * 교수 정보 및 게시글 불러오기
+     */
+    @GetMapping("/test/{profId}")
+    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findBoarByProfessor(profId, pageable))
                 );
     }
 }

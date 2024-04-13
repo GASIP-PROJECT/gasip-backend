@@ -1,5 +1,6 @@
 package com.example.gasip.professor.controller;
 
+import com.example.gasip.board.service.BoardService;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.professor.dto.ProfessorResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfessorController {
 
     private final ProfessorService professorService;
+    private final BoardService boardService;
 
     /**
      * 교수 조회
@@ -54,6 +56,7 @@ public class ProfessorController {
             .body(
                 ApiUtils.success(
                     professorService.findByProfId(profId)
+
                 )
             );
     }
@@ -88,5 +91,17 @@ public class ProfessorController {
                         )
                 );
     }
+
+//    /**
+//     * 교수 정보 및 게시글 불러오기
+//     */
+//    @GetMapping("/board/{profId}")
+//    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+//        return ResponseEntity
+//                .ok()
+//                .body(
+//                        ApiUtils.success(professorService.findBoarByProfessor(profId, pageable))
+//                );
+//    }
 
 }

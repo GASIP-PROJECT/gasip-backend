@@ -1,5 +1,6 @@
 package com.example.gasip.professor.service;
 
+import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.grade.repository.GradeRepository;
 import com.example.gasip.professor.dto.ProfessorResponse;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class ProfessorService {
     private final ProfessorRepository professorRepository;
     private final GradeRepository gradeRepository;
+    private final BoardRepository boardRepository;
 
     /**
      * 교수 조회
@@ -63,4 +65,13 @@ public class ProfessorService {
                 .map(ProfessorResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+//    /**
+//     *
+//     */
+//    @Transactional
+//    public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
+//        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
+//        return boardRepository.findBoarByProfessor(professor);
+//    }
 }

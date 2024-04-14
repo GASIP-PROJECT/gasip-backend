@@ -122,6 +122,11 @@ public class MemberController {
     }
 
     @PutMapping("/passwords")
+    @Tag(name = "Service Member Interface", description = "비밀번호를 변경하는 api 입니다.")
+    @Operation(summary = "비밀번호 변경", description = "비밀번호를 변경하는 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
     public ResponseEntity<?> editPassword(@AuthenticationPrincipal MemberDetails memberDetails,
                                           @RequestBody MemberUpdatePasswordRequest memberUpdatePasswordRequest) {
         return ResponseEntity
@@ -134,6 +139,11 @@ public class MemberController {
     }
 
     @PutMapping("/nicknames")
+    @Tag(name = "Service Member Interface", description = "닉네임을 변경하는 api 입니다.")
+    @Operation(summary = "닉네임 변경", description = "닉네임 변경하는 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
     public ResponseEntity<?> editNickname(@AuthenticationPrincipal MemberDetails memberDetails,
                                           @RequestBody MemberUpdateNicknameRequest memberUpdateNicknameRequest) {
         return ResponseEntity
@@ -146,6 +156,11 @@ public class MemberController {
     }
 
     @PostMapping("/emails/verification-requests")
+    @Tag(name = "Service Member Interface", description = "이메일 인증 api 입니다.")
+    @Operation(summary = "이메일 인증번호 전송 api", description = "이메일 인증 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
     public ResponseEntity sendMessage(@RequestParam("email") String email) {
         return ResponseEntity
             .ok()
@@ -157,6 +172,11 @@ public class MemberController {
     }
 
     @GetMapping("/emails/verifications")
+    @Tag(name = "Service Member Interface", description = "이메일 인증번호 검증 api 입니다.")
+    @Operation(summary = "인증번호 6자리 검증", description = "인증번호 검증 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
     public ResponseEntity verificationEmail(@RequestParam("email") String email,
                                             @RequestParam("code") String authCode) {
         return ResponseEntity
@@ -169,6 +189,11 @@ public class MemberController {
     }
 
     @DeleteMapping()
+    @Tag(name = "Service Member Interface", description = "회원 탈퇴 api 입니다.")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
     public ResponseEntity withdrawAccount(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()

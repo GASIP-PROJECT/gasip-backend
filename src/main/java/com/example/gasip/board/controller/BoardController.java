@@ -155,7 +155,7 @@ public class BoardController {
      * 교수 정보 및 게시글 불러오기
      */
     @GetMapping("/boards-detail/{profId}")
-    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+    public ResponseEntity<?> findçiBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(

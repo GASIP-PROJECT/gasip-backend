@@ -14,7 +14,6 @@ import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
-import com.example.gasip.professor.service.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,8 +34,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
-
-    private final ProfessorService professorService;
 
     @Transactional
     public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
@@ -166,7 +163,6 @@ public class BoardService {
      */
     @Transactional
     public List<BoardProfessorReadResponse>  findBoarByProfessor(Long profId, Pageable pageable) {
-        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
         return boardRepository.findBoarByProfessor(profId);
     }
 

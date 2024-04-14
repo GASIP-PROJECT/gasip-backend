@@ -121,6 +121,18 @@ public class MemberController {
             );
     }
 
+    @PutMapping("/passwords")
+    public ResponseEntity<?> editPassword(@AuthenticationPrincipal MemberDetails memberDetails,
+                                          @RequestBody MemberUpdatePasswordRequest memberUpdatePasswordRequest) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.updatePassword(memberDetails,memberUpdatePasswordRequest)
+                )
+            );
+    }
+
     @PutMapping("/nicknames")
     public ResponseEntity<?> editNickname(@AuthenticationPrincipal MemberDetails memberDetails,
                                           @RequestBody MemberUpdateNicknameRequest memberUpdateNicknameRequest) {
@@ -152,6 +164,17 @@ public class MemberController {
             .body(
                 ApiUtils.success(
                     memberService.verifiedCode(email, authCode)
+                )
+            );
+    }
+
+    @DeleteMapping()
+    public ResponseEntity withdrawAccount(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.withdrawAccount(memberDetails)
                 )
             );
     }

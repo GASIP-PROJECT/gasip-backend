@@ -58,4 +58,8 @@ public class Member {
     public void updateNickname(String name) {
         this.nickname = name;
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

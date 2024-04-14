@@ -4,6 +4,7 @@ import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.grade.repository.GradeRepository;
 import com.example.gasip.professor.dto.ProfessorResponse;
+import com.example.gasip.professor.dto.ProfessorWithBoardResponse;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,4 +75,13 @@ public class ProfessorService {
 //        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
 //        return boardRepository.findBoarByProfessor(professor);
 //    }
+
+    /**
+     * 교수 상세정보 및 교수 게시글 불러오기
+     */
+    @Transactional
+    public List<ProfessorWithBoardResponse> findBoardByProfessor(Long profId) {
+        return professorRepository.findBoardByProfessor(profId);
+    }
+
 }

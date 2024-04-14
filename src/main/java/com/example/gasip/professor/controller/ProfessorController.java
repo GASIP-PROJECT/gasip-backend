@@ -1,6 +1,5 @@
 package com.example.gasip.professor.controller;
 
-import com.example.gasip.board.service.BoardService;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.professor.dto.ProfessorResponse;
@@ -11,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfessorController {
 
     private final ProfessorService professorService;
-    private final BoardService boardService;
 
     /**
      * 교수 조회
@@ -50,7 +49,7 @@ public class ProfessorController {
      */
     @GetMapping("{profId}")
     @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = { "Professor Controller" })
-    public ResponseEntity<?> findByProfId(@PathVariable Long profId) {
+    public ResponseEntity<?> findByProfId(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
@@ -92,16 +91,16 @@ public class ProfessorController {
                 );
     }
 
-//    /**
-//     * 교수 정보 및 게시글 불러오기
-//     */
-//    @GetMapping("/board/{profId}")
-//    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
-//        return ResponseEntity
-//                .ok()
-//                .body(
-//                        ApiUtils.success(professorService.findBoarByProfessor(profId, pageable))
-//                );
-//    }
+    /**
+     * 교수 정보 및 게시글 불러오기
+     */
+    @GetMapping("/boards-detail/{profId}")
+    public ResponseEntity<?> findBoardByProfessor(@PathVariable Long profId) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(professorService.findBoardByProfessor(profId))
+                );
+    }
 
 }

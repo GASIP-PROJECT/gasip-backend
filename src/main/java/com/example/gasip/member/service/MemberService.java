@@ -154,4 +154,21 @@ public class MemberService {
         member.updateNickname(memberUpdateNicknameRequest.getNickname());
         return MemberUpdateNicknameResponse.fromEntity(member);
     }
+    @Transactional
+    public MemberUpdatePasswordResponse updatePassword(MemberDetails memberDetails, MemberUpdatePasswordRequest memberUpdatePasswordRequest) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        member.updatePassword(memberUpdatePasswordRequest.getPassword());
+        member.encodePassword(passwordEncoder);
+        return MemberUpdatePasswordResponse.fromEntity(member);
+    }
+
+    public String withdrawAccount(MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        memberRepository.delete(member);
+        return "회원 탈퇴 성공";
+    }
 }

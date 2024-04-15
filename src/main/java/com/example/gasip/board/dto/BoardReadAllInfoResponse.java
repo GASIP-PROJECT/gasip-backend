@@ -1,9 +1,8 @@
 package com.example.gasip.board.dto;
 
 import com.example.gasip.board.model.Board;
-import com.example.gasip.comment.model.Comment;
+import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.global.entity.BaseTimeEntity;
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,9 +16,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-@Schema(description = "게시글 읽기 Response DTO 관련 VO")
 @AllArgsConstructor
-public class BoardReadResponse extends BaseTimeEntity {
+public class BoardReadAllInfoResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글 ID")
     private Long postId;
@@ -41,9 +39,15 @@ public class BoardReadResponse extends BaseTimeEntity {
     private String collegeName;
     @Schema(description = "소속 학과 이름")
     private String majorName;
+    @Schema(description = "댓글 개수")
+    private Long numberOfComment;
+    @Schema(description = "댓글 리스트")
+    private List<CommentReadResponse> comments;
 
-    @QueryProjection
-    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId, int gradePoint, String profName, String collegeName,String majorName
+    public BoardReadAllInfoResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content,
+                                    Long clickCount, Long likeCount, Long profId, int gradePoint, String profName,
+                                    String collegeName, String majorName, List<CommentReadResponse> comments,
+                                    Long numberOfComment
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -55,9 +59,11 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.profName = profName;
         this.collegeName = collegeName;
         this.majorName = majorName;
+        this.numberOfComment = numberOfComment;
+        this.comments = comments;
     }
-    public static BoardReadResponse fromEntity(Board board) {
-        return BoardReadResponse.builder()
+    public static BoardReadAllInfoResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
+        return BoardReadAllInfoResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())
             .postId(board.getPostId())
@@ -68,6 +74,8 @@ public class BoardReadResponse extends BaseTimeEntity {
             .profName(board.getProfessor().getProfName())
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
+            .numberOfComment(Long.valueOf(commentList.size()))
+            .comments(commentList)
             .build();
     }
 }

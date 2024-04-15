@@ -4,6 +4,9 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.comment.dto.CommentReadResponse;
+import com.example.gasip.comment.model.Comment;
+import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
 import com.example.gasip.global.exception.InvaildWritterException;
@@ -19,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,6 +37,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
@@ -60,11 +63,17 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
+    public BoardReadAllInfoResponse findBoardbyId(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
-            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
         Board board = insertView(postId, member);
-        return BoardReadResponse.fromEntity(board);
+        List<CommentReadResponse> commentList = commentRepository.findAllByBoard(board)
+            .stream()
+            .map(CommentReadResponse::fromEntity)
+            .collect(Collectors.toList());
+
+        return BoardReadAllInfoResponse.fromEntity(board,commentList);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {

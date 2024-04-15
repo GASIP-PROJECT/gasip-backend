@@ -63,7 +63,7 @@ public class Board extends BaseTimeEntity {
     private int gradePoint;
 
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint) {
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint,List<Comment>comments) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -72,6 +72,7 @@ public class Board extends BaseTimeEntity {
         this.professor = professor;
         this.member = member;
         this.gradePoint = gradePoint;
+        this.comments = comments;
     }
     public void updateBoard(String content) {
         this.content = content;

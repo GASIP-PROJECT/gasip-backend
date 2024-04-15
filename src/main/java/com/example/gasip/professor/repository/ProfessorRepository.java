@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProfessorRepository extends JpaRepository<Professor, Long> {
+public interface ProfessorRepository extends JpaRepository<Professor, Long>, ProfessorRepositoryCustom {
     List<Professor> findProfessorByCategory(Category Id);
 
     List<Professor> findProfessorByProfNameLike(String profName);

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,12 +49,13 @@ public class ProfessorController {
      */
     @GetMapping("{profId}")
     @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = { "Professor Controller" })
-    public ResponseEntity<?> findByProfId(@PathVariable Long profId) {
+    public ResponseEntity<?> findByProfId(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
                     professorService.findByProfId(profId)
+
                 )
             );
     }
@@ -86,6 +88,18 @@ public class ProfessorController {
                         ApiUtils.success(
                                 professorService.findProfessorByProfNameLike(profName)
                         )
+                );
+    }
+
+    /**
+     * 교수 정보 및 게시글 불러오기
+     */
+    @GetMapping("/boards-detail/{profId}")
+    public ResponseEntity<?> findBoardByProfessor(@PathVariable Long profId) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(professorService.findBoardByProfessor(profId))
                 );
     }
 

@@ -1,9 +1,6 @@
 package com.example.gasip.board.repository;
 
-import com.example.gasip.board.dto.BoardContentDto;
-import com.example.gasip.board.dto.BoardReadRequest;
-import com.example.gasip.board.dto.BoardReadResponse;
-import com.example.gasip.board.dto.QBoardReadResponse;
+import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -51,6 +48,21 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profName.like(profName))
+                .orderBy(board.regDate.desc())
+                .fetch();
+    }
+
+    /**
+     * 교수 게시글 정보 넘겨주기
+     */
+    @Override
+    public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId) {
+        return queryFactory
+                .select(new QBoardProfessorReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.gradePoint, board.professor.profId, board.professor.profName, board.professor.category.Id, board.professor.category.majorName))
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.professor.profId.eq(profId))
                 .orderBy(board.regDate.desc())
                 .fetch();
     }

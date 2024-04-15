@@ -150,4 +150,16 @@ public class BoardController {
                         )
                 );
     }
+
+    /**
+     * 교수 정보 및 게시글 불러오기
+     */
+    @GetMapping("/boards-detail/{profId}")
+    public ResponseEntity<?> findçiBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findBoarByProfessor(profId, pageable))
+                );
+    }
 }

@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -59,6 +58,7 @@ public class BoardService {
             .collect(Collectors.toList());
     }
 
+
     @Transactional
     public BoardReadResponse findBoardId(Long postId,MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
@@ -67,7 +67,7 @@ public class BoardService {
         return BoardReadResponse.fromEntity(board);
     }
     @Transactional
-    public BoardUpdateResponse editBoard(MemberDetails memberDetails,Long boardId,BoardUpdateRequest boardUpdateRequest) {
+    public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {
         Board board = validatedBoardWritter(memberDetails, boardId);
         board.updateBoard(boardUpdateRequest.getContent());
         return BoardUpdateResponse.fromEntity(board);
@@ -156,6 +156,14 @@ public class BoardService {
     @Transactional
     public List<BoardReadResponse> findByProfNameLike(String profName) {
         return boardRepository.findByProfNameLike(profName);
+    }
+
+    /**
+     *
+     */
+    @Transactional
+    public List<BoardProfessorReadResponse>  findBoarByProfessor(Long profId, Pageable pageable) {
+        return boardRepository.findBoarByProfessor(profId);
     }
 
 }

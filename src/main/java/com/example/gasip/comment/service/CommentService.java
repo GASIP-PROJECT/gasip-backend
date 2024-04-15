@@ -56,7 +56,6 @@ public class CommentService {
             .stream()
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());
-
     }
 
     // 댓글 edit

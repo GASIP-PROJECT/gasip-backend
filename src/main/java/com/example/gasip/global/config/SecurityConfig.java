@@ -95,7 +95,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-            List.of("http://localhost:8081"));
+            List.of("http://localhost:8081","https://gasip.site"));
         configuration.setAllowedMethods(
             Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
         configuration.addAllowedHeader(("*"));

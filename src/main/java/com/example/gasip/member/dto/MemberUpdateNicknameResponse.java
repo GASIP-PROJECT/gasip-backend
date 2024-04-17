@@ -15,7 +15,7 @@ public class MemberUpdateNicknameResponse {
 
     public static MemberUpdateNicknameResponse fromEntity(Member member) {
         return MemberUpdateNicknameResponse.builder()
-            .nickname(member.getName())
+            .nickname(member.getNickname())
             .build();
     }
 }

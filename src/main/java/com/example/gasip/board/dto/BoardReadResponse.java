@@ -1,7 +1,6 @@
 package com.example.gasip.board.dto;
 
 import com.example.gasip.board.model.Board;
-import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -41,9 +39,11 @@ public class BoardReadResponse extends BaseTimeEntity {
     private String collegeName;
     @Schema(description = "소속 학과 이름")
     private String majorName;
+    @Schema(description = "닉네임")
+    private String nickname;
 
     @QueryProjection
-    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId, int gradePoint, String profName, String collegeName,String majorName
+    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId, int gradePoint, String profName, String collegeName,String majorName, String nickname
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -55,6 +55,7 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.profName = profName;
         this.collegeName = collegeName;
         this.majorName = majorName;
+        this.nickname = nickname;
     }
     public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
@@ -68,6 +69,7 @@ public class BoardReadResponse extends BaseTimeEntity {
             .profName(board.getProfessor().getProfName())
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
+            .nickname(board.getMember().getNickname())
             .build();
     }
 }

@@ -17,8 +17,7 @@ public class ProfessorRepositoryCustomImpl implements ProfessorRepositoryCustom{
     public List<ProfessorWithBoardResponse> findBoardByProfessor(Long profId) {
         return queryFactory
                 .select(new QProfessorWithBoardResponse(
-                        professor.profId, professor.profName, professor.category.Id, professor.category.majorName, board.content, board.postId))
-//                .select(Projections.constructor(ProfessorWithBoardResponse.class, board))
+                        professor.profId, professor.profName, professor.category.Id, professor.category.majorName, board.content, board.postId, board.member.nickname))
                 .from(professor, board)
                 .where(professor.profId.eq(board.professor.profId), board.professor.profId.eq(profId))
                 .fetch();

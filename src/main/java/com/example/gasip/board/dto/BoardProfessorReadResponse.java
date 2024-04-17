@@ -37,9 +37,10 @@ public class BoardProfessorReadResponse extends BaseTimeEntity {
     private String profName;
     private Long majorId;
     private String majorName;
+    private String nickName;
 
     @QueryProjection
-    public BoardProfessorReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, int gradePoint, Long profId, String profName, Long majorId, String majorName) {
+    public BoardProfessorReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, int gradePoint, Long profId, String profName, Long majorId, String majorName, String nickName) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -50,6 +51,7 @@ public class BoardProfessorReadResponse extends BaseTimeEntity {
         this.profName = profName;
         this.majorId = majorId;
         this.majorName = majorName;
+        this.nickName = nickName;
     }
     public static BoardProfessorReadResponse fromEntity(Board board) {
         return BoardProfessorReadResponse.builder()
@@ -64,6 +66,7 @@ public class BoardProfessorReadResponse extends BaseTimeEntity {
                 .profName(board.getProfessor().getProfName())
                 .majorId(board.getProfessor().getCategory().getId())
                 .majorName(board.getProfessor().getCategory().getMajorName())
+                .nickName(board.getMember().getNickname())
                 .build();
     }
 }

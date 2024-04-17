@@ -92,7 +92,7 @@ public class ProfessorController {
     }
 
     /**
-     * 교수 정보 및 게시글 불러오기
+     * 교수 정보 및 게시글 불러오기 로직
      */
     @GetMapping("/boards-detail/{profId}")
     public ResponseEntity<?> findBoardByProfessor(@PathVariable Long profId) {

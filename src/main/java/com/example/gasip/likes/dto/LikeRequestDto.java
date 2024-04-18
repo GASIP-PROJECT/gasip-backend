@@ -9,17 +9,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class LikeRequestDto {
-    private Long memberId;
     private Long postId;
 
-    public LikeRequestDto(Long memberId, Long postId) {
-        this.memberId = memberId;
+    public LikeRequestDto(Long postId) {
         this.postId = postId;
     }
 
     public static LikeRequestDto fromEntity(Likes likes) {
         return LikeRequestDto.builder()
-                .memberId(likes.getMember().getMemberId())
                 .postId(likes.getBoard().getPostId())
                 .build();
     }

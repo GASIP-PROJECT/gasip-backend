@@ -1,6 +1,7 @@
 package com.example.gasip.likes.dto;
 
 import com.example.gasip.likes.model.Likes;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -9,17 +10,15 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class LikeRequestDto {
-    private Long memberId;
     private Long postId;
 
-    public LikeRequestDto(Long memberId, Long postId) {
-        this.memberId = memberId;
+    @QueryProjection
+    public LikeRequestDto(Long postId) {
         this.postId = postId;
     }
 
     public static LikeRequestDto fromEntity(Likes likes) {
         return LikeRequestDto.builder()
-                .memberId(likes.getMember().getMemberId())
                 .postId(likes.getBoard().getPostId())
                 .build();
     }

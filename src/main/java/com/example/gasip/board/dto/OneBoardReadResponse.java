@@ -10,14 +10,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
-public class BoardReadAllInfoResponse extends BaseTimeEntity {
+public class OneBoardReadResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글 ID")
     private Long postId;
@@ -44,26 +43,8 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
     @Schema(description = "댓글 리스트")
     private List<CommentReadResponse> comments;
 
-    public BoardReadAllInfoResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content,
-                                    Long clickCount, Long likeCount, Long profId, int gradePoint, String profName,
-                                    String collegeName, String majorName, List<CommentReadResponse> comments,
-                                    Long numberOfComment
-    ) {
-        super(regDate, updateDate);
-        this.postId = postId;
-        this.content = content;
-        this.clickCount = clickCount;
-        this.likeCount = likeCount;
-        this.profId = profId;
-        this.gradePoint = gradePoint;
-        this.profName = profName;
-        this.collegeName = collegeName;
-        this.majorName = majorName;
-        this.numberOfComment = numberOfComment;
-        this.comments = comments;
-    }
-    public static BoardReadAllInfoResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
-        return BoardReadAllInfoResponse.builder()
+    public static OneBoardReadResponse fromEntity(Board board, List<CommentReadResponse> commentList) {
+        return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())
             .postId(board.getPostId())
@@ -74,7 +55,7 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
             .profName(board.getProfessor().getProfName())
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
-            .numberOfComment(Long.valueOf(commentList.size()))
+            .numberOfComment((long) commentList.size())
             .comments(commentList)
             .build();
     }

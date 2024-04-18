@@ -41,9 +41,13 @@ public class BoardReadResponse extends BaseTimeEntity {
     private String majorName;
     @Schema(description = "닉네임")
     private String nickname;
+    @Schema(description = "좋아요 클릭 여부")
+    private Boolean isLike;
 
     @QueryProjection
-    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Long profId, int gradePoint, String profName, String collegeName,String majorName, String nickname
+    public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content,
+                             Long clickCount, Long likeCount, Long profId, int gradePoint, String profName,
+                             String collegeName,String majorName, String nickname, Boolean isLike
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -56,6 +60,7 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.collegeName = collegeName;
         this.majorName = majorName;
         this.nickname = nickname;
+        this.isLike = isLike;
     }
     public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
@@ -70,6 +75,7 @@ public class BoardReadResponse extends BaseTimeEntity {
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
             .nickname(board.getMember().getNickname())
+            .isLike(board.getIsLike())
             .build();
     }
 }

@@ -5,7 +5,6 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
-import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
@@ -13,11 +12,13 @@ import com.example.gasip.global.exception.InvaildWritterException;
 import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.likes.repository.LikeRepository;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class BoardService {
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
+
 
     @Transactional
     public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
@@ -49,22 +52,36 @@ public class BoardService {
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Professor professor = professorRepository.findById(profId).orElseThrow(
+            () -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
         Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
+    // TODO LIKE 테이블 join해서 queryDSL 쓰는게 빠른지 비교
     @Transactional
-    public List<BoardReadResponse> findBoardByProfessor(Long profId, Pageable pageable) {
-        Professor professor = professorRepository.findById(profId).orElseThrow(() -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
-        return boardRepository.findAllByProfessorOrderByRegDateDesc(professor,pageable).stream()
+    public List<BoardReadResponse> findBoardByProfessor(MemberDetails memberDetails,Long profId, Pageable pageable) {
+        Professor professor = professorRepository.findById(profId).orElseThrow(
+            () -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Page<Board> boards = boardRepository.findAllByProfessorOrderByRegDateDesc(professor, pageable);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
     }
 
 
     @Transactional
-    public BoardReadAllInfoResponse findBoardbyId(Long postId, MemberDetails memberDetails) {
+    public OneBoardReadResponse findBoardbyId(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
@@ -74,27 +91,26 @@ public class BoardService {
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());
 
-        return BoardReadAllInfoResponse.fromEntity(board,commentList);
+        return OneBoardReadResponse.fromEntity(board,commentList);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {
-        Board board = validatedBoardWritter(memberDetails, boardId);
+        Board board = validatedBoardWritterEqualMember(memberDetails, boardId);
         board.updateBoard(boardUpdateRequest.getContent());
         return BoardUpdateResponse.fromEntity(board);
     }
     @Transactional
     public String deleteBoard(MemberDetails memberDetails,Long boardId) {
-        validatedBoardWritter(memberDetails, boardId);
+        validatedBoardWritterEqualMember(memberDetails, boardId);
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional
     public List<BoardReadResponse> findBestBoard(Pageable pageable) {
-
         return boardRepository.findBestBoard(pageable);
     }
 
-    private Board validatedBoardWritter(MemberDetails memberDetails, Long boardId) {
+    private Board validatedBoardWritterEqualMember(MemberDetails memberDetails, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         if (!member.getMemberId().equals(board.getMember().getMemberId())) {

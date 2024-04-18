@@ -14,6 +14,8 @@ public class ProfessorResponse {
     private Long profId;
     @Schema(description = "교수 이름")
     private String profName;
+    @Schema(description = "단과대 이름")
+    private String collegeName;
     @Schema(description = "교수 전공 ID")
     private Long majorId;
     @Schema(description = "교수 전공 이름")
@@ -24,9 +26,10 @@ public class ProfessorResponse {
     public static ProfessorResponse fromEntity(Professor professor) {
         return ProfessorResponse.builder()
                 .profId(professor.getProfId())
+                .profName(professor.getProfName())
+                .collegeName(professor.getCategory().getCollegeName())
                 .majorId(professor.getCategory().getId())
                 .majorName(professor.getCategory().getMajorName())
-                .profName(professor.getProfName())
                 .professorAverageGradePoint(professor.getAverageGradePoint())
                 .build();
     }

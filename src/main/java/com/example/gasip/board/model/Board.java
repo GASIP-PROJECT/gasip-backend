@@ -62,6 +62,9 @@ public class Board extends BaseTimeEntity {
     @ColumnDefault("0")
     private int gradePoint;
 
+    @Transient
+    private Boolean isLike;
+
 
     public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint,List<Comment>comments) {
         super(regDate, updateDate);
@@ -81,5 +84,9 @@ public class Board extends BaseTimeEntity {
 
     public void increaseView(Long count) {
         clickCount+=count;
+    }
+
+    public void updateLike(Boolean isLike) {
+        this.isLike=isLike;
     }
 }

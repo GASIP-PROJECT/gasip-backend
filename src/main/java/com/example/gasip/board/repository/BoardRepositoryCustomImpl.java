@@ -35,7 +35,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardReadResponse> findAllBoard() {
         return queryFactory
                 .select(new QBoardReadResponse(
-                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName, board.professor.category.collegeName,board.professor.category.majorName, board.member.nickname))
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount,
+                    board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName,
+                    board.professor.category.collegeName,board.professor.category.majorName, board.member.nickname))
                 .from(board)
                 .fetch();
     }

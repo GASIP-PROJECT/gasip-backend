@@ -14,11 +14,13 @@ public class MemberMyPageResponse {
     private String email;
     @Schema(description = "닉네임", example = "무한이")
     private String name;
+    private String nickname;
 
     public static MemberMyPageResponse fromEntity(Member member) {
         return MemberMyPageResponse.builder()
             .email(member.getEmail())
             .name(member.getName())
+            .nickname(member.getNickname())
             .build();
     }
 

@@ -3,13 +3,11 @@ package com.example.gasip.comment.dto;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +23,6 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
     private String memberName;
     private String content;
     private Long commentLike;
-    private Long parentId;
     private List<CommentChildrenReadResponse> commentChildren = new ArrayList<>();
 
     public static CommentReadResponse fromEntity(Comment comment) {

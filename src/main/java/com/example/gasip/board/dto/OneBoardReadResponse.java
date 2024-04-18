@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -56,7 +55,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
             .profName(board.getProfessor().getProfName())
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
-            .numberOfComment(Long.valueOf(commentList.size()))
+            .numberOfComment((long) commentList.size())
             .comments(commentList)
             .build();
     }

@@ -46,7 +46,7 @@ public class Board extends BaseTimeEntity {
     private Long likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Prof_ID")
+    @JoinColumn(name = "prof_id")
     @Schema(description = "게시글과 관련된 교수정보")
     private Professor professor;
 

@@ -29,7 +29,7 @@ public class LikeService {
         Board board = boardRepository.findById(likeRequestDto.getPostId())
                 .orElseThrow(() -> new NotFoundException("Could not found board id : " + likeRequestDto.getPostId()));
 
-        // 이미 좋아요 되어있으면 에러 반환
+        // 좋아요 중복 요청 시 에러 반환(이미 좋아요 되어있는 경우)
         if (likeRepository.findByMemberAndBoard(member, board).isPresent()){
             throw new DuplicateResourceException("already exist data by member id :" + member.getMemberId() + " ,"
                     + "board id : " + board.getPostId());

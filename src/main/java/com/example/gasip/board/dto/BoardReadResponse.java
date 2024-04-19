@@ -57,7 +57,7 @@ public class BoardReadResponse extends BaseTimeEntity {
 
     @QueryProjection
     public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String memberNickname,
-                             String content, Long clickCount, Long likeCount, Long commentCount, Long profId,
+                             String content, Long clickCount, Long likeCount, Long profId,
                              int gradePoint, String profName, String collegeName,String majorName
     ) {
         super(regDate, updateDate);
@@ -66,7 +66,6 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.content = content;
         this.clickCount = clickCount;
         this.likeCount = likeCount;
-        this.commentCount = commentCount;
         this.profId = profId;
         this.gradePoint = gradePoint;
         this.profName = profName;

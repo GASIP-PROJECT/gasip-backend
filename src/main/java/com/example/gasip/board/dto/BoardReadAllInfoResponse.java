@@ -43,11 +43,13 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
     private Long numberOfComment;
     @Schema(description = "댓글 리스트")
     private List<CommentReadResponse> comments;
+    @Schema(description = "닉네임")
+    private String nickName;
 
     public BoardReadAllInfoResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content,
                                     Long clickCount, Long likeCount, Long profId, int gradePoint, String profName,
                                     String collegeName, String majorName, List<CommentReadResponse> comments,
-                                    Long numberOfComment
+                                    Long numberOfComment, String nickName
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -61,6 +63,7 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
         this.majorName = majorName;
         this.numberOfComment = numberOfComment;
         this.comments = comments;
+        this.nickName = nickName;
     }
     public static BoardReadAllInfoResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
         return BoardReadAllInfoResponse.builder()
@@ -76,6 +79,7 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
             .majorName(board.getProfessor().getCategory().getMajorName())
             .numberOfComment(Long.valueOf(commentList.size()))
             .comments(commentList)
+            .nickName(board.getMember().getNickname())
             .build();
     }
 }

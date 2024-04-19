@@ -46,7 +46,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     @Schema(description = "닉네임")
     private String nickName;
 
-    public static OneBoardReadResponse fromEntity(Board board, List<CommentReadResponse> commentList) {
+    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
         return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())

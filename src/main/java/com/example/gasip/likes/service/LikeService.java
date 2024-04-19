@@ -2,6 +2,7 @@ package com.example.gasip.likes.service;
 
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.DuplicateResourceException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.dto.LikeRequestDto;
@@ -31,8 +32,9 @@ public class LikeService {
 
         // 좋아요 중복 요청 시 에러 반환(이미 좋아요 되어있는 경우)
         if (likeRepository.findByMemberAndBoard(member, board).isPresent()){
-            throw new DuplicateResourceException("already exist data by member id :" + member.getMemberId() + " ,"
-                    + "board id : " + board.getPostId());
+//            throw new DuplicateResourceException("already exist data by member id :" + member.getMemberId() + " ,"
+//                    + "board id : " + board.getPostId());
+            throw new DuplicateResourceException(ErrorCode.DUPLICATE_LIKE);
         }
 
         Likes likes = Likes.builder()

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -42,8 +43,10 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     private Long numberOfComment;
     @Schema(description = "댓글 리스트")
     private List<CommentReadResponse> comments;
+    @Schema(description = "닉네임")
+    private String nickName;
 
-    public static OneBoardReadResponse fromEntity(Board board, List<CommentReadResponse> commentList) {
+    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
         return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())
@@ -57,6 +60,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
             .majorName(board.getProfessor().getCategory().getMajorName())
             .numberOfComment((long) commentList.size())
             .comments(commentList)
+            .nickName(board.getMember().getNickname())
             .build();
     }
 }

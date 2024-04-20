@@ -25,7 +25,7 @@ public enum ErrorCode {
     DUPLICATE_EMAIL("이미 존재하는 이메일"),
     ACCESS_FORBIDDEN("권한 오류"),
     DUPLICATE_LIKE("좋아요 중복 오류"),
-//    NO_STOCK_ERROR("재고 부족 오류"),
+    NO_STOCK_ERROR("재고 부족 오류"),
     DUPLICATE_PHONENUMBER("이미 존재하는 휴대폰 번호"),
 
     // Member

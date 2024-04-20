@@ -63,6 +63,14 @@ public class LikeService {
         boardRepository.subLikeCount(board);
     }
 
+    /**
+     * 좋아요 체크
+     */
+    @Transactional
+    public Boolean isLikes(Long postId, Long memberId) {
+        return likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberId);
+    }
+
 
     /**
      *

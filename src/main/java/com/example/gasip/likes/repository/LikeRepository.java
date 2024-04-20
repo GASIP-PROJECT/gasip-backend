@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, Long> {
     Optional<Likes> findByMemberAndBoard(Member member, Board board);
+
+    Boolean existsByBoard_PostIdAndMember_MemberId(Long boardId, Long memberId);
 }

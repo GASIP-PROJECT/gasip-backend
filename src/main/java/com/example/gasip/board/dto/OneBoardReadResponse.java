@@ -48,8 +48,10 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     private List<CommentReadResponse> comments;
     @Schema(description = "닉네임")
     private String nickName;
+    @Schema(description = "좋아요 여부")
+    private Boolean isLike;
 
-    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList) {
+    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList, Boolean isLike) {
         return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())
@@ -65,6 +67,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
             .majorName(board.getProfessor().getCategory().getMajorName())
             .comments(commentList)
             .nickName(board.getMember().getNickname())
+            .isLike(isLike)
             .build();
     }
 }

@@ -5,7 +5,6 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
-import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
@@ -13,6 +12,8 @@ import com.example.gasip.global.exception.InvaildWritterException;
 import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.likes.model.Likes;
+import com.example.gasip.likes.repository.LikeRepository;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
@@ -38,6 +39,7 @@ public class BoardService {
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
@@ -73,8 +75,9 @@ public class BoardService {
             .stream()
             .map(CommentReadResponse::fromEntity)
             .collect(Collectors.toList());
+        Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
 
-        return BoardReadAllInfoResponse.fromEntity(board,commentList);
+        return BoardReadAllInfoResponse.fromEntity(board,commentList,likes);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {

@@ -135,17 +135,17 @@ public class GlobalControllerAdvice {
             );
     }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<?> duplicateResourceException(
-            DuplicateResourceException ex)
-     {
-            log.error("handling {}, message : {}", ex.getClass(), ex.getMessage());
-
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(
-                            ApiUtils.error(ErrorCode.DUPLICATE_LIKE.getMessage(), ErrorCode.DUPLICATE_LIKE.getHttpStatus())
-                    );
-        }
+//    @ExceptionHandler(DuplicateResourceException.class)
+//    public ResponseEntity<?> duplicateResourceException(
+//            DuplicateResourceException ex)
+//     {
+//            log.error("handling {}, message : {}", ex.getClass(), ex.getMessage());
+//
+//            return ResponseEntity
+//                    .status(HttpStatus.CONFLICT)
+//                    .body(
+//                            ApiUtils.error(ErrorCode.DUPLICATE_LIKE.getMessage(), ErrorCode.DUPLICATE_LIKE.getHttpStatus())
+//                    );
+//        }
 }
 

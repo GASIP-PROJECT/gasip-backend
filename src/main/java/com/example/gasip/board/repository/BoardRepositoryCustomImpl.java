@@ -35,7 +35,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardReadResponse> findAllBoard() {
         return queryFactory
                 .select(new QBoardReadResponse(
-                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName, board.professor.category.collegeName,board.professor.category.majorName, board.member.nickname))
+                        board.regDate, board.updateDate, board.postId, board.member.nickname,
+                    board.content, board.clickCount, board.likeCount, board.professor.profId,
+                    board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                    board.professor.category.majorName))
                 .from(board)
                 .fetch();
     }
@@ -44,7 +47,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardReadResponse> findByProfNameLike(String profName) {
         return queryFactory
                 .select(new QBoardReadResponse(
-                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName, board.professor.category.collegeName,board.professor.category.majorName, board.member.nickname))
+                    board.regDate, board.updateDate, board.postId, board.member.nickname,
+                    board.content, board.clickCount, board.likeCount, board.professor.profId,
+                    board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                    board.professor.category.majorName))
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profName.like(profName))
@@ -71,7 +77,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardReadResponse> findBestBoard(Pageable pageable) {
         return queryFactory
             .select(new QBoardReadResponse(
-                board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.professor.profId, board.gradePoint, board.professor.profName, board.professor.category.collegeName,board.professor.category.majorName, board.member.nickname))
+                board.regDate, board.updateDate, board.postId, board.member.nickname,
+                board.content, board.clickCount, board.likeCount, board.professor.profId,
+                board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                board.professor.category.majorName))
             .from(board)
             .leftJoin(board.professor, professor)
             .where(board.likeCount.goe(5))

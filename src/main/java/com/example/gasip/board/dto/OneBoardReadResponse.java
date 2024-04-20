@@ -17,10 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
-public class BoardReadAllInfoResponse extends BaseTimeEntity {
+public class OneBoardReadResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글 ID")
     private Long postId;
+    @NotNull
+    @Schema(description = "게시글 작성자")
+    private String memberNickname;
     @NotNull
     @Schema(description = "게시글 내용")
     private String content;
@@ -28,6 +31,8 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
     private Long clickCount;
     @Schema(description = "게시글 좋아요")
     private Long likeCount;
+    @Schema(description = "댓글 개수")
+    private Long commentCount;
     @NotNull
     @Schema(description = "게시글과 관련된 교수 정보")
     private Long profId;
@@ -39,48 +44,27 @@ public class BoardReadAllInfoResponse extends BaseTimeEntity {
     private String collegeName;
     @Schema(description = "소속 학과 이름")
     private String majorName;
-    @Schema(description = "댓글 개수")
-    private Long numberOfComment;
     @Schema(description = "댓글 리스트")
     private List<CommentReadResponse> comments;
     @Schema(description = "닉네임")
     private String nickName;
+    @Schema(description = "좋아요 여부")
+    private Boolean isLike;
 
-    Boolean isLike;
-
-    public BoardReadAllInfoResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content,
-                                    Long clickCount, Long likeCount, Long profId, int gradePoint, String profName,
-                                    String collegeName, String majorName, List<CommentReadResponse> comments,
-                                    Long numberOfComment, String nickName, Boolean isLike
-    ) {
-        super(regDate, updateDate);
-        this.postId = postId;
-        this.content = content;
-        this.clickCount = clickCount;
-        this.likeCount = likeCount;
-        this.profId = profId;
-        this.gradePoint = gradePoint;
-        this.profName = profName;
-        this.collegeName = collegeName;
-        this.majorName = majorName;
-        this.numberOfComment = numberOfComment;
-        this.comments = comments;
-        this.nickName = nickName;
-        this.isLike = isLike;
-    }
-    public static BoardReadAllInfoResponse fromEntity(Board board,List<CommentReadResponse> commentList, Boolean isLike) {
-        return BoardReadAllInfoResponse.builder()
+    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList, Boolean isLike) {
+        return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())
             .postId(board.getPostId())
+            .memberNickname(board.getMember().getNickname())
             .content(board.getContent())
             .clickCount(board.getClickCount())
             .likeCount(board.getLikeCount())
+            .commentCount((long) commentList.size())
             .profId(board.getProfessor().getProfId())
             .profName(board.getProfessor().getProfName())
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
-            .numberOfComment(Long.valueOf(commentList.size()))
             .comments(commentList)
             .nickName(board.getMember().getNickname())
             .isLike(isLike)

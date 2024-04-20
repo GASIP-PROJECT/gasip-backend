@@ -1,8 +1,8 @@
 package com.example.gasip.comment.dto;
 
 import com.example.gasip.comment.model.Comment;
+import com.example.gasip.global.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,18 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CommentReadResponse implements Serializable {
+public class CommentReadResponse extends BaseTimeEntity implements Serializable {
     private Long postId;
     private Long commentId;
     private Long memberId;
+    private String memberName;
     private String content;
     private Long commentLike;
-    private Long parentId;
     private List<CommentChildrenReadResponse> commentChildren = new ArrayList<>();
 
     public static CommentReadResponse fromEntity(Comment comment) {
@@ -38,9 +37,12 @@ public class CommentReadResponse implements Serializable {
     }
     private static CommentReadResponse buildCommentDtoWithChildrenComment(Comment comment) {
         return CommentReadResponse.builder()
+            .regDate(comment.getRegDate())
+            .updateDate(comment.getUpdateDate())
             .postId(comment.getBoard().getPostId())
             .commentId(comment.getCommentId())
             .memberId(comment.getMember().getMemberId())
+            .memberName(comment.getMember().getName())
             .content(comment.getContent())
             .commentChildren(comment.getCommentChildren()
                 .stream()

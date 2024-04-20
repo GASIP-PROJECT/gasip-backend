@@ -56,13 +56,14 @@ public class BoardController {
     @Operation(summary = "교수 페이지별 게시글 정보 요청", description = "교수의 전체 게시글 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
     public ResponseEntity<?> getBoardDetail(
+        @AuthenticationPrincipal MemberDetails memberDetails,
         @Parameter(name = "profId", description = "조회할 profId를 입력받아 교수 페이지 내 전체 게시글을 조회합니다.", in = ParameterIn.PATH)
         @PathVariable Long profId,
         Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardByProfessor(profId,pageable))
+                ApiUtils.success(boardService.findBoardByProfessor(memberDetails,profId,pageable))
             );
     }
 

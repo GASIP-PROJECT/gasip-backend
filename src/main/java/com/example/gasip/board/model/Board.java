@@ -46,7 +46,7 @@ public class Board extends BaseTimeEntity {
     private Long likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Prof_ID")
+    @JoinColumn(name = "prof_id")
     @Schema(description = "게시글과 관련된 교수정보")
     private Professor professor;
 
@@ -61,6 +61,9 @@ public class Board extends BaseTimeEntity {
     @Schema(description = "교수 평점")
     @ColumnDefault("0")
     private int gradePoint;
+
+    @Transient
+    private Boolean isLike;
 
 
     public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint,List<Comment>comments) {
@@ -81,5 +84,9 @@ public class Board extends BaseTimeEntity {
 
     public void increaseView(Long count) {
         clickCount+=count;
+    }
+
+    public void updateLike(Boolean isLike) {
+        this.isLike=isLike;
     }
 }

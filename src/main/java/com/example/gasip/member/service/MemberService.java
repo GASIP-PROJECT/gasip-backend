@@ -115,6 +115,21 @@ public class MemberService {
         return "이메일을 정상적으로 전송했습니다.";
     }
 
+    @Transactional
+    public String sendCodeToExistedEmail(String email) {
+        String authCode = createCode();
+        try {
+            mailService.sendEmail(email, authCode);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
+        redisMailService.setValues(AUTH_CODE_PREFIX + email,
+            authCode, Duration.ofMillis(authCodeExpirationMillis));
+
+        return "이메일을 정상적으로 전송했습니다.";
+    }
+
     private void checkDuplicatedEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {

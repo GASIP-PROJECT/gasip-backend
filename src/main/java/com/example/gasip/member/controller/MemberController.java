@@ -171,6 +171,22 @@ public class MemberController {
             );
     }
 
+    @PostMapping("/emails/verification-requests/exist")
+    @Tag(name = "Service Member Interface", description = "기존 이메일 인증 api 입니다.")
+    @Operation(summary = "이메일 인증번호 전송 api", description = "기존 이메일 인증 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
+    public ResponseEntity sendMessageToExistEmail(@RequestParam("email") String email) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.sendCodeToExistedEmail(email)
+                )
+            );
+    }
+
     @GetMapping("/emails/verifications")
     @Tag(name = "Service Member Interface", description = "이메일 인증번호 검증 api 입니다.")
     @Operation(summary = "인증번호 6자리 검증", description = "인증번호 검증 api 입니다.")

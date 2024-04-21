@@ -46,8 +46,6 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     private String majorName;
     @Schema(description = "댓글 리스트")
     private List<CommentReadResponse> comments;
-    @Schema(description = "닉네임")
-    private String nickName;
     @Schema(description = "좋아요 여부")
     private Boolean isLike;
 
@@ -66,7 +64,6 @@ public class OneBoardReadResponse extends BaseTimeEntity {
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
             .comments(commentList)
-            .nickName(board.getMember().getNickname())
             .isLike(isLike)
             .build();
     }

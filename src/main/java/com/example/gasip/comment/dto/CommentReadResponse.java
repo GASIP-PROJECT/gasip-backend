@@ -1,6 +1,5 @@
 package com.example.gasip.comment.dto;
 
-import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

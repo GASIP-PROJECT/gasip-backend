@@ -60,7 +60,7 @@ public class CommentService {
 
     // 댓글 edit
     @Transactional
-    public CommentUpdateResponse editComment(MemberDetails memberDetails, CommentUpdateRequest commentUpdateRequest,  Long commentId) {
+    public CommentUpdateResponse editComment(MemberDetails memberDetails, CommentUpdateRequest commentUpdateRequest, Long commentId) {
         Comment comment = validatedCommentWritter(memberDetails, commentId);
         comment.updateComment(commentUpdateRequest.getContent());
         return CommentUpdateResponse.fromEntity(comment);

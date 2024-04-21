@@ -1,7 +1,6 @@
 package com.example.gasip.board.dto;
 
 import com.example.gasip.board.model.Board;
-import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

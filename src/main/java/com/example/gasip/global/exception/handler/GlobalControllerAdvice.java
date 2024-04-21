@@ -29,7 +29,8 @@ public class GlobalControllerAdvice {
         InvalidParamException.class,
         NoStockException.class,
         MemberNotFoundException.class,
-        DuplicatePhoneNumberException.class
+        DuplicatePhoneNumberException.class,
+        DuplicateResourceException.class
     })
     public ResponseEntity<?> handleCustomException(
         RuntimeException ex
@@ -133,4 +134,18 @@ public class GlobalControllerAdvice {
                 ApiUtils.error(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR)
             );
     }
+
+//    @ExceptionHandler(DuplicateResourceException.class)
+//    public ResponseEntity<?> duplicateResourceException(
+//            DuplicateResourceException ex)
+//     {
+//            log.error("handling {}, message : {}", ex.getClass(), ex.getMessage());
+//
+//            return ResponseEntity
+//                    .status(HttpStatus.CONFLICT)
+//                    .body(
+//                            ApiUtils.error(ErrorCode.DUPLICATE_LIKE.getMessage(), ErrorCode.DUPLICATE_LIKE.getHttpStatus())
+//                    );
+//        }
 }
+

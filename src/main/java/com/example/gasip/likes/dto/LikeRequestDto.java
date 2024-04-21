@@ -17,7 +17,7 @@ public class LikeRequestDto {
         this.postId = postId;
     }
 
-    public static LikeRequestDto fromEntity(Likes likes) {
+    public static LikeRequestDto toEntity(Likes likes) {
         return LikeRequestDto.builder()
                 .postId(likes.getBoard().getPostId())
                 .build();

@@ -46,7 +46,7 @@ public class CommentLikesService {
     }
 
     @Transactional
-    public void deleteComment(CommentLikesRequestDto commentLikesRequestDto, MemberDetails memberDetails) throws Exception {
+    public void deleteComment(CommentLikesRequestDto commentLikesRequestDto, MemberDetails memberDetails) {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 

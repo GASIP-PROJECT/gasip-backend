@@ -18,7 +18,7 @@ import static com.example.gasip.global.entity.HttpResponseEntity.success;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("Comments/likes")
+@RequestMapping("comments/likes")
 public class CommentLikesController {
     private final CommentLikesService commentLikesService;
     private final CommentLikesRepository commentLikesRepository;

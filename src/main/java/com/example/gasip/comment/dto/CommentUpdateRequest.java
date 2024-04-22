@@ -1,6 +1,7 @@
 package com.example.gasip.comment.dto;
 
 import com.example.gasip.board.model.Board;
+import com.example.gasip.comment.model.Comment;
 import com.example.gasip.member.model.Member;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

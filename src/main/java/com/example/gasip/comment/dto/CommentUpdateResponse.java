@@ -1,5 +1,6 @@
 package com.example.gasip.comment.dto;
 
+import com.example.gasip.comment.model.Comment;
 import lombok.*;
 
 @Getter

@@ -18,7 +18,7 @@ public class CommentLikesResponseDto {
 
     public static CommentLikesResponseDto fromEntity(CommentLikes commentLikes) {
         return CommentLikesResponseDto.builder()
-                .commentLikesId(commentLikes.getLikesId())
+                .commentLikesId(commentLikes.getCommentlikesId())
                 .commentId(commentLikes.getComment().getCommentId())
                 .postId(commentLikes.getBoard().getPostId())
                 .memberId(commentLikes.getMember().getMemberId())

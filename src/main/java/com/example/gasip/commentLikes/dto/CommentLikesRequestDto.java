@@ -10,10 +10,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CommentLikesRequestDto {
     private Long commentId;
+    private Long postId;
 
     public static CommentLikesRequestDto toEntity(CommentLikes commentLikes) {
         return CommentLikesRequestDto.builder()
                 .commentId(commentLikes.getComment().getCommentId())
+                .postId(commentLikes.getBoard().getPostId())
                 .build();
     }
 }

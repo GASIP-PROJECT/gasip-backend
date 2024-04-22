@@ -1,8 +1,9 @@
 package com.example.gasip.commentLikes.service;
 
+import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
-import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.comment.model.Comment;
+import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.commentLikes.dto.CommentLikesRequestDto;
 import com.example.gasip.commentLikes.model.CommentLikes;
 import com.example.gasip.commentLikes.repository.CommentLikesRepository;
@@ -29,16 +30,19 @@ public class CommentLikesService {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
+        Board board = boardRepository.getReferenceById(commentLikesRequestDto.getPostId());
+
         Comment comment = commentRepository.findById(commentLikesRequestDto.getCommentId())
                 .orElseThrow(() -> new NotFoundException(("Could not found comment id : " + commentLikesRequestDto.getCommentId())));
 
-        if (commentLikesRepository.findByMemberAndComment(member, comment).isPresent()) {
+        if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment, board).isPresent()) {
             throw new DuplicateResourceException(ErrorCode.DUPLICATE_LIKE);
         }
 
         CommentLikes commentLikes = CommentLikes.builder()
                 .comment(comment)
                 .member(member)
+                .board(board)
                 .build();
 
         commentLikesRepository.save(commentLikes);
@@ -50,11 +54,13 @@ public class CommentLikesService {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
+        Board board = boardRepository.getReferenceById(commentLikesRequestDto.getPostId());
+
         Comment comment = commentRepository.findById(commentLikesRequestDto.getCommentId())
                 .orElseThrow(() -> new NotFoundException(("Could not found comment id : " + commentLikesRequestDto.getCommentId())));
 
-        CommentLikes commentLikes = commentLikesRepository.findByMemberAndComment(member, comment)
-                .orElseThrow(() -> new NotFoundException("could not found like id"));
+        CommentLikes commentLikes = commentLikesRepository.findByMemberAndCommentAndBoard(member, comment, board)
+                .orElseThrow(() -> new NotFoundException("could not found comment like id"));
 
 
         commentLikesRepository.delete(commentLikes);

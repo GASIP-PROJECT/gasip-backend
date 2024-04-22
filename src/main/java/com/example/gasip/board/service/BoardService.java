@@ -4,6 +4,8 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.comment.dto.CommentReadResponse;
+import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
 import com.example.gasip.global.exception.InvaildWritterException;
@@ -89,7 +91,7 @@ public class BoardService {
             .collect(Collectors.toList());
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
 
-        return OneBoardReadResponse.fromEntity(board,commentList, likes);
+        return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {

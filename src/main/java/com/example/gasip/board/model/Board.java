@@ -66,7 +66,7 @@ public class Board extends BaseTimeEntity {
     private Boolean isLike;
 
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member,int gradePoint,List<Comment>comments) {
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member, int gradePoint, List<Comment>comments) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;

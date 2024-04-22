@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -94,12 +95,14 @@ public class MemberController {
                 schema = @Schema(implementation = MemberMyBoardResponse.class)
             )})
     })
-    public ResponseEntity<?> getMyBoards(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> getMyBoards(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    memberService.getBoards(memberDetails.getId())
+                    memberService.getMyBoards(memberDetails,pageable)
                 )
             );
     }

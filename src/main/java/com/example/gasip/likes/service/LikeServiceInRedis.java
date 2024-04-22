@@ -5,7 +5,7 @@ import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.likes.dto.LikeRequestDto;
 import com.example.gasip.likes.model.Likes;
 import com.example.gasip.likes.repository.LikeRepository;
-import com.example.gasip.redisson.RedissonLock;
+import com.example.gasip.global.redisson.RedissonLock;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

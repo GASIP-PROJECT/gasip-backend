@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BoardRepositoryCustom {
-    List<BoardContentDto> findContentsByMemberId(Long id);
 
+    List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable);
     List<BoardReadResponse> findAllBoard();
 
     List<BoardReadRequest> findAllByPostId(Long postId);

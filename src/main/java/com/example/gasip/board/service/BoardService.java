@@ -5,7 +5,6 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
-import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
@@ -13,7 +12,6 @@ import com.example.gasip.global.exception.InvaildWritterException;
 import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
-import com.example.gasip.likes.model.Likes;
 import com.example.gasip.likes.repository.LikeRepository;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -82,7 +80,7 @@ public class BoardService {
 
 
     @Transactional
-    public OneBoardReadResponse findBoardbyId(Long postId, MemberDetails memberDetails) {
+    public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
@@ -191,7 +189,7 @@ public class BoardService {
      *
      */
     @Transactional
-    public List<BoardProfessorReadResponse>  findBoarByProfessor(Long profId, Pageable pageable) {
+    public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
         return boardRepository.findBoarByProfessor(profId);
     }
 

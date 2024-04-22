@@ -1,4 +1,4 @@
-package com.example.gasip.redisson;
+package com.example.gasip.global.redisson;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class RedissonLockAspect {
 
     private final RedissonClient redissonClient;
 
-    @Around("@annotation(com.example.gasip.redisson.RedissonLock)")
+    @Around("@annotation(com.example.gasip.global.redisson.RedissonLock)")
     public void redissonLock(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

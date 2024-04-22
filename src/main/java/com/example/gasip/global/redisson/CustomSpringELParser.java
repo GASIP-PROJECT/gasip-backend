@@ -1,4 +1,4 @@
-package com.example.gasip.redisson;
+package com.example.gasip.global.redisson;
 
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;

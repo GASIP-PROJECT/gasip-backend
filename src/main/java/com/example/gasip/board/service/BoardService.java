@@ -6,6 +6,7 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.comment.repository.CommentRepository;
+import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
 import com.example.gasip.global.exception.InvaildWritterException;
@@ -40,14 +41,31 @@ public class BoardService {
     private final RedisViewCountService redisViewCountService;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
+    private final CommentLikesRepository commentLikesRepository;
 
+    // TODO 인증 받지 않은 유저도 열람 가능하도록 수정
     @Transactional
-    public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
-//        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        return boardRepository.findAllByOrderByRegDateDesc(pageable).stream()
+    public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        Page<Board> boards = boardRepository.findAllByOrderByRegDateDesc(pageable);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
+//
+//        return boardRepository.findAllByOrderByRegDateDesc(pageable)
+//                .stream()
+//                .map(BoardReadResponse::fromEntity)
+//                .collect(Collectors.toList());
     }
+
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -59,6 +77,7 @@ public class BoardService {
         return BoardCreateResponse.fromEntity(board);
     }
     // TODO LIKE 테이블 join해서 queryDSL 쓰는게 빠른지 비교
+    // TODO isLike 컬럼 데이터 안들어옴
     @Transactional
     public List<BoardReadResponse> findBoardByProfessor(MemberDetails memberDetails,Long profId, Pageable pageable) {
         Professor professor = professorRepository.findById(profId).orElseThrow(
@@ -80,7 +99,7 @@ public class BoardService {
 
 
     @Transactional
-    public OneBoardReadResponse findBoardbyId(Long postId, MemberDetails memberDetails) {
+    public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
@@ -169,25 +188,43 @@ public class BoardService {
     /**
      * 게시글 검색 기능
      */
+    // TODO 인증 받지 않은 유저도 열람 가능하도록 수정
     @Transactional
-    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
-        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
-                .stream()
+    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, MemberDetails memberDetails , Pageable pageable) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        Page<Board> boards = boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
+//
+//        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
+//                .stream()
+//                .map(BoardReadResponse::fromEntity)
+//                .collect(Collectors.toList());
     }
 
     /**
      * 교수 이름으로 게시글 검색
      */
+    // TODO isLike 컬럼 데이터 안들어옴
     @Transactional
     public List<BoardReadResponse> findByProfNameLike(String profName) {
+//        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         return boardRepository.findByProfNameLike(profName);
     }
 
     /**
      *
      */
+    // TODO 사용하는 API 인지 확인
     @Transactional
     public List<BoardProfessorReadResponse>  findBoarByProfessor(Long profId, Pageable pageable) {
         return boardRepository.findBoarByProfessor(profId);

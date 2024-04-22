@@ -28,11 +28,11 @@ public class BoardController {
 
     @GetMapping("/all-boards")
     @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable) {
+    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
-                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable))
+                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable, memberDetails))
                 );
     }
 
@@ -79,7 +79,7 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBoardbyId(postId,memberDetails))
+                ApiUtils.success(boardService.findBoardById(postId,memberDetails))
 
             );
     }
@@ -131,12 +131,12 @@ public class BoardController {
      * 게시글 검색
      */
     @GetMapping("/search")
-    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
+    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, @AuthenticationPrincipal MemberDetails memberDetails , Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByContentContainingOrderByRegDateDesc(content, pageable)
+                                boardService.findByContentContainingOrderByRegDateDesc(content, memberDetails , pageable)
                         )
                 );
     }

@@ -53,16 +53,22 @@ public class CommentService {
     // 특정 게시글 댓글 조회
     @Transactional(readOnly = true)
     public List<CommentReadResponse> findCommentByBoard(Long postId, MemberDetails memberDetails) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
-                () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
-        );
         Board board = boardRepository.findById(postId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
-//        Boolean commentLikes = commentLikesRepository.existsByComment_CommentIdAndMember_MemberId(commentId, memberDetails.getId())
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
-        return commentRepository.findAllByBoard(board)
-            .stream()
-            .map(CommentReadResponse::fromEntity)
-            .collect(Collectors.toList());
+        List<Comment> comments = commentRepository.findAllByBoard(board);
+
+        for (Comment comment : comments) {
+            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
+                comment.updateCommentLike(false);
+            } else {
+                comment.updateCommentLike(true);
+            }
+        }
+        return comments.stream()
+                .map(CommentReadResponse::fromEntity)
+                .collect(Collectors.toList());
+
     }
 
     // 댓글 edit
@@ -94,7 +100,6 @@ public class CommentService {
                 IllegalArgumentException::new
         );
     }
-
 
 
 }

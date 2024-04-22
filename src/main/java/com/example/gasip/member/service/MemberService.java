@@ -1,12 +1,15 @@
 package com.example.gasip.member.service;
 
 import com.auth0.jwt.JWT;
+import com.example.gasip.board.dto.BoardReadResponse;
+import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.MemberDuplicatedException;
 import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.likes.repository.LikeRepository;
 import com.example.gasip.member.dto.*;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -14,6 +17,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,15 +29,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+    private final LikeRepository likeRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationProvider authenticationProvider;
@@ -75,11 +77,22 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<?> getBoards(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(
-            (IllegalArgumentException::new)
+    public List<BoardReadResponse> getMyBoards(MemberDetails memberDetails, Pageable pageable) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
-        return boardRepository.findContentsByMemberId(member.getMemberId());
+        List<BoardReadResponse> boardReadResponseList = boardRepository.findAllByMemberId(memberDetails.getId(),pageable);
+        List<BoardReadResponse> boardReadResponses = new ArrayList<>();
+        for (BoardReadResponse boardReadResponse : boardReadResponseList) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+            boardReadResponses.add(BoardReadResponse.fromEntity(board));
+        }
+        return boardReadResponses;
     }
 
     @Transactional

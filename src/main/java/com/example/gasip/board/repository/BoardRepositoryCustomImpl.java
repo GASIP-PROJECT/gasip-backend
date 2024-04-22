@@ -20,15 +20,19 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<BoardContentDto> findContentsByMemberId(Long id) {
-
+    public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
         return queryFactory
-                .select(Projections.constructor(BoardContentDto.class, board.postId, board.content))
-                .from(board)
-                .leftJoin(board.member, member)
-                .where(idEqual(id))
-                .orderBy(board.postId.desc())
-                .fetch();
+            .select(new QBoardReadResponse(
+                board.regDate, board.updateDate, board.postId, board.member.nickname,
+                board.content, board.clickCount, board.likeCount, board.professor.profId,
+                board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                board.professor.category.majorName))
+            .from(board)
+            .leftJoin(board.professor, professor)
+            .where(board.member.memberId.eq(memberId))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
     }
 
     @Override
@@ -65,7 +69,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId) {
         return queryFactory
                 .select(new QBoardProfessorReadResponse(
-                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount, board.likeCount, board.gradePoint, board.professor.profId, board.professor.profName, board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount,
+                    board.likeCount, board.gradePoint, board.professor.profId, board.professor.profName,
+                    board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.eq(profId))

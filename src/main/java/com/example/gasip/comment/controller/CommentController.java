@@ -38,12 +38,12 @@ public class CommentController {
     // 특정 게시글 댓글 read
     @GetMapping("{postId}")
     @Operation(summary = "게시글에 해당하는 댓글 조회 요청", description = "특정 게시글에 작성된 댓글을 조회합니다.", tags = { "Comment Controller" })
-    public ResponseEntity<?> findCommentByBoard(@PathVariable Long postId) {
+    public ResponseEntity<?> findCommentByBoard(@PathVariable Long postId, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    commentService.findCommentByBoard(postId)
+                    commentService.findCommentByBoard(postId, memberDetails)
                 )
             );
     }

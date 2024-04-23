@@ -97,7 +97,7 @@ public class BoardService {
             .collect(Collectors.toList());
     }
 
-
+    // TODO 댓글 isCommentLike 칼럼 값 들어오도록 설정
     @Transactional
     public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(

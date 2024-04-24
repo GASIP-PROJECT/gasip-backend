@@ -104,11 +104,27 @@ public class BoardService {
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
         Board board = insertView(postId, member);
+
+//        List<Comment> comments = commentRepository.findAllByBoard(board);
+//        for (Comment comment : comments) {
+//            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
+//                comment.updateCommentLike(false);
+//            } else {
+//                comment.updateCommentLike(true);
+//            }
+//        }
+//        comments.stream()
+//                .map(CommentReadResponse::fromEntity)
+//                .collect(Collectors.toList());
+
         List<CommentReadResponse> commentList = commentRepository.findAllByBoard(board)
-            .stream()
-            .map(CommentReadResponse::fromEntity)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CommentReadResponse::fromEntity)
+                .collect(Collectors.toList());
+
+
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
+
 
         return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
@@ -216,9 +232,21 @@ public class BoardService {
      */
     // TODO isLike 컬럼 데이터 안들어옴
     @Transactional
-    public List<BoardReadResponse> findByProfNameLike(String profName) {
-//        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        return boardRepository.findByProfNameLike(profName);
+    public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        List<Board> boards = boardRepository.findByProfessorProfNameLike(profName);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
+                .map(BoardReadResponse::fromEntity)
+                .collect(Collectors.toList());
+//        return boardRepository.findByProfNameLike(profName);
     }
 
     /**

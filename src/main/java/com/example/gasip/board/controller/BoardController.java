@@ -145,12 +145,12 @@ public class BoardController {
      * 교수 게시글 검색
      */
     @GetMapping("/professor-search")
-    public ResponseEntity<?> findByProfNameLike(String profName) {
+    public ResponseEntity<?> findByProfNameLike(String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByProfNameLike(profName)
+                                boardService.findByProfNameLike(profName, memberDetails)
                         )
                 );
     }

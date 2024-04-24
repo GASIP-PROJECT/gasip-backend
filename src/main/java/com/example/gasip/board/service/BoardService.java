@@ -252,7 +252,7 @@ public class BoardService {
      */
     // TODO 사용하는 API 인지 확인
     @Transactional
-    public List<BoardProfessorReadResponse>  findBoarByProfessor(Long profId, Pageable pageable) {
+    public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
         return boardRepository.findBoarByProfessor(profId);
     }
 

@@ -24,6 +24,9 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     @Schema(description = "게시글 작성자")
     private String memberNickname;
     @NotNull
+    @Schema(description = "게시글 작성자 ID")
+    private Long memberId;
+    @NotNull
     @Schema(description = "게시글 내용")
     private String content;
     @Schema(description = "게시글 조회수")
@@ -54,6 +57,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
             .updateDate(board.getUpdateDate())
             .postId(board.getPostId())
             .memberNickname(board.getMember().getNickname())
+            .memberId(board.getMember().getMemberId())
             .content(board.getContent())
             .clickCount(board.getClickCount())
             .likeCount(board.getLikeCount())

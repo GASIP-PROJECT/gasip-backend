@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -94,12 +95,14 @@ public class MemberController {
                 schema = @Schema(implementation = MemberMyBoardResponse.class)
             )})
     })
-    public ResponseEntity<?> getMyBoards(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> getMyBoards(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    memberService.getBoards(memberDetails.getId())
+                    memberService.getMyBoards(memberDetails,pageable)
                 )
             );
     }
@@ -167,6 +170,22 @@ public class MemberController {
             .body(
                 ApiUtils.success(
                     memberService.sendCodeToEmail(email)
+                )
+            );
+    }
+
+    @PostMapping("/emails/verification-requests/exist")
+    @Tag(name = "Service Member Interface", description = "기존 이메일 인증 api 입니다.")
+    @Operation(summary = "이메일 인증번호 전송 api", description = "기존 이메일 인증 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
+    public ResponseEntity sendMessageToExistEmail(@RequestParam("email") String email) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.sendCodeToExistedEmail(email)
                 )
             );
     }

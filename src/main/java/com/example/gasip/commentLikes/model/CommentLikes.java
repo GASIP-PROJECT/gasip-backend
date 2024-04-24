@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "comment_likes")
+@Table(name = "CommentLikes")
 public class CommentLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentlikesId;
+    @Column(name = "commentlikes_id")
+    private Long commentLikesId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

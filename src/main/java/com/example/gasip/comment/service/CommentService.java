@@ -5,6 +5,7 @@ import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.*;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
+import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
 import com.example.gasip.global.exception.MemberNotFoundException;
@@ -24,6 +25,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final CommentLikesRepository commentLikesRepository;
 
     // 댓글 create
     @Transactional
@@ -50,17 +52,28 @@ public class CommentService {
 
     // 특정 게시글 댓글 조회
     @Transactional(readOnly = true)
-    public List<CommentReadResponse> findCommentByBoard(Long postId) {
+    public List<CommentReadResponse> findCommentByBoard(Long postId, MemberDetails memberDetails) {
         Board board = boardRepository.findById(postId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
-        return commentRepository.findAllByBoard(board)
-            .stream()
-            .map(CommentReadResponse::fromEntity)
-            .collect(Collectors.toList());
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        List<Comment> comments = commentRepository.findAllByBoard(board);
+
+        for (Comment comment : comments) {
+            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
+                comment.updateCommentLike(false);
+            } else {
+                comment.updateCommentLike(true);
+            }
+        }
+        return comments.stream()
+                .map(CommentReadResponse::fromEntity)
+                .collect(Collectors.toList());
+
     }
 
     // 댓글 edit
     @Transactional
-    public CommentUpdateResponse editComment(MemberDetails memberDetails, CommentUpdateRequest commentUpdateRequest,  Long commentId) {
+    public CommentUpdateResponse editComment(MemberDetails memberDetails, CommentUpdateRequest commentUpdateRequest, Long commentId) {
         Comment comment = validatedCommentWritter(memberDetails, commentId);
         comment.updateComment(commentUpdateRequest.getContent());
         return CommentUpdateResponse.fromEntity(comment);

@@ -6,6 +6,7 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.comment.repository.CommentRepository;
+import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
 import com.example.gasip.global.exception.InvaildWritterException;
@@ -40,14 +41,31 @@ public class BoardService {
     private final RedisViewCountService redisViewCountService;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
+    private final CommentLikesRepository commentLikesRepository;
 
+    // TODO 인증 받지 않은 유저도 열람 가능하도록 수정
     @Transactional
-    public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable) {
-//        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        return boardRepository.findAllByOrderByRegDateDesc(pageable).stream()
+    public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        Page<Board> boards = boardRepository.findAllByOrderByRegDateDesc(pageable);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
+//
+//        return boardRepository.findAllByOrderByRegDateDesc(pageable)
+//                .stream()
+//                .map(BoardReadResponse::fromEntity)
+//                .collect(Collectors.toList());
     }
+
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -78,20 +96,36 @@ public class BoardService {
             .collect(Collectors.toList());
     }
 
-
+    // TODO 댓글 isCommentLike 칼럼 값 들어오도록 설정
     @Transactional
     public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
         Board board = insertView(postId, member);
+
+//        List<Comment> comments = commentRepository.findAllByBoard(board);
+//        for (Comment comment : comments) {
+//            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
+//                comment.updateCommentLike(false);
+//            } else {
+//                comment.updateCommentLike(true);
+//            }
+//        }
+//        comments.stream()
+//                .map(CommentReadResponse::fromEntity)
+//                .collect(Collectors.toList());
+
         List<CommentReadResponse> commentList = commentRepository.findAllByBoard(board)
-            .stream()
-            .map(CommentReadResponse::fromEntity)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CommentReadResponse::fromEntity)
+                .collect(Collectors.toList());
+
+
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
 
-        return OneBoardReadResponse.fromEntity(board,commentList, likes);
+
+        return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {
@@ -169,25 +203,54 @@ public class BoardService {
     /**
      * 게시글 검색 기능
      */
+    // TODO 비로그인 유저도 열람 가능하도록 수정
     @Transactional
-    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
-        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
-                .stream()
+    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, MemberDetails memberDetails , Pageable pageable) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        Page<Board> boards = boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
+//
+//        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
+//                .stream()
+//                .map(BoardReadResponse::fromEntity)
+//                .collect(Collectors.toList());
     }
 
     /**
      * 교수 이름으로 게시글 검색
      */
+    // TODO 비로그인 유저도 사용할 수 있도록 변경.
     @Transactional
-    public List<BoardReadResponse> findByProfNameLike(String profName) {
-        return boardRepository.findByProfNameLike(profName);
+    public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        List<Board> boards = boardRepository.findByProfessorProfNameLike(profName);
+        for (Board board : boards) {
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+        }
+        return boards.stream()
+                .map(BoardReadResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 
     /**
      *
      */
+    // TODO 사용하는 API 인지 확인
     @Transactional
     public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
         return boardRepository.findBoarByProfessor(profId);

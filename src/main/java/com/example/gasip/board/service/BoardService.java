@@ -77,7 +77,6 @@ public class BoardService {
         return BoardCreateResponse.fromEntity(board);
     }
     // TODO LIKE 테이블 join해서 queryDSL 쓰는게 빠른지 비교
-    // TODO isLike 컬럼 데이터 안들어옴
     @Transactional
     public List<BoardReadResponse> findBoardByProfessor(MemberDetails memberDetails,Long profId, Pageable pageable) {
         Professor professor = professorRepository.findById(profId).orElseThrow(
@@ -204,7 +203,7 @@ public class BoardService {
     /**
      * 게시글 검색 기능
      */
-    // TODO 인증 받지 않은 유저도 열람 가능하도록 수정
+    // TODO 비로그인 유저도 열람 가능하도록 수정
     @Transactional
     public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, MemberDetails memberDetails , Pageable pageable) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
@@ -230,7 +229,7 @@ public class BoardService {
     /**
      * 교수 이름으로 게시글 검색
      */
-    // TODO isLike 컬럼 데이터 안들어옴
+    // TODO 비로그인 유저도 사용할 수 있도록 변경.
     @Transactional
     public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
@@ -246,7 +245,6 @@ public class BoardService {
         return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
-//        return boardRepository.findByProfNameLike(profName);
     }
 
     /**

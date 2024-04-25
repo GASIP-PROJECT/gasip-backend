@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,11 +121,7 @@ public class BoardService {
                 .stream()
                 .map(CommentReadResponse::fromEntity)
                 .collect(Collectors.toList());
-
-
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
-
-
         return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
     @Transactional
@@ -140,9 +137,24 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional
-    public List<BoardReadResponse> findBestBoard(Pageable pageable) {
+    public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
 
-        return boardRepository.findBestBoard(pageable);
+            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
+                board.updateLike(false);
+            } else {
+                board.updateLike(true);
+            }
+
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+        }
+        return boardReadResponseList;
     }
 
     private Board validatedBoardWritterEqualMember(MemberDetails memberDetails, Long boardId) {

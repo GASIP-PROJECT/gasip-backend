@@ -51,7 +51,7 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     @Schema(description = "좋아요 여부")
     private Boolean isLike;
 
-    public static OneBoardReadResponse fromEntity(Board board,List<CommentReadResponse> commentList, Boolean isLike) {
+    public static OneBoardReadResponse fromEntity(Board board, List<CommentReadResponse> commentList, Boolean isLike) {
         return OneBoardReadResponse.builder()
             .regDate(board.getRegDate())
             .updateDate(board.getUpdateDate())

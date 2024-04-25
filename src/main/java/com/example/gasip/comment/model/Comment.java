@@ -49,6 +49,9 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE)
     private List<Comment> commentChildren = new ArrayList<>();
 
+    @Transient
+    private Boolean isCommentLike;
+
     public void updateParent(Comment comment) {
         this.parentComment = comment;
     }
@@ -60,6 +63,10 @@ public class Comment extends BaseTimeEntity {
     public void updateComment(String content) {
         this.content = content;
         this.updateDate = LocalDateTime.now();
+    }
+
+    public void updateCommentLike(Boolean isCommentLike) {
+        this.isCommentLike=isCommentLike;
     }
 
 }

@@ -166,7 +166,6 @@ public class MemberService {
     }
     @Transactional
     public String verifiedCode(String email, String authCode) {
-        this.checkDuplicatedEmail(email);
         String redisAuthCode = redisMailService.getValues(AUTH_CODE_PREFIX + email);
         if (redisAuthCode.equals(authCode)) {
             return "코드가 정상 통과되었습니다.";

@@ -90,7 +90,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .from(board)
             .leftJoin(board.professor, professor)
             .where(board.likeCount.goe(5))
-            .orderBy(board.likeCount.desc(),board.clickCount.desc())
+            .orderBy(board.regDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

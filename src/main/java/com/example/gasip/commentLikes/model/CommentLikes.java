@@ -30,6 +30,7 @@ public class CommentLikes {
 
     @Builder
     public CommentLikes(Member member, Board board,Comment comment) {
+
         this.member = member;
         this.board = board;
         this.comment = comment;

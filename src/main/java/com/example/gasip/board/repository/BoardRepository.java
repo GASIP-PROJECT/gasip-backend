@@ -19,4 +19,6 @@ public interface BoardRepository extends JpaRepository<Board,Long>,BoardReposito
     Page<Board> findAllByProfessorOrderByRegDateDesc(Professor professor, Pageable pageable);
 
     List<Board> findBoardByProfessor(Professor Professor);
+
+    List<Board> findByProfessorProfNameLike(String profName);
 }

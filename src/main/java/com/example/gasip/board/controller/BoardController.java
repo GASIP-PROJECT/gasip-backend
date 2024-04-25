@@ -28,11 +28,11 @@ public class BoardController {
 
     @GetMapping("/all-boards")
     @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable) {
+    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
-                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable))
+                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable, memberDetails))
                 );
     }
 
@@ -119,11 +119,11 @@ public class BoardController {
 
     @GetMapping("/best")
     @Operation(summary = "인기글 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBestBoard(Pageable pageable) {
+    public ResponseEntity<?> getBestBoard(@AuthenticationPrincipal MemberDetails memberDetails,Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBestBoard(pageable))
+                ApiUtils.success(boardService.findBestBoard(memberDetails,pageable))
             );
     }
 
@@ -131,12 +131,12 @@ public class BoardController {
      * 게시글 검색
      */
     @GetMapping("/search")
-    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, Pageable pageable) {
+    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, @AuthenticationPrincipal MemberDetails memberDetails , Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByContentContainingOrderByRegDateDesc(content, pageable)
+                                boardService.findByContentContainingOrderByRegDateDesc(content, memberDetails , pageable)
                         )
                 );
     }
@@ -145,12 +145,12 @@ public class BoardController {
      * 교수 게시글 검색
      */
     @GetMapping("/professor-search")
-    public ResponseEntity<?> findByProfNameLike(String profName) {
+    public ResponseEntity<?> findByProfNameLike(String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByProfNameLike(profName)
+                                boardService.findByProfNameLike(profName, memberDetails)
                         )
                 );
     }

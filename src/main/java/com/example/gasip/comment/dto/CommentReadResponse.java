@@ -23,6 +23,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
     private String memberName;
     private String content;
     private Long commentLike;
+    private Boolean isCommentLike;
     private List<CommentChildrenReadResponse> commentChildren = new ArrayList<>();
 
     public static CommentReadResponse fromEntity(Comment comment) {
@@ -44,6 +45,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
             .memberId(comment.getMember().getMemberId())
             .memberName(comment.getMember().getName())
             .content(comment.getContent())
+            .isCommentLike(comment.getIsCommentLike())
             .commentChildren(comment.getCommentChildren()
                 .stream()
                 .map(CommentChildrenReadResponse::fromEntity)

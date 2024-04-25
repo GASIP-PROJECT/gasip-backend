@@ -119,11 +119,11 @@ public class BoardController {
 
     @GetMapping("/best")
     @Operation(summary = "인기글 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
-    public ResponseEntity<?> getBestBoard(Pageable pageable) {
+    public ResponseEntity<?> getBestBoard(@AuthenticationPrincipal MemberDetails memberDetails,Pageable pageable) {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBestBoard(pageable))
+                ApiUtils.success(boardService.findBestBoard(memberDetails,pageable))
             );
     }
 

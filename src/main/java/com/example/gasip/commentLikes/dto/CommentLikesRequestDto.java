@@ -18,4 +18,5 @@ public class CommentLikesRequestDto {
                 .postId(commentLikes.getBoard().getPostId())
                 .build();
     }
+
 }

@@ -29,7 +29,8 @@ public class CommentLikes {
     private Comment comment;
 
     @Builder
-    public CommentLikes(Member member, Board board, Comment comment) {
+    public CommentLikes(Member member, Board board,Comment comment) {
+
         this.member = member;
         this.board = board;
         this.comment = comment;

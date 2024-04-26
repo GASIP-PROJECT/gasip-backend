@@ -5,6 +5,7 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
+import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
@@ -105,23 +106,19 @@ public class BoardService {
         );
         Board board = insertView(postId, member);
 
-//        List<Comment> comments = commentRepository.findAllByBoard(board);
-//        for (Comment comment : comments) {
-//            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
-//                comment.updateCommentLike(false);
-//            } else {
-//                comment.updateCommentLike(true);
-//            }
-//        }
-//        comments.stream()
-//                .map(CommentReadResponse::fromEntity)
-//                .collect(Collectors.toList());
+        List<Comment> comments = commentRepository.findAllByBoard(board);
+        List<CommentReadResponse> commentList = new ArrayList<>();
+        for (Comment comment : comments) {
+            if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
+                comment.updateCommentLike(false);
+            } else {
+                comment.updateCommentLike(true);
+            }
+            commentList.add(CommentReadResponse.fromEntity(comment));
+        }
 
-        List<CommentReadResponse> commentList = commentRepository.findAllByBoard(board)
-                .stream()
-                .map(CommentReadResponse::fromEntity)
-                .collect(Collectors.toList());
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
+
         return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
     @Transactional

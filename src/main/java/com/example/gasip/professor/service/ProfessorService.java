@@ -42,11 +42,19 @@ public class ProfessorService {
      * 특정 교수 불러오기
      */
     @Transactional
-    public ProfessorResponse findByProfId(Long profId) {
+    public ProfessorResponse findByProfId(Long profId,MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
         Professor professor = professorRepository.findById(profId)
                 .orElseThrow(IllegalArgumentException::new);
         String gradePoint = gradeRepository.professorAverageGradepoint(profId).get(0).toString();
         professor.updateProfessor(gradePoint);
+        if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+            professor.updateGrade(false);
+        } else {
+            professor.updateGrade(true);
+        }
         return ProfessorResponse.fromEntity(professor);
     }
 

@@ -20,7 +20,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
     private Long postId;
     private Long commentId;
     private Long memberId;
-    private String memberName;
+    private String nickName;
     private String content;
     private Long commentLike;
     private Boolean isCommentLike;
@@ -43,7 +43,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
             .postId(comment.getBoard().getPostId())
             .commentId(comment.getCommentId())
             .memberId(comment.getMember().getMemberId())
-            .memberName(comment.getMember().getName())
+            .nickName(comment.getMember().getName())
             .content(comment.getContent())
             .isCommentLike(comment.getIsCommentLike())
             .commentChildren(comment.getCommentChildren()

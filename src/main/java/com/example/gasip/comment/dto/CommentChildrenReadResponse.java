@@ -32,6 +32,7 @@ public class CommentChildrenReadResponse extends BaseTimeEntity implements Seria
             .memberId(comment.getMember().getMemberId())
             .memberName(comment.getMember().getName())
             .content(comment.getContent())
+            .commentLike(comment.getCommentLike())
             .isCommentLike(comment.getIsCommentLike())
             .parentId(comment.getParentComment().getCommentId())
             .build();

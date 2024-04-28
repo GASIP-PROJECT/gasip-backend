@@ -22,6 +22,8 @@ public class ProfessorResponse {
     private String majorName;
     @Schema(description = "교수 평균 평점")
     private String professorAverageGradePoint;
+    @Schema(description = "교수 평점 작성 여부")
+    private Boolean isGrade;
 
     public static ProfessorResponse fromEntity(Professor professor) {
         return ProfessorResponse.builder()
@@ -31,6 +33,7 @@ public class ProfessorResponse {
                 .majorId(professor.getCategory().getId())
                 .majorName(professor.getCategory().getMajorName())
                 .professorAverageGradePoint(professor.getAverageGradePoint())
+                .isGrade(professor.getIsGrade())
                 .build();
     }
 }

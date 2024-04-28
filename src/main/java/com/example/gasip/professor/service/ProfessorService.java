@@ -2,7 +2,12 @@ package com.example.gasip.professor.service;
 
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.category.model.Category;
+import com.example.gasip.global.constant.ErrorCode;
+import com.example.gasip.global.exception.MemberNotFoundException;
+import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.grade.repository.GradeRepository;
+import com.example.gasip.member.model.Member;
+import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.dto.ProfessorWithBoardResponse;
 import com.example.gasip.professor.model.Professor;
@@ -11,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +24,7 @@ import java.util.stream.Collectors;
 public class ProfessorService {
     private final ProfessorRepository professorRepository;
     private final GradeRepository gradeRepository;
-    private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 교수 조회
@@ -61,12 +65,21 @@ public class ProfessorService {
      * 교수 이름으로 교수 상세페이지 조회
      */
     @Transactional
-    public List<ProfessorResponse> findProfessorByProfNameLike(String professorName) {
+    public List<ProfessorResponse> findProfessorByProfNameLike(String professorName, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
         List<Professor> professors = professorRepository.findProfessorByProfNameLike(professorName);
         return professors.stream()
             .map(professor -> {
                 String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
                 professor.updateProfessor(averageGradePoint);
+                if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+                    professor.updateGrade(false);
+                } else {
+                    professor.updateGrade(true);
+                }
+
                 return ProfessorResponse.fromEntity(professor);
             })
             .collect(Collectors.toList());

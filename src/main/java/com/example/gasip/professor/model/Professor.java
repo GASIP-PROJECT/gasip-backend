@@ -28,6 +28,8 @@ public class Professor {
 
     @Transient
     private String averageGradePoint;
+    @Transient
+    private Boolean isGrade;
 
 
     @Builder
@@ -39,6 +41,10 @@ public class Professor {
 
     public void updateProfessor(String averagePoint) {
         this.averageGradePoint = averagePoint;
+    }
+
+    public void updateGrade(Boolean isGrade) {
+        this.isGrade=isGrade;
     }
 
 }

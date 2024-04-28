@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,21 +61,16 @@ public class ProfessorService {
      * 교수 이름으로 교수 상세페이지 조회
      */
     @Transactional
-    public List<ProfessorResponse> findProfessorByProfNameLike(String profName) {
-        return professorRepository.findProfessorByProfNameLike(profName)
-                .stream()
-                .map(ProfessorResponse::fromEntity)
-                .collect(Collectors.toList());
+    public List<ProfessorResponse> findProfessorByProfNameLike(String professorName) {
+        List<Professor> professors = professorRepository.findProfessorByProfNameLike(professorName);
+        return professors.stream()
+            .map(professor -> {
+                String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
+                professor.updateProfessor(averageGradePoint);
+                return ProfessorResponse.fromEntity(professor);
+            })
+            .collect(Collectors.toList());
     }
-
-//    /**
-//     *
-//     */
-//    @Transactional
-//    public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
-//        Professor professor = professorRepository.findById(profId).orElseThrow(IllegalArgumentException::new);
-//        return boardRepository.findBoarByProfessor(professor);
-//    }
 
     /**
      * 교수 상세정보 및 교수 게시글 불러오기

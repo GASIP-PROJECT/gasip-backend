@@ -51,12 +51,13 @@ public class ProfessorController {
      */
     @GetMapping("{profId}")
     @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = { "Professor Controller" })
-    public ResponseEntity<?> findByProfId(@PathVariable Long profId, Pageable pageable) {
+    public ResponseEntity<?> findByProfId(@PathVariable Long profId, Pageable pageable,
+                                          @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    professorService.findByProfId(profId)
+                    professorService.findByProfId(profId,memberDetails)
 
                 )
             );

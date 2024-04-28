@@ -2,6 +2,7 @@ package com.example.gasip.professor.controller;
 
 import com.example.gasip.category.model.Category;
 import com.example.gasip.global.api.ApiUtils;
+import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.professor.dto.ProfessorResponse;
 import com.example.gasip.professor.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,12 +83,13 @@ public class ProfessorController {
      */
     @GetMapping("/search")
     @Operation(summary = "교수 이름으로 교수 목록을 조회합니다.", description = "교수 이름으로 검색된 교수 목록을 불러옵니다.", tags = {"Professor Controller"})
-    public ResponseEntity<?> findProfessorByProfNameLike(String profName) {
+    public ResponseEntity<?> findProfessorByProfNameLike(String profName,
+                                                         @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                professorService.findProfessorByProfNameLike(profName)
+                                professorService.findProfessorByProfNameLike(profName,memberDetails)
                         )
                 );
     }

@@ -98,7 +98,7 @@ public class BoardService {
             .collect(Collectors.toList());
     }
 
-    // TODO 댓글 isCommentLike 칼럼 값 들어오도록 설정
+    // TODO 자식 댓글 isCommentLike 칼럼 값 들어오도록 설정
     @Transactional
     public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
@@ -107,15 +107,17 @@ public class BoardService {
         Board board = insertView(postId, member);
 
         List<Comment> comments = commentRepository.findAllByBoard(board);
-        List<CommentReadResponse> commentList = new ArrayList<>();
+        List<CommentReadResponse> commentList;
         for (Comment comment : comments) {
             if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
                 comment.updateCommentLike(false);
             } else {
                 comment.updateCommentLike(true);
             }
-            commentList.add(CommentReadResponse.fromEntity(comment));
         }
+        commentList = comments.stream()
+                .map(CommentReadResponse::fromEntity)
+                .collect(Collectors.toList());
 
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
 

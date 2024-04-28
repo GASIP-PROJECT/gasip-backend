@@ -114,10 +114,6 @@ public class BoardService {
             } else {
                 comment.updateCommentLike(true);
             }
-//            commentList.add(CommentReadResponse.fromEntity(comment));
-
-//            Boolean isCommentLike = commentLikesRepository.existsByCommentAndMember(comment, member);
-//            commentChildrenList.add(CommentChildrenReadResponse.fromEntity(comment));
         }
         commentList = comments.stream()
                 .map(CommentReadResponse::fromEntity)

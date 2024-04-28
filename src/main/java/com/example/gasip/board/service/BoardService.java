@@ -4,6 +4,7 @@ package com.example.gasip.board.service;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
+import com.example.gasip.comment.dto.CommentChildrenReadResponse;
 import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
@@ -98,7 +99,7 @@ public class BoardService {
             .collect(Collectors.toList());
     }
 
-    // TODO 댓글 isCommentLike 칼럼 값 들어오도록 설정
+    // TODO 자식 댓글 isCommentLike 칼럼 값 들어오도록 설정
     @Transactional
     public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
@@ -108,6 +109,7 @@ public class BoardService {
 
         List<Comment> comments = commentRepository.findAllByBoard(board);
         List<CommentReadResponse> commentList = new ArrayList<>();
+        List<CommentChildrenReadResponse> commentChildrenList = new ArrayList<>();
         for (Comment comment : comments) {
             if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
                 comment.updateCommentLike(false);
@@ -115,6 +117,9 @@ public class BoardService {
                 comment.updateCommentLike(true);
             }
             commentList.add(CommentReadResponse.fromEntity(comment));
+
+//            Boolean isCommentLike = commentLikesRepository.existsByCommentAndMember(comment, member);
+//            commentChildrenList.add(CommentChildrenReadResponse.fromEntity(comment));
         }
 
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());

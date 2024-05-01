@@ -15,8 +15,10 @@ public class MemberLogInResponse {
     private Long memberId;
     @Schema(description = "이메일", example = "abc@gmail.com")
     private String email;
-    @Schema(description = "닉네임", example = "무한이")
+    @Schema(description = "이름", example = "이름")
     private String name;
+    @Schema(description = "닉네임", example = "무한이")
+    private String nickname;
     @Schema(description = "JWT TOKEN", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNCIsImVtYWlsIjoiYXBpZG9jQGVtYWlsLmNvbSIsInJvbGVzIjpbIk1FTUJFUiJdLCJleHAiOjE3MTIyMjQ5NzV9.SQKtyHmqn2NKzHy4BX7_IgBePO_svEtmz1xbO9ToMz8")
     private String accessToken;
 
@@ -25,6 +27,7 @@ public class MemberLogInResponse {
             .memberId(member.getMemberId())
             .email(member.getEmail())
             .name(member.getName())
+            .nickname(member.getNickname())
             .accessToken(token)
             .build();
     }

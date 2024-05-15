@@ -190,12 +190,21 @@ public class MemberService {
         member.encodePassword(passwordEncoder);
         return MemberUpdatePasswordResponse.fromEntity(member);
     }
-
+    @Transactional
     public String withdrawAccount(MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
         memberRepository.delete(member);
         return "회원 탈퇴 성공";
+    }
+    @Transactional
+    public MemberResetPasswordResponse resetPassword(MemberResetPasswordRequest memberResetPasswordRequest) {
+        Member member = memberRepository.findByEmail(memberResetPasswordRequest.getEmail()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        member.updatePassword(memberResetPasswordRequest.getPassword());
+        member.encodePassword(passwordEncoder);
+        return MemberResetPasswordResponse.fromEntity(member);
     }
 }

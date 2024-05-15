@@ -43,7 +43,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
             .postId(comment.getBoard().getPostId())
             .commentId(comment.getCommentId())
             .memberId(comment.getMember().getMemberId())
-            .nickName(comment.getMember().getName())
+            .nickName(comment.getMember().getNickname())
             .content(comment.getContent())
             .commentLike(comment.getCommentLike())
             .isCommentLike(comment.getIsCommentLike())

@@ -27,8 +27,10 @@ public class BoardController {
     private final LikeService likeService;
 
     @GetMapping("/all-boards")
-    @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findAllByOrderByRegDateDesc(Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
+    @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findAllByOrderByRegDateDesc(
+        Pageable pageable,
+        @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
@@ -36,7 +38,7 @@ public class BoardController {
                 );
     }
 
-    @PostMapping("/{profId}") // 전체 게시글 작성 시 profId = 0
+    @PostMapping("/{profId}") // 전체 게시판 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")
     public ResponseEntity<?> createBoard(
@@ -55,9 +57,9 @@ public class BoardController {
     @GetMapping("/{profId}")
     @Operation(summary = "교수 페이지별 게시글 정보 요청", description = "교수의 전체 게시글 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
-    public ResponseEntity<?> getBoardDetail(
+    public ResponseEntity<?> getBoardListByProfessor(
         @AuthenticationPrincipal MemberDetails memberDetails,
-        @Parameter(name = "profId", description = "조회할 profId를 입력받아 교수 페이지 내 전체 게시글을 조회합니다.", in = ParameterIn.PATH)
+        @Parameter(name = "profId", description = "조회할 profId(Professor Table PK)를 입력받아 교수 페이지 내 전체 게시글을 조회합니다.", in = ParameterIn.PATH)
         @PathVariable Long profId,
         Pageable pageable) {
         return ResponseEntity
@@ -71,7 +73,7 @@ public class BoardController {
     @GetMapping("/details/{postId}")
     @Operation(summary = "게시글 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "postId", description = "postId를 URL을 통해 입력받아 특정 게시글을 조회합니다.")
-    public ResponseEntity<?> getBoardDetail(
+    public ResponseEntity<?> getBoardListByProfessor(
         @Parameter(name = "postId", description = "조회할 postId를 입력받아 해당 게시글을 조회합니다.", in = ParameterIn.PATH)
         @PathVariable Long postId,
         @AuthenticationPrincipal MemberDetails memberDetails) {
@@ -89,7 +91,7 @@ public class BoardController {
     @Parameter(name = "content", description = "작성된 게시글의 내용을 수정 할 content를 입력받아 수정합니다.")
     public ResponseEntity<?> editBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
-        @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 수정합니다.", in = ParameterIn.PATH)
+        @Parameter(name = "boardId", description = "수정할 boardId를 입력받아 해당 게시글을 수정합니다.", in = ParameterIn.PATH)
         @PathVariable Long postId,
         @RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return ResponseEntity
@@ -136,7 +138,7 @@ public class BoardController {
                 .ok()
                 .body(
                         ApiUtils.success(
-                                boardService.findByContentContainingOrderByRegDateDesc(content, memberDetails , pageable)
+                                boardService.findContainingContentOrderByRegDateDesc(content, memberDetails , pageable)
                         )
                 );
     }
@@ -158,6 +160,7 @@ public class BoardController {
     /**
      * 교수 정보 및 게시글 불러오기
      */
+    //TODO Boards/{profId}와 중복 여부 확인
     @GetMapping("/boards-detail/{profId}")
     public ResponseEntity<?> findçiBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity

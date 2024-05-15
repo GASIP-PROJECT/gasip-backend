@@ -22,6 +22,7 @@ public class CommentChildrenReadResponse extends BaseTimeEntity implements Seria
     private Long commentLike;
     private Boolean isCommentLike;
     private Long parentId;
+    private String nickName;
 
     public static CommentChildrenReadResponse fromEntity(Comment comment) {
         return CommentChildrenReadResponse.builder()
@@ -35,6 +36,7 @@ public class CommentChildrenReadResponse extends BaseTimeEntity implements Seria
             .commentLike(comment.getCommentLike())
             .isCommentLike(comment.getIsCommentLike())
             .parentId(comment.getParentComment().getCommentId())
+            .nickName(comment.getMember().getNickname())
             .build();
     }
 }

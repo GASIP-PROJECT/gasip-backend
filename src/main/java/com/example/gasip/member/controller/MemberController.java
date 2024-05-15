@@ -140,6 +140,22 @@ public class MemberController {
                 )
             );
     }
+    @PutMapping("/passwords/noauth")
+    @Tag(name = "Service Member Interface", description = "로그인 화면에서 비밀번호를 재설정하는 api 입니다.")
+    @Operation(summary = "로그인 전 비밀번호 재설정", description = "비밀번호를 재설정하는 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
+    public ResponseEntity<?> editPasswordWithoutAuth(
+            @RequestBody MemberResetPasswordRequest memberResetPasswordRequest) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.resetPassword(memberResetPasswordRequest)
+                )
+            );
+    }
 
     @PutMapping("/nicknames")
     @Tag(name = "Service Member Interface", description = "닉네임을 변경하는 api 입니다.")

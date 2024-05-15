@@ -45,29 +45,14 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final CommentLikesRepository commentLikesRepository;
 
-    // TODO 인증 받지 않은 유저도 열람 가능하도록 수정
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findAllByOrderByRegDateDesc(Pageable pageable, MemberDetails memberDetails) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-
         Page<Board> boards = boardRepository.findAllByOrderByRegDateDesc(pageable);
-        for (Board board : boards) {
-            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
-                board.updateLike(false);
-            } else {
-                board.updateLike(true);
-            }
-        }
+        checkMemberClickBoardLike(memberDetails, boards);
         return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
-//
-//        return boardRepository.findAllByOrderByRegDateDesc(pageable)
-//                .stream()
-//                .map(BoardReadResponse::fromEntity)
-//                .collect(Collectors.toList());
     }
-
 
     @Transactional
     public BoardCreateResponse createBoard(BoardCreateRequest boardCreateRequest, MemberDetails memberDetails, Long profId) {
@@ -78,28 +63,21 @@ public class BoardService {
         Board board = boardRepository.save(boardCreateRequest.toEntity(professor,member));
         return BoardCreateResponse.fromEntity(board);
     }
+
     // TODO LIKE 테이블 join해서 queryDSL 쓰는게 빠른지 비교
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findBoardByProfessor(MemberDetails memberDetails,Long profId, Pageable pageable) {
         Professor professor = professorRepository.findById(profId).orElseThrow(
             () -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
-            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         Page<Board> boards = boardRepository.findAllByProfessorOrderByRegDateDesc(professor, pageable);
-        for (Board board : boards) {
-            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
-                board.updateLike(false);
-            } else {
-                board.updateLike(true);
-            }
-        }
+        checkMemberClickBoardLike(memberDetails, boards);
         return boards.stream()
             .map(BoardReadResponse::fromEntity)
             .collect(Collectors.toList());
     }
 
     // TODO 자식 댓글 isCommentLike 칼럼 값 들어오도록 설정
-    @Transactional
+    @Transactional(readOnly = true)
     public OneBoardReadResponse findBoardById(Long postId, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
@@ -109,16 +87,14 @@ public class BoardService {
         List<Comment> comments = commentRepository.findAllByBoard(board);
         List<CommentReadResponse> commentList;
         for (Comment comment : comments) {
+            comment.updateCommentLike(true);
             if (commentLikesRepository.findByMemberAndCommentAndBoard(member, comment ,board).isEmpty()) {
                 comment.updateCommentLike(false);
-            } else {
-                comment.updateCommentLike(true);
             }
         }
         commentList = comments.stream()
                 .map(CommentReadResponse::fromEntity)
                 .collect(Collectors.toList());
-
         Boolean likes = likeRepository.existsByBoard_PostIdAndMember_MemberId(postId, memberDetails.getId());
 
         return OneBoardReadResponse.fromEntity(board, commentList, likes);
@@ -135,34 +111,19 @@ public class BoardService {
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
-            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
-        );
         List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
-        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+        List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
         for (BoardReadResponse boardReadResponse : boardReadResponses) {
             Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
-
-            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
-                board.updateLike(false);
-            } else {
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
                 board.updateLike(true);
             }
-
-            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+            bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
-        return boardReadResponseList;
-    }
-
-    private Board validatedBoardWritterEqualMember(MemberDetails memberDetails, Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-        if (!member.getMemberId().equals(board.getMember().getMemberId())) {
-            throw new InvaildWritterException(ErrorCode.INVALID_WRITTER);
-        }
-        return board;
+        return bestBoardReadResponseList;
     }
     @Transactional
     public Board insertView(Long postId,Member member) {
@@ -214,27 +175,13 @@ public class BoardService {
     /**
      * 게시글 검색 기능
      */
-    // TODO 비로그인 유저도 열람 가능하도록 수정
-    @Transactional
-    public List<BoardReadResponse> findByContentContainingOrderByRegDateDesc(String content, MemberDetails memberDetails , Pageable pageable) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
-
+    @Transactional(readOnly = true)
+    public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
         Page<Board> boards = boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable);
-        for (Board board : boards) {
-            if (likeRepository.findByMemberAndBoard(member, board).isEmpty()) {
-                board.updateLike(false);
-            } else {
-                board.updateLike(true);
-            }
-        }
+        checkMemberClickBoardLike(memberDetails, boards);
         return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
-//
-//        return boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable)
-//                .stream()
-//                .map(BoardReadResponse::fromEntity)
-//                .collect(Collectors.toList());
     }
 
     /**
@@ -243,7 +190,8 @@ public class BoardService {
     // TODO 비로그인 유저도 사용할 수 있도록 변경.
     @Transactional
     public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
-        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         List<Board> boards = boardRepository.findByProfessorProfNameLike(profName);
         for (Board board : boards) {
@@ -265,6 +213,24 @@ public class BoardService {
     @Transactional
     public List<BoardProfessorReadResponse> findBoarByProfessor(Long profId, Pageable pageable) {
         return boardRepository.findBoarByProfessor(profId);
+    }
+
+    private void checkMemberClickBoardLike(MemberDetails memberDetails, Page<Board> boards) {
+        for (Board board : boards) {
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+        }
+    }
+
+    private Board validatedBoardWritterEqualMember(MemberDetails memberDetails, Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+        if (!member.getMemberId().equals(board.getMember().getMemberId())) {
+            throw new InvaildWritterException(ErrorCode.INVALID_WRITTER);
+        }
+        return board;
     }
 
 }

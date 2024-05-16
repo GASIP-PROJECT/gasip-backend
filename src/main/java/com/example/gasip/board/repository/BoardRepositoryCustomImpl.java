@@ -2,7 +2,6 @@ package com.example.gasip.board.repository;
 
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .from(board)
             .leftJoin(board.professor, professor)
             .where(board.member.memberId.eq(memberId))
+            .orderBy(board.regDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

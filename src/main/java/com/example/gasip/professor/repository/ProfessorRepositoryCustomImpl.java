@@ -32,7 +32,7 @@ public class ProfessorRepositoryCustomImpl implements ProfessorRepositoryCustom{
                 .select(new QProfessorResponse(
                         professor.profId, professor.profName, professor.category.collegeName, professor.category.Id, professor.category.majorName))
                 .from(professor)
-                .where(professor.category.majorName.eq(majorName))
+                .where(professor.category.majorName.contains(majorName))
                 .fetch();
     }
 }

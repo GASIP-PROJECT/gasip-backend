@@ -107,4 +107,18 @@ public class ProfessorController {
                 );
     }
 
+    /**
+     * 학과로 교수 검색
+     */
+    @GetMapping("/major-search")
+    public ResponseEntity<?> findProfessorByCategoryNameContaining(String majorName) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                professorService.findProfessorByCategoryNameContaining(majorName)
+                        )
+                );
+    }
+
 }

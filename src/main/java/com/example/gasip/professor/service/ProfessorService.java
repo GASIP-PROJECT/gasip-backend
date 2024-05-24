@@ -1,6 +1,5 @@
 package com.example.gasip.professor.service;
 
-import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.MemberNotFoundException;
@@ -101,4 +100,11 @@ public class ProfessorService {
         return professorRepository.findBoardByProfessor(profId);
     }
 
+    /**
+     * 학과로 교수 검색
+     */
+    @Transactional
+    public List<ProfessorResponse> findProfessorByCategoryNameContaining(String majorName) {
+        return professorRepository.findProfessorByCategoryNameContaining(majorName);
+    }
 }

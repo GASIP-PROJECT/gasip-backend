@@ -1,12 +1,13 @@
 package com.example.gasip.professor.dto;
 
 import com.example.gasip.professor.model.Professor;
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 @Schema(description = "교수 DTO Response 관련 VO")
 public class ProfessorResponse {
 
@@ -24,6 +25,15 @@ public class ProfessorResponse {
     private String professorAverageGradePoint;
     @Schema(description = "교수 평점 작성 여부")
     private Boolean isGrade;
+
+    @QueryProjection
+    public ProfessorResponse(Long profId, String profName, String collegeName, Long majorId, String majorName) {
+        this.profId = profId;
+        this.profName = profName;
+        this.collegeName = collegeName;
+        this.majorId = majorId;
+        this.majorName = majorName;
+    }
 
     public static ProfessorResponse fromEntity(Professor professor) {
         return ProfessorResponse.builder()

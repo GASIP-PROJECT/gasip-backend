@@ -20,7 +20,7 @@
 <br>
 
 ## 🏗 아키텍처
-> 작성중
+> ![image](https://github.com/GASIP-PROJECT/gasip-backend/assets/114489245/f501b0f4-c7d8-4430-a91e-c80e92b08fdc)
 
 <br>
 

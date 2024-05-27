@@ -40,6 +40,7 @@ public class MemberSignUpRequest {
             .name(name)
             .nickname(nickname)
             .role(Role.MEMBER)
+            .isWithDraw(false)
             .build();
 
     }

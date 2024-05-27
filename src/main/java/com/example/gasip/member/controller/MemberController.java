@@ -239,4 +239,20 @@ public class MemberController {
             );
     }
 
+    @PostMapping("/restore")
+    @Tag(name = "Service Member Interface", description = "회원 복구 api 입니다.")
+    @Operation(summary = "회원 복구", description = "회원 복구 api 입니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK", content = {@Content(mediaType = "application/json")})
+    })
+    public ResponseEntity restoreAccount(@AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    memberService.restoreAccount(memberDetails)
+                )
+            );
+    }
+
 }

@@ -64,6 +64,9 @@ public class MemberService {
         );
         MemberDetails memberDetails = (MemberDetails) authentication.getPrincipal();
         Member member = memberRepository.getReferenceById(memberDetails.getId());
+        if (Boolean.TRUE.equals(member.getIsWithDraw())) {
+            throw new MemberNotFoundException(ErrorCode.WITHDRAWED_MEMBER);
+        }
         String accessToken = jwtService.issue(member.getMemberId(), member.getEmail(), member.getRole());
         return MemberLogInResponse.fromEntity(member,accessToken);
     }
@@ -195,8 +198,17 @@ public class MemberService {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
-        memberRepository.delete(member);
+        member.updateMemberWithdrawalStatus(true);
         return "회원 탈퇴 성공";
+    }
+
+    @Transactional
+    public String restoreAccount(MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        member.updateMemberWithdrawalStatus(false);
+        return "회원 복구 성공";
     }
     @Transactional
     public MemberResetPasswordResponse resetPassword(MemberResetPasswordRequest memberResetPasswordRequest) {

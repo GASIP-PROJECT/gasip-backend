@@ -38,17 +38,21 @@ public class Member {
     @Schema(description = "권한", example = "MEMBER")
     private Role role;
 
+    @Schema(description = "탈퇴여부", example = "true/false")
+    private Boolean isWithDraw;
+
     @Builder
-    private Member(String email, String name, String nickname, String password, Role role) {
+    private Member(String email, String name, String nickname, String password, Role role, Boolean isWithDraw) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.role = role;
+        this.isWithDraw = isWithDraw;
     }
 
     public static Member create(String email, String name, String nickname, String password, Role role) {
-        return new Member(email, name, nickname,password, role);
+        return new Member(email, name, nickname,password, role,false);
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
@@ -61,5 +65,9 @@ public class Member {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateMemberWithdrawalStatus(Boolean value) {
+        this.isWithDraw = value;
     }
 }

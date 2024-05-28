@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,13 +82,24 @@ public class ProfessorService {
             .map(professor -> {
                 String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
                 professor.updateProfessor(averageGradePoint);
-                if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
-                    professor.updateGrade(false);
+                if (Objects.equals(professorName, "전체")) {
+                    return null;
                 } else {
-                    professor.updateGrade(true);
-                }
+                    if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+                        professor.updateGrade(false);
+                    } else {
+                        professor.updateGrade(true);
+                    }
 
-                return ProfessorResponse.fromEntity(professor);
+                    return ProfessorResponse.fromEntity(professor);
+                }
+//                if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+//                    professor.updateGrade(false);
+//                } else {
+//                    professor.updateGrade(true);
+//                }
+//
+//                return ProfessorResponse.fromEntity(professor);
             })
             .collect(Collectors.toList());
     }

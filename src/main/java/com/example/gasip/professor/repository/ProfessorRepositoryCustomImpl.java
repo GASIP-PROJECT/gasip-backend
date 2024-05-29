@@ -35,4 +35,15 @@ public class ProfessorRepositoryCustomImpl implements ProfessorRepositoryCustom{
                 .where(professor.category.majorName.contains(majorName), (professor.category.Id.gt(0)))
                 .fetch();
     }
+
+    // 학과/학부 키워드를 통한 교수 검색
+    @Override
+    public List<ProfessorResponse> findProfessorByProfessorNameLike(String profName) {
+        return queryFactory
+                .select(new QProfessorResponse(
+                        professor.profId, professor.profName, professor.category.collegeName, professor.category.Id, professor.category.majorName))
+                .from(professor)
+                .where(professor.profName.like(profName), (professor.profId.gt(0)))
+                .fetch();
+    }
 }

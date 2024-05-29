@@ -101,7 +101,7 @@ public class ProfessorService {
     }
 
     /**
-     * 학과로 교수 검색
+     * 학과/학부 키워드로 교수 검색
      */
     @Transactional
     public List<ProfessorResponse> findProfessorByCategoryNameContaining(String majorName, MemberDetails memberDetails) {
@@ -129,28 +129,26 @@ public class ProfessorService {
     }
 
     /**
-     * 학과/학부 키워드를 통한 교수 검색
+     * 교수이름 키워드를 통한 교수 검색
      */
     @Transactional
     public List<ProfessorResponse> findProfessorByProfessorNameLike(String professorName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
-        List<ProfessorResponse> professors = professorRepository.findProfessorByProfessorNameLike(professorName);
-
-//        return professors.stream()
-//                .map(professor -> {
-//                    String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
-//                    professor.updateProfessor(averageGradePoint);
-//                    if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
-//                        professor.updateGrade(false);
-//                    } else {
-//                        professor.updateGrade(true);
-//                    }
-//                    return ProfessorResponse.fromEntity(professor);
-//                })
-//                .collect(Collectors.toList());
-
-        return professorRepository.findProfessorByProfessorNameLike(professorName);
+        List<ProfessorResponse> professorResponses = new ArrayList<>();
+        List<ProfessorResponse> professorResponseList = professorRepository.findProfessorByProfessorNameLike(professorName);
+        for (ProfessorResponse professorResponse : professorResponseList) {
+            Professor professor = professorRepository.getReferenceById(professorResponse.getProfId());
+            String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
+            professor.updateProfessor(averageGradePoint);
+            if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+                professor.updateGrade(false);
+            } else {
+                professor.updateGrade(true);
+            }
+            professorResponses.add(ProfessorResponse.fromEntity(professor));
+        }
+        return professorResponses;
     }
 }

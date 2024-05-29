@@ -83,7 +83,7 @@ public class ProfessorController {
      * 교수 이름으로 검색
      */
     @GetMapping("/search")
-    @Operation(summary = "교수 이름으로 교수 목록을 조회합니다.", description = "교수 이름으로 검색된 교수 목록을 불러옵니다.", tags = {"Professor Controller"})
+    @Operation(summary = "교수 이름으로 교수 목록을 조회합니다.(사용하지 않는 API 입니다.)", description = "교수 이름으로 검색된 교수 목록을 불러옵니다.\n 현재는 사용하지 않는 API 입니다.", tags = {"Professor Controller"})
     public ResponseEntity<?> findProfessorByProfNameLike(String profName,
                                                          @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
@@ -111,14 +111,31 @@ public class ProfessorController {
      * 학과로 교수 검색
      */
     @GetMapping("/major-search")
-    public ResponseEntity<?> findProfessorByCategoryNameContaining(String majorName) {
+    @Operation(summary = "학과/학부 이름으로 교수 목록을 조회합니다.", description = "학과/학부 이름으로 검색된 교수 목록을 불러옵니다.", tags = {"Professor Controller"})
+    public ResponseEntity<?> findProfessorByCategoryNameContaining(String majorName,
+                                                                   @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
                         ApiUtils.success(
-                                professorService.findProfessorByCategoryNameContaining(majorName)
+                                professorService.findProfessorByCategoryNameContaining(majorName,memberDetails)
                         )
                 );
     }
 
+    /**
+     * 학과/학부 키워드를 통한 교수 검색
+     */
+    @GetMapping("/prof-search")
+    @Operation(summary = "교수 이름으로 교수 목록을 조회합니다.", description = "교수 이름으로 검색된 교수 목록을 불러옵니다.", tags = {"Professor Controller"})
+    public ResponseEntity<?> findProfessorByProfessorNameLike(String profName,
+                                                              @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                professorService.findProfessorByProfessorNameLike(profName, memberDetails)
+                        )
+                );
+    }
 }

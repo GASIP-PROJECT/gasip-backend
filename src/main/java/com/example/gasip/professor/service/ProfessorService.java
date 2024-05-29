@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,7 +105,27 @@ public class ProfessorService {
      * 학과로 교수 검색
      */
     @Transactional
-    public List<ProfessorResponse> findProfessorByCategoryNameContaining(String majorName) {
-        return professorRepository.findProfessorByCategoryNameContaining(majorName);
+    public List<ProfessorResponse> findProfessorByCategoryNameContaining(String majorName, MemberDetails memberDetails) {
+        long beforeTime = System.currentTimeMillis();
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        List<ProfessorResponse> professorResponses = new ArrayList<>();
+        List<ProfessorResponse> professorResponseList = professorRepository.findProfessorByCategoryNameContaining(majorName);
+        for (ProfessorResponse professorResponse : professorResponseList) {
+            Professor professor = professorRepository.getReferenceById(professorResponse.getProfId());
+            String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
+            professor.updateProfessor(averageGradePoint);
+            if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+                professor.updateGrade(false);
+            } else {
+                professor.updateGrade(true);
+            }
+            professorResponses.add(ProfessorResponse.fromEntity(professor));
+        }
+        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+        long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
+        System.out.println("시간차이(m) : "+secDiffTime);
+        return professorResponses;
     }
 }

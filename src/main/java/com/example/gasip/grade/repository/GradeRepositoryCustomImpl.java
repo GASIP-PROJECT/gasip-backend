@@ -2,13 +2,12 @@ package com.example.gasip.grade.repository;
 
 import com.example.gasip.grade.dto.response.GradeGetDto;
 import com.example.gasip.grade.dto.response.QGradeGetDto;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.example.gasip.grade.model.QGrade.*;
+import static com.example.gasip.grade.model.QGrade.grade;
 
 @RequiredArgsConstructor
 public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {

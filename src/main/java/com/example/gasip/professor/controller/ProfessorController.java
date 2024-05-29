@@ -122,4 +122,18 @@ public class ProfessorController {
                 );
     }
 
+    /**
+     * 학과/학부 키워드를 통한 교수 검색
+     */
+    @GetMapping("/search-test")
+    public ResponseEntity<?> findProfessorByProfessorNameLike(String profName,
+                                                              @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                professorService.findProfessorByProfessorNameLike(profName, memberDetails)
+                        )
+                );
+    }
 }

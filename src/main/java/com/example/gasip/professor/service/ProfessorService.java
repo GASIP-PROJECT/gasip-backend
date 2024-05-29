@@ -87,7 +87,6 @@ public class ProfessorService {
                 } else {
                     professor.updateGrade(true);
                 }
-
                 return ProfessorResponse.fromEntity(professor);
             })
             .collect(Collectors.toList());
@@ -127,5 +126,31 @@ public class ProfessorService {
         long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
         System.out.println("시간차이(m) : "+secDiffTime);
         return professorResponses;
+    }
+
+    /**
+     * 학과/학부 키워드를 통한 교수 검색
+     */
+    @Transactional
+    public List<ProfessorResponse> findProfessorByProfessorNameLike(String professorName, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+                () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        List<ProfessorResponse> professors = professorRepository.findProfessorByProfessorNameLike(professorName);
+
+//        return professors.stream()
+//                .map(professor -> {
+//                    String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();
+//                    professor.updateProfessor(averageGradePoint);
+//                    if (gradeRepository.findAllByProfessorAndMember(professor, member).isEmpty()) {
+//                        professor.updateGrade(false);
+//                    } else {
+//                        professor.updateGrade(true);
+//                    }
+//                    return ProfessorResponse.fromEntity(professor);
+//                })
+//                .collect(Collectors.toList());
+
+        return professorRepository.findProfessorByProfessorNameLike(professorName);
     }
 }

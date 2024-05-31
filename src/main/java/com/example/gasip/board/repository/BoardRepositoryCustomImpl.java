@@ -47,6 +47,24 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .fetch();
     }
 
+    /**
+     *
+     * 자유 게시판 게시글 불러오기
+     */
+    @Override
+    public List<BoardProfessorReadResponse> findFreeBoardByProfessor(Pageable pageable) {
+        return queryFactory
+                .select(new QBoardProfessorReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.content, board.clickCount,
+                        board.likeCount, board.gradePoint, board.professor.profId, board.professor.profName,
+                        board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.professor.profId.eq(0L))
+                .orderBy(board.regDate.desc())
+                .fetch();
+    }
+
     @Override
     public List<BoardReadResponse> findByProfNameLike(String profName) {
         return queryFactory

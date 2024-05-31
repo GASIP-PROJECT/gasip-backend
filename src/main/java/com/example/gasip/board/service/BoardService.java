@@ -99,6 +99,49 @@ public class BoardService {
 
         return OneBoardReadResponse.fromEntity(board, commentList, likes);
     }
+
+    /**
+     *
+     * 자유 게시판 게시글 반환
+     *
+     */
+    @Transactional
+    public List<BoardProfessorReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
+        List<BoardProfessorReadResponse> boardProfessorReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
+        List<BoardProfessorReadResponse> boardProfessorReadResponseList = new ArrayList<>();
+
+        for (BoardProfessorReadResponse boardProfessorReadResponse : boardProfessorReadResponses) {
+            Board board = boardRepository.getReferenceById(boardProfessorReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardProfessorReadResponseList.add(BoardProfessorReadResponse.fromEntity(board));
+        }
+        return boardProfessorReadResponseList;
+    }
+
+    /**
+     *
+     * 자유게시글 제외한 모든 교수 리뷰 반환
+     *
+     */
+    @Transactional
+    public List<BoardProfessorReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
+        List<BoardProfessorReadResponse> boardProfessorReadResponses = boardRepository.findBoardByAllProfessor(pageable);
+        List<BoardProfessorReadResponse> boardProfessorReadResponseArrayList = new ArrayList<>();
+
+        for (BoardProfessorReadResponse boardProfessorReadResponse : boardProfessorReadResponses) {
+            Board board = boardRepository.getReferenceById(boardProfessorReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardProfessorReadResponseArrayList.add(BoardProfessorReadResponse.fromEntity(board));
+        }
+        return boardProfessorReadResponseArrayList;
+    }
+
     @Transactional
     public BoardUpdateResponse editBoard(MemberDetails memberDetails, Long boardId, BoardUpdateRequest boardUpdateRequest) {
         Board board = validatedBoardWritterEqualMember(memberDetails, boardId);

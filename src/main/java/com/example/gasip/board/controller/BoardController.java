@@ -38,6 +38,31 @@ public class BoardController {
                 );
     }
 
+    @GetMapping("/free-boards")
+    @Operation(summary = "자유 게시글 정보 요청", description = "자유 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findFreeBoardByProfessor(
+            Pageable pageable,
+            @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findFreeBoardByProfessor(pageable, memberDetails))
+                );
+    }
+
+    @GetMapping("/professor-boards")
+    @Operation(summary = "모든 교수 게시글 정보 요청", description = "모든 교수 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findBoardByAllProfessor(
+            Pageable pageable,
+            @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findBoardByAllProfessor(pageable, memberDetails))
+                );
+    }
+
+
     @PostMapping("/{profId}") // 전체 게시판 작성 시 profId = 0
     @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")

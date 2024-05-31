@@ -33,10 +33,10 @@ public interface BoardRepositoryCustom {
     /**
      * 자유게시판 게시글 불러오기
      */
-    List<BoardProfessorReadResponse> findFreeBoardByProfessor(Pageable pageable);
+    List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable);
 
     /**
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
-    List<BoardProfessorReadResponse> findBoardByAllProfessor(Pageable pageable);
+    List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
 }

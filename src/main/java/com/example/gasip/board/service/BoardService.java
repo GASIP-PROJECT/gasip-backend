@@ -106,19 +106,19 @@ public class BoardService {
      *
      */
     @Transactional
-    public List<BoardProfessorReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
-        List<BoardProfessorReadResponse> boardProfessorReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
-        List<BoardProfessorReadResponse> boardProfessorReadResponseList = new ArrayList<>();
+    public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
+        List<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
 
-        for (BoardProfessorReadResponse boardProfessorReadResponse : boardProfessorReadResponses) {
-            Board board = boardRepository.getReferenceById(boardProfessorReadResponse.getPostId());
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
             board.updateLike(false);
             if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
                 board.updateLike(true);
             }
-            boardProfessorReadResponseList.add(BoardProfessorReadResponse.fromEntity(board));
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
-        return boardProfessorReadResponseList;
+        return boardReadResponseList;
     }
 
     /**
@@ -127,19 +127,19 @@ public class BoardService {
      *
      */
     @Transactional
-    public List<BoardProfessorReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
-        List<BoardProfessorReadResponse> boardProfessorReadResponses = boardRepository.findBoardByAllProfessor(pageable);
-        List<BoardProfessorReadResponse> boardProfessorReadResponseArrayList = new ArrayList<>();
+    public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
+        List<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
+        List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
 
-        for (BoardProfessorReadResponse boardProfessorReadResponse : boardProfessorReadResponses) {
-            Board board = boardRepository.getReferenceById(boardProfessorReadResponse.getPostId());
+        for (BoardReadResponse boardReadResponse : boardReadResponses1) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
             board.updateLike(false);
             if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
                 board.updateLike(true);
             }
-            boardProfessorReadResponseArrayList.add(BoardProfessorReadResponse.fromEntity(board));
+            boardReadResponseList2.add(BoardReadResponse.fromEntity(board));
         }
-        return boardProfessorReadResponseArrayList;
+        return boardReadResponseList2;
     }
 
     @Transactional

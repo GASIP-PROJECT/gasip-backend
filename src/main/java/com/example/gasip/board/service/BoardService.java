@@ -107,7 +107,7 @@ public class BoardService {
      */
     @Transactional
     public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
-        List<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses) {
@@ -118,6 +118,7 @@ public class BoardService {
             }
             boardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
+
         return boardReadResponseList;
     }
 
@@ -128,7 +129,7 @@ public class BoardService {
      */
     @Transactional
     public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
-        List<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
+        Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses1) {

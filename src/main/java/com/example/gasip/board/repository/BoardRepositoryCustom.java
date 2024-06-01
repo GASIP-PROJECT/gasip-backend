@@ -39,5 +39,5 @@ public interface BoardRepositoryCustom {
     /**
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
-    List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
+    Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
 }

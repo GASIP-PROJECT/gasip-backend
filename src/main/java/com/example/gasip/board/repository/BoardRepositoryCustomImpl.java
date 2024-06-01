@@ -5,6 +5,8 @@ import com.example.gasip.board.model.Board;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -52,8 +54,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      * 자유 게시판 게시글 불러오기
      */
     @Override
-    public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable) {
-        return queryFactory
+    public Page<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable) {
+        List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
@@ -63,7 +65,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.eq(0L))
                 .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+        return new PageImpl<>(boardReadResponses);
     }
 
     /**

@@ -77,8 +77,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      *
      */
     @Override
-    public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable) {
-        return queryFactory
+    public Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable) {
+        List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
@@ -88,7 +88,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.gt(0))
                 .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+        return new PageImpl<>(boardReadResponses);
     }
 
 

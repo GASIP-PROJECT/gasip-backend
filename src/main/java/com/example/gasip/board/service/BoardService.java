@@ -129,7 +129,7 @@ public class BoardService {
      */
     @Transactional
     public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
-        List<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
+        Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses1) {

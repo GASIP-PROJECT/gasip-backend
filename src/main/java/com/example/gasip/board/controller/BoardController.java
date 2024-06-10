@@ -26,45 +26,8 @@ public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
 
-    @GetMapping("/all-boards")
-    @Operation(summary = "전체 게시글 정보 요청", description = "모든 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findAllByOrderByRegDateDesc(
-        Pageable pageable,
-        @AuthenticationPrincipal MemberDetails memberDetails) {
-        return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable, memberDetails))
-                );
-    }
-
-    @GetMapping("/free-boards")
-    @Operation(summary = "자유 게시글 정보 요청", description = "자유 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findFreeBoardByProfessor(
-            Pageable pageable,
-            @AuthenticationPrincipal MemberDetails memberDetails) {
-        return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(boardService.findFreeBoardByProfessor(pageable, memberDetails))
-                );
-    }
-
-    @GetMapping("/professor-boards")
-    @Operation(summary = "모든 교수 게시글 정보 요청", description = "모든 교수 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
-    public ResponseEntity<?> findBoardByAllProfessor(
-            Pageable pageable,
-            @AuthenticationPrincipal MemberDetails memberDetails) {
-        return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(boardService.findBoardByAllProfessor(pageable, memberDetails))
-                );
-    }
-
-
     @PostMapping("/{profId}") // 전체 게시판 작성 시 profId = 0
-    @Operation(summary = "게시글 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "리뷰 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "게시글에 들어갈 내용")
     public ResponseEntity<?> createBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
@@ -79,8 +42,44 @@ public class BoardController {
                 )
             );
     }
+    //TODO 쓰는 API인지 확인 필요
+    @GetMapping("/all-boards")
+    @Operation(summary = "전체 리뷰 정보 요청", description = "모든 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findAllByOrderByRegDateDesc(
+        Pageable pageable,
+        @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findAllByOrderByRegDateDesc(pageable, memberDetails))
+                );
+    }
+
+    @GetMapping("/free-boards")
+    @Operation(summary = "자유 게시판 전체 리뷰 정보 요청", description = "자유 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findFreeBoardByProfessor(
+            Pageable pageable,
+            @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findFreeBoardByProfessor(pageable, memberDetails))
+                );
+    }
+
+    @GetMapping("/professor-boards")
+    @Operation(summary = "모든 교수 리뷰 정보 요청", description = "모든 교수 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
+    public ResponseEntity<?> findBoardByAllProfessor(
+            Pageable pageable,
+            @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(boardService.findBoardByAllProfessor(pageable, memberDetails))
+                );
+    }
     @GetMapping("/{profId}")
-    @Operation(summary = "교수 페이지별 게시글 정보 요청", description = "교수의 전체 게시글 불러옵니다.", tags = { "Board Controller" })
+    @Operation(summary = "교수별 리뷰 정보 요청", description = "교수의 전체 게시글 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "profId", description = "profId를 URL을 통해 입력받아 해당 교수에 대한 특정 게시글을 조회합니다.")
     public ResponseEntity<?> getBoardListByProfessor(
         @AuthenticationPrincipal MemberDetails memberDetails,
@@ -96,7 +95,7 @@ public class BoardController {
 
 
     @GetMapping("/details/{postId}")
-    @Operation(summary = "게시글 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
+    @Operation(summary = "리뷰 상세 정보 요청", description = "교수의 게시글 중 특정 게시글 상세 정보를 불러옵니다.", tags = { "Board Controller" })
     @Parameter(name = "postId", description = "postId를 URL을 통해 입력받아 특정 게시글을 조회합니다.")
     public ResponseEntity<?> getBoardListByProfessor(
         @Parameter(name = "postId", description = "조회할 postId를 입력받아 해당 게시글을 조회합니다.", in = ParameterIn.PATH)
@@ -112,7 +111,7 @@ public class BoardController {
     }
 
     @PutMapping("/{postId}")
-    @Operation(summary = "게시글 수정 요청", description = "작성된 게시글을 수정을 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "리뷰 수정 요청", description = "작성된 게시글을 수정을 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "content", description = "작성된 게시글의 내용을 수정 할 content를 입력받아 수정합니다.")
     public ResponseEntity<?> editBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
@@ -130,7 +129,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardId}")
-    @Operation(summary = "게시글 삭제 요청", description = "게시글 삭제를 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "리뷰 삭제 요청", description = "게시글 삭제를 요청합니다.", tags = { "Board Controller" })
     @Parameter(name = "boardId", description = "삭제할 boardId를 입력받아 해당 게시글을 삭제합니다.")
     public ResponseEntity<?> deleteBoard(
         @AuthenticationPrincipal MemberDetails memberDetails,
@@ -145,7 +144,7 @@ public class BoardController {
     }
 
     @GetMapping("/best")
-    @Operation(summary = "인기글 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
+    @Operation(summary = "인기 리뷰 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> getBestBoard(@AuthenticationPrincipal MemberDetails memberDetails,Pageable pageable) {
         return ResponseEntity
             .ok()
@@ -155,10 +154,12 @@ public class BoardController {
     }
 
     /**
-     * 게시글 검색
+     * 리뷰 내용 검색
      */
     @GetMapping("/search")
-    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(String content, @AuthenticationPrincipal MemberDetails memberDetails , Pageable pageable) {
+    public ResponseEntity<?> findByContentContainingOrderByRegDateDesc(@RequestParam String content,
+                                                                       @AuthenticationPrincipal MemberDetails memberDetails,
+                                                                       Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(
@@ -171,8 +172,9 @@ public class BoardController {
     /**
      * 교수 게시글 검색
      */
+    //TODO 쓰는 API인지 확인 필요
     @GetMapping("/professor-search")
-    public ResponseEntity<?> findByProfNameLike(String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> findByProfNameLike(@RequestParam String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(

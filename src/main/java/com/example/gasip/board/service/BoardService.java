@@ -105,7 +105,7 @@ public class BoardService {
      * 자유 게시판 게시글 반환
      *
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
         Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
@@ -127,7 +127,7 @@ public class BoardService {
      * 자유게시글 제외한 모든 교수 리뷰 반환
      *
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
         Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();

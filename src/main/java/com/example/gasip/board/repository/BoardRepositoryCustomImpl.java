@@ -26,7 +26,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .select(new QBoardReadResponse(
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
-                board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                board.professor.profName, board.professor.category.collegeName,
                 board.professor.category.majorName))
             .from(board)
             .leftJoin(board.professor, professor)
@@ -43,7 +43,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
-                    board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                    board.professor.profName, board.professor.category.collegeName,
                     board.professor.category.majorName))
                 .from(board)
                 .fetch();
@@ -59,7 +59,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
-                        board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                        board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName))
                 .from(board)
                 .leftJoin(board.professor, professor)
@@ -82,7 +82,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
-                        board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                        board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName))
                 .from(board)
                 .leftJoin(board.professor, professor)
@@ -101,7 +101,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(new QBoardReadResponse(
                     board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
-                    board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                    board.professor.profName, board.professor.category.collegeName,
                     board.professor.category.majorName))
                 .from(board)
                 .leftJoin(board.professor, professor)
@@ -118,7 +118,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return queryFactory
                 .select(new QBoardProfessorReadResponse(
                         board.regDate, board.updateDate, board.postId, board.content, board.clickCount,
-                    board.likeCount, board.gradePoint, board.professor.profId, board.professor.profName,
+                    board.likeCount, board.professor.profId, board.professor.profName,
                     board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
                 .from(board)
                 .leftJoin(board.professor, professor)
@@ -133,7 +133,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .select(new QBoardReadResponse(
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
-                board.gradePoint, board.professor.profName, board.professor.category.collegeName,
+                board.professor.profName, board.professor.category.collegeName,
                 board.professor.category.majorName))
             .from(board)
             .leftJoin(board.professor, professor)

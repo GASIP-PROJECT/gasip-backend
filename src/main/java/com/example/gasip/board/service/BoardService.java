@@ -232,7 +232,7 @@ public class BoardService {
      * 교수 이름으로 게시글 검색
      */
     // TODO 비로그인 유저도 사용할 수 있도록 변경.
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));

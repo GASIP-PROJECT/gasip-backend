@@ -40,9 +40,6 @@ public class BoardReadResponse extends BaseTimeEntity {
     @Schema(description = "게시글과 관련된 교수 정보")
     private Long profId;
     @NotNull
-    @Schema(description = "교수 평점")
-    private int gradePoint;
-    @NotNull
     @Schema(description = "교수 이름")
     private String profName;
     @NotNull
@@ -58,7 +55,7 @@ public class BoardReadResponse extends BaseTimeEntity {
     @QueryProjection
     public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String memberNickname,
                              String content, Long clickCount, Long likeCount, Long profId,
-                             int gradePoint, String profName, String collegeName,String majorName
+                             String profName, String collegeName,String majorName
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -67,7 +64,6 @@ public class BoardReadResponse extends BaseTimeEntity {
         this.clickCount = clickCount;
         this.likeCount = likeCount;
         this.profId = profId;
-        this.gradePoint = gradePoint;
         this.profName = profName;
         this.collegeName = collegeName;
         this.majorName = majorName;

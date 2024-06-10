@@ -105,7 +105,7 @@ public class BoardService {
      * 자유 게시판 게시글 반환
      *
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
         Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
@@ -127,7 +127,7 @@ public class BoardService {
      * 자유게시글 제외한 모든 교수 리뷰 반환
      *
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
         Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
@@ -232,7 +232,7 @@ public class BoardService {
      * 교수 이름으로 게시글 검색
      */
     // TODO 비로그인 유저도 사용할 수 있도록 변경.
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));

@@ -38,8 +38,6 @@ public class OneBoardReadResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글과 관련된 교수 정보")
     private Long profId;
-    @Schema(description = "교수 평점")
-    private int gradePoint;
     @Schema(description = "교수 이름")
     private String profName;
     @Schema(description = "소속 단과대 이름")

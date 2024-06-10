@@ -57,16 +57,16 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @Column(nullable = false)
-    @Schema(description = "교수 평점")
-    @ColumnDefault("0")
-    private int gradePoint;
+//    @Column(nullable = false)
+//    @Schema(description = "교수 평점")
+//    @ColumnDefault("0")
+//    private int gradePoint;
 
     @Transient
     private Boolean isLike;
 
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member, int gradePoint, List<Comment>comments) {
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member, List<Comment>comments) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -74,7 +74,6 @@ public class Board extends BaseTimeEntity {
         this.likeCount = likeCount;
         this.professor = professor;
         this.member = member;
-        this.gradePoint = gradePoint;
         this.comments = comments;
     }
     public void updateBoard(String content) {

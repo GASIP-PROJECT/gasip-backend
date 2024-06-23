@@ -61,6 +61,10 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // 알림
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'org.springframework.cloud:spring-cloud-gcp-starter:1.2.8.RELEASE'
+
 }
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

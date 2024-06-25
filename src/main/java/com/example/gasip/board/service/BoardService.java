@@ -20,6 +20,7 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -156,6 +157,7 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional(readOnly = true)
+    @Cacheable
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
         List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();

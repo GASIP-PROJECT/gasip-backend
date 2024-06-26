@@ -1,8 +1,10 @@
 package com.example.gasip.board.controller;
 
 import com.example.gasip.board.dto.BoardCreateRequest;
+import com.example.gasip.board.dto.BoardPushRequest;
 import com.example.gasip.board.dto.BoardUpdateRequest;
 import com.example.gasip.board.service.BoardService;
+import com.example.gasip.board.service.FirebasePushService;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.service.LikeService;
@@ -18,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Tag(name = "Board Controller", description = "게시글 CRUD와 관련된 API입니다.")
 @RestController
 @RequestMapping("/boards")
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
+    private final FirebasePushService firebasePushService;
 
     @PostMapping("/{profId}") // 전체 게시판 작성 시 profId = 0
     @Operation(summary = "리뷰 생성 요청", description = "게시글을 생성을 요청합니다.", tags = { "Board Controller" })
@@ -195,5 +200,20 @@ public class BoardController {
                 .body(
                         ApiUtils.success(boardService.findBoarByProfessor(profId, pageable))
                 );
+    }
+
+    /**
+     * 알림 설정
+     */
+    @PostMapping("/api/fcm")
+    public ResponseEntity pushMessage(@RequestBody BoardPushRequest boardPushRequest) throws IOException {
+        System.out.println(boardPushRequest.getTargetToken() + " "
+            +boardPushRequest.getTitle() + " " + boardPushRequest.getBody());
+
+        firebasePushService.sendMessageTo(
+            boardPushRequest.getTargetToken(),
+            boardPushRequest.getTitle(),
+            boardPushRequest.getBody());
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.gasip.global.entity;
+package com.example.gasip.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @Getter
-public class FcmMessage {
+public class FcmMessageRequest {
     private boolean validateOnly;
     private Message message;
 

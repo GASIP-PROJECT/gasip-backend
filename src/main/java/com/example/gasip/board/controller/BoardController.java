@@ -206,14 +206,14 @@ public class BoardController {
      * 알림 설정
      */
     @PostMapping("/api/fcm")
-    public ResponseEntity pushMessage(@RequestBody BoardPushRequest boardPushRequest) throws IOException {
+    public ResponseEntity<?> pushMessage(@RequestBody BoardPushRequest boardPushRequest) throws IOException {
         System.out.println(boardPushRequest.getTargetToken() + " "
-            +boardPushRequest.getTitle() + " " + boardPushRequest.getBody());
+            + boardPushRequest.getTitle() + " " + boardPushRequest.getBody());
 
-        firebasePushService.sendMessageTo(
-            boardPushRequest.getTargetToken(),
-            boardPushRequest.getTitle(),
-            boardPushRequest.getBody());
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(firebasePushService.sendMessageTo(boardPushRequest))
+            );
     }
 }

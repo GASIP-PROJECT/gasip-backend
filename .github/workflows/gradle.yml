@@ -32,6 +32,12 @@ jobs:
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application-dev.yml
           find src
 
+      - name: Set FCM.json
+        run: |
+          mkdir -p src/main/resources/firebase
+          echo "${{ secrets.FIREBASE_SECRET_ADMIN }}" | base64 --decode > src/main/resources/firebase/gasip-4eb42-firebase-adminsdk-3v4pj-6851019caa.json
+          find src
+
       - name: Build with Gradle
         run: ./gradlew build --scan
 

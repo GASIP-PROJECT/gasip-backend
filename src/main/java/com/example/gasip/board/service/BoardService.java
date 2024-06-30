@@ -42,6 +42,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
+    private final RedisBestBoardService redisBestBoardService;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final CommentLikesRepository commentLikesRepository;
@@ -159,6 +160,12 @@ public class BoardService {
     @Transactional(readOnly = true)
     @Cacheable
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
+        return redisBestBoardService.getData("bestBoard");
+    }
+//    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
+    //TODO 파라미터 빼고 cron 어케 적용하징..?
+    @Transactional(readOnly = true)
+    public List<BoardReadResponse> insertBestBoardListRedis(MemberDetails memberDetails,Pageable pageable) {
         List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
         for (BoardReadResponse boardReadResponse : boardReadResponses) {
@@ -169,8 +176,10 @@ public class BoardService {
             }
             bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
+        redisBestBoardService.addBestBoardList(bestBoardReadResponseList);
         return bestBoardReadResponseList;
     }
+
     @Transactional
     public Board insertView(Long postId,Member member) {
         String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));

@@ -1,5 +1,9 @@
 package com.example.gasip.global.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -25,11 +29,15 @@ public abstract class BaseTimeEntity {
     @CreatedDate // Entity 생성 시 시간 저장
     @Column(updatable = false, name = "reg_date")
     @Schema(description = "작성 시간")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime regDate;
 
     @LastModifiedDate // 조회한 Entity 값 변경 시 시간 저장
     @Column(name = "update_date")
     @Schema(description = "수정 시간")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     protected LocalDateTime updateDate;
 
     public BaseTimeEntity(LocalDateTime regDate, LocalDateTime updateDate) {

@@ -140,7 +140,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .where(board.likeCount.goe(5))
             .orderBy(board.regDate.desc())
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
+            .limit(Math.min(pageable.getPageSize(),30))
             .fetch();
     }
 

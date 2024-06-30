@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Schema(description = "게시글 읽기 Response DTO 관련 VO")
 @AllArgsConstructor
-public class BoardReadResponse extends BaseTimeEntity {
+public class BoardReadResponse extends BaseTimeEntity implements Serializable {
     @NotNull
     @Schema(description = "게시글 ID")
     private Long postId;

@@ -24,7 +24,7 @@ public interface BoardRepositoryCustom {
 
     List<BoardReadResponse> findByProfNameLike(String profName);
 
-    List<BoardReadResponse> findBestBoard(Pageable pageable);
+    List<BoardReadResponse> findBestBoard();
 
     /**
      * 교수 상세정보 넘기기

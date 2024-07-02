@@ -20,6 +20,7 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,6 +42,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final ProfessorRepository professorRepository;
     private final RedisViewCountService redisViewCountService;
+    private final RedisBestBoardService redisBestBoardService;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final CommentLikesRepository commentLikesRepository;
@@ -156,10 +158,11 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional(readOnly = true)
+//    @Cacheable
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
-        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
+        List<BoardReadResponse> boardReadResponseList = redisBestBoardService.getData("bestBoard");
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
-        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+        for (BoardReadResponse boardReadResponse : boardReadResponseList) {
             Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
             board.updateLike(false);
             if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
@@ -169,6 +172,13 @@ public class BoardService {
         }
         return bestBoardReadResponseList;
     }
+    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
+    @Transactional(readOnly = true)
+    public void insertBestBoardListRedis() {
+        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
+        redisBestBoardService.addBestBoardList(boardReadResponses);
+    }
+
     @Transactional
     public Board insertView(Long postId,Member member) {
         String viewCount = redisViewCountService.getData(String.valueOf(member.getMemberId()));

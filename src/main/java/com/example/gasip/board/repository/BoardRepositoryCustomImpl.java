@@ -128,7 +128,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<BoardReadResponse> findBestBoard(Pageable pageable) {
+    public List<BoardReadResponse> findBestBoard() {
         return queryFactory
             .select(new QBoardReadResponse(
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -139,8 +139,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             .leftJoin(board.professor, professor)
             .where(board.likeCount.goe(5))
             .orderBy(board.regDate.desc())
-            .offset(pageable.getOffset())
-            .limit(Math.min(pageable.getPageSize(),30))
+            .limit(30)
             .fetch();
     }
 

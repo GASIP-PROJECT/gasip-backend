@@ -158,17 +158,11 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional(readOnly = true)
-    @Cacheable
+//    @Cacheable
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
-        return redisBestBoardService.getData("bestBoard");
-    }
-//    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
-    //TODO 파라미터 빼고 cron 어케 적용하징..?
-    @Transactional(readOnly = true)
-    public List<BoardReadResponse> insertBestBoardListRedis(MemberDetails memberDetails,Pageable pageable) {
-        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard(pageable);
+        List<BoardReadResponse> boardReadResponseList = redisBestBoardService.getData("bestBoard");
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
-        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+        for (BoardReadResponse boardReadResponse : boardReadResponseList) {
             Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
             board.updateLike(false);
             if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
@@ -176,8 +170,13 @@ public class BoardService {
             }
             bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
-        redisBestBoardService.addBestBoardList(bestBoardReadResponseList);
         return bestBoardReadResponseList;
+    }
+    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
+    @Transactional(readOnly = true)
+    public void insertBestBoardListRedis() {
+        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
+        redisBestBoardService.addBestBoardList(boardReadResponses);
     }
 
     @Transactional

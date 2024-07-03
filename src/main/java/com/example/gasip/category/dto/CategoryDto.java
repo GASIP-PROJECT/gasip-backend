@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class CategoryDto {
 
     private Long Id;
-    private Long collegeId;
     private String collegeName;
     private String majorName;
     private List<CategoryDto> children;
@@ -26,7 +25,10 @@ public class CategoryDto {
                 .Id(category.getId())
                 .collegeName(category.getCollegeName())
                 .majorName(category.getMajorName())
-                .children(category.getChildren().stream().map(CategoryDto::toEntity).collect(Collectors.toList()))
+                .children(category.getChildren()
+                        .stream()
+                        .map(CategoryDto::toEntity)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

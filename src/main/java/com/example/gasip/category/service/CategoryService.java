@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,16 @@ public class CategoryService {
      */
     @Transactional
     public List<CategoryResponse> findAllByParentCategory() {
-        return categoryRepository.findAllByParentCategory();
+        List<CategoryResponse> categoryResponses = categoryRepository.findAllByParentCategory();
+        List<CategoryResponse> categoryResponseList = new ArrayList<>();
+
+        for(CategoryResponse categoryResponse : categoryResponses) {
+            Category category = categoryRepository.getReferenceById(categoryResponse.getId());
+            categoryResponseList.add(CategoryResponse.fromEntity(category));
+        }
+
+        return categoryResponseList;
+
     }
 
     @Transactional

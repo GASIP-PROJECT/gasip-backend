@@ -294,4 +294,7 @@ google-services.json
 # Android Profiling
 *.hprof
 
+# data insert
+/src/main/resources/data.sql
+
 # End of https://www.toptal.com/developers/gitignore/api/reactnative

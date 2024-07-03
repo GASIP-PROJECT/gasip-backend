@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @NoArgsConstructor
 @SuperBuilder
@@ -13,14 +16,13 @@ public class CategoryResponse {
     private Long Id;
     private String collegeName;
     private String majorName;
-    private Category parentCategory;
+    private List<CategoryResponse> children;
 
     @QueryProjection
-    public CategoryResponse(Long Id, String collegeName, String majorName, Category parentCategory) {
+    public CategoryResponse(Long Id, String collegeName, String majorName) {
         this.Id = Id;
         this.collegeName = collegeName;
         this.majorName = majorName;
-        this.parentCategory = parentCategory;
     }
 
     public static CategoryResponse fromEntity(Category category) {
@@ -28,7 +30,10 @@ public class CategoryResponse {
                 .Id(category.getId())
                 .collegeName(category.getCollegeName())
                 .majorName(category.getMajorName())
-                .parentCategory(category.getParentCategory())
+                .children(category.getChildren()
+                        .stream()
+                        .map(CategoryResponse::fromEntity)
+                        .collect(Collectors.toList()))
                 .build();
     }
 

@@ -38,7 +38,7 @@ public class Category{
 
 
     @Builder
-    public Category(Long Id, Long collegeId, String collegeName, Long majorId, String majorName, Category parentCategory) {
+    public Category(Long Id, String collegeName, String majorName, Category parentCategory) {
         this.Id = Id;
         this.collegeName = collegeName;
         this.majorName = majorName;

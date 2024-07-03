@@ -55,6 +55,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
     @Override
     public Page<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable) {
+        List<Long> ids = queryFactory
+                .select(board.postId)
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.professor.profId.eq(1441L))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -62,8 +70,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName))
                 .from(board)
-                .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(0L))
+//                .leftJoin(board.professor, professor)
+//                .where(board.professor.profId.eq(1441L))
+                .where(board.postId.in(ids))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

@@ -10,7 +10,8 @@ public class GradeGetDto {
 
     @QueryProjection
     public GradeGetDto(Double averageGradepoint) {
-        this.averageGradepoint = Math.round(averageGradepoint*10)/10.0;
+        // averageGradepoint가 null이면 0으로 설정
+        this.averageGradepoint = Math.round((averageGradepoint != null ? averageGradepoint : 0) * 10) / 10.0;
     }
 
     @Override

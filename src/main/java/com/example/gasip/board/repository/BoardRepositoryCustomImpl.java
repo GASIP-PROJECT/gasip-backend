@@ -59,7 +59,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(1441L))
+                .where(board.professor.profId.eq(0L))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();

@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,6 +177,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public void insertBestBoardListRedis() {
         List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
+        boardReadResponses.removeIf(boardReadRespons -> boardReadRespons.getRegDate().isBefore(LocalDateTime.now().minusDays(1)));
         redisBestBoardService.addBestBoardList(boardReadResponses);
     }
 

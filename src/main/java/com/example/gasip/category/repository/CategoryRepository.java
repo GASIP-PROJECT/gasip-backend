@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryRepositoryCustom {
-//    @Query("select c from Category c where c.parentCategory is NULL")
-//    List<Category> findCollege();
-
     @Query("select c from Category c where c.parentCategory is NULL")
     List<Category> findCategory();
 

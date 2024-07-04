@@ -12,6 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     @Query("select c from Category c where c.parentCategory is NULL")
     List<Category> findCategory();
 
+    //TODO : 전체 카테고리 제외 한 결과 반환하도록 querydsl로 리팩토링
     List<Category> findCategoryByParentCategory(Category parentCategory_id);
 
     List<Category> findCategoryById(Long Id);

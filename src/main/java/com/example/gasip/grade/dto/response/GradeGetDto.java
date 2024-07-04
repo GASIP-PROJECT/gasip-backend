@@ -10,7 +10,7 @@ public class GradeGetDto {
 
     @QueryProjection
     public GradeGetDto(Double averageGradepoint) {
-        this.averageGradepoint = averageGradepoint;
+        this.averageGradepoint = Math.round(averageGradepoint*10)/10.0;
     }
 
     @Override

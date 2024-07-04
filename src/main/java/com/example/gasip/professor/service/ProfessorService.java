@@ -29,7 +29,7 @@ public class ProfessorService {
     /**
      * 교수 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProfessorResponse> findAll() {
         return professorRepository.findAll()
             .stream()
@@ -41,7 +41,7 @@ public class ProfessorService {
     /**
      * 특정 교수 불러오기
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ProfessorResponse findByProfId(Long profId,MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
@@ -61,7 +61,7 @@ public class ProfessorService {
     /**
      * 특정 학과 교수 불러오기
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProfessorResponse> findProfByMajor(Category Id) {
         return professorRepository.findProfessorByCategory(Id)
                 .stream()
@@ -72,7 +72,7 @@ public class ProfessorService {
     /**
      * 교수 이름으로 교수 상세페이지 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProfessorResponse> findProfessorByProfNameLike(String professorName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
@@ -95,7 +95,7 @@ public class ProfessorService {
     /**
      * 교수 상세정보 및 교수 게시글 불러오기
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProfessorWithBoardResponse> findBoardByProfessor(Long profId) {
         return professorRepository.findBoardByProfessor(profId);
     }

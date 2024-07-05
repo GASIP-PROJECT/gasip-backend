@@ -10,7 +10,7 @@ import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.BoardNotFoundException;
-import com.example.gasip.global.exception.InvaildWritterException;
+import com.example.gasip.global.exception.InvalidWritterException;
 import com.example.gasip.global.exception.MemberNotFoundException;
 import com.example.gasip.global.exception.ProfessorNotFoundException;
 import com.example.gasip.global.security.MemberDetails;
@@ -20,7 +20,6 @@ import com.example.gasip.member.repository.MemberRepository;
 import com.example.gasip.professor.model.Professor;
 import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,7 +30,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -159,7 +157,6 @@ public class BoardService {
         return boardId + "번 게시글이 삭제되었습니다.";
     }
     @Transactional(readOnly = true)
-//    @Cacheable
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
         List<BoardReadResponse> boardReadResponseList = redisBestBoardService.getData("bestBoard");
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
@@ -284,7 +281,7 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(ErrorCode.NOT_FOUND_BOARD));
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         if (!member.getMemberId().equals(board.getMember().getMemberId())) {
-            throw new InvaildWritterException(ErrorCode.INVALID_WRITTER);
+            throw new InvalidWritterException(ErrorCode.INVALID_WRITTER);
         }
         return board;
     }

@@ -5,8 +5,7 @@ import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.constant.ErrorCode;
-import com.example.gasip.global.exception.MemberDuplicatedException;
-import com.example.gasip.global.exception.MemberNotFoundException;
+import com.example.gasip.global.exception.*;
 import com.example.gasip.global.security.JwtService;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.repository.LikeRepository;
@@ -51,6 +50,7 @@ public class MemberService {
     @Transactional
     public MemberSignUpResponse signup(MemberSignUpRequest memberSignUpRequest) {
         validateEmailDuplicated(memberSignUpRequest);
+        validateNickNameDuplicated(memberSignUpRequest.getNickname());
         Member member = memberSignUpRequest.toEntity();
         member.encodePassword(passwordEncoder);
 
@@ -108,13 +108,6 @@ public class MemberService {
             return false;
         }
     }
-
-    private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {
-        memberRepository.findByEmail(memberSignUpRequest.getEmail()).ifPresent(member -> {
-                throw new IllegalArgumentException();
-            }
-        );
-    }
     @Transactional
     public String sendCodeToEmail(String email) {
         checkDuplicatedEmail(email);
@@ -149,7 +142,7 @@ public class MemberService {
     private void checkDuplicatedEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
-            throw new MemberDuplicatedException(ErrorCode.DUPLICATE_MEMBER);
+            throw new DuplicateMemberException(ErrorCode.DUPLICATE_MEMBER);
         }
     }
 
@@ -163,8 +156,8 @@ public class MemberService {
             }
             return builder.toString();
         } catch (NoSuchAlgorithmException e) {
-            log.debug("MemberService.createCode() exception occur");
-            throw new IllegalArgumentException();
+            log.debug("인증번호가 발급되지 않았습니다.");
+            throw new NoSuchVerifiedCodeException(ErrorCode.NO_SUCH_CODE);
         }
     }
     @Transactional
@@ -173,7 +166,7 @@ public class MemberService {
         if (redisAuthCode.equals(authCode)) {
             return "코드가 정상 통과되었습니다.";
         } else {
-            throw new IllegalArgumentException();
+            throw new InvalidVerifiedException(ErrorCode.INVALID_CODE);
         }
     }
     @Transactional
@@ -181,6 +174,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
             () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
+        validateNickNameDuplicated(memberUpdateNicknameRequest.getNickname());
         member.updateNickname(memberUpdateNicknameRequest.getNickname());
         return MemberUpdateNicknameResponse.fromEntity(member);
     }
@@ -218,5 +212,18 @@ public class MemberService {
         member.updatePassword(memberResetPasswordRequest.getPassword());
         member.encodePassword(passwordEncoder);
         return MemberResetPasswordResponse.fromEntity(member);
+    }
+
+    private void validateEmailDuplicated(MemberSignUpRequest memberSignUpRequest) {
+        memberRepository.findByEmail(memberSignUpRequest.getEmail()).ifPresent(member -> {
+                throw new DuplicateMemberException(ErrorCode.DUPLICATE_MEMBER);
+            }
+        );
+    }
+    private void validateNickNameDuplicated(String nickName) {
+        memberRepository.findByNickname(nickName).ifPresent(member -> {
+                throw new DuplicateNickNameException(ErrorCode.DUPLICATE_NICKNAME);
+            }
+        );
     }
 }

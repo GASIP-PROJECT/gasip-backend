@@ -70,12 +70,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName))
                 .from(board)
-//                .leftJoin(board.professor, professor)
-//                .where(board.professor.profId.eq(1441L))
                 .where(board.postId.in(ids))
                 .orderBy(board.regDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
         return new PageImpl<>(boardReadResponses);
     }

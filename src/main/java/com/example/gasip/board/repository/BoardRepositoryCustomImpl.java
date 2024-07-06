@@ -60,8 +60,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.eq(0L))
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
                 .fetch();
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
@@ -72,6 +70,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .from(board)
                 .where(board.postId.in(ids))
                 .orderBy(board.regDate.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
         return new PageImpl<>(boardReadResponses);
     }
@@ -83,6 +83,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
     @Override
     public Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable) {
+        List<Long> prof_ids = queryFactory
+                .select(board.postId)
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.professor.profId.gt(0L))
+                .fetch();
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -90,8 +96,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName))
                 .from(board)
-                .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0))
+//                .leftJoin(board.professor, professor)
+//                .where(board.professor.profId.gt(0))
+                .where(board.postId.in(prof_ids))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

@@ -1,5 +1,4 @@
 # GASIP : 가천대학교 재학생/졸업생 대상 가천대 교수님 익명 리뷰 서비스
-- 스레드 풀 테스트 중
 <div align="center">
   <br>
   <img width="234" alt="image" src="https://github.com/GASIP-PROJECT/gasip-backend/assets/114489245/55e77169-b2fa-4220-ba23-349dcb8d41ed">
@@ -20,7 +19,8 @@
 <br>
 
 ## 🏗 아키텍처
-> ![image](https://github.com/GASIP-PROJECT/gasip-backend/assets/114489245/f501b0f4-c7d8-4430-a91e-c80e92b08fdc)
+> ![image](https://github.com/GASIP-PROJECT/gasip-backend/assets/114489245/fa9e9d48-17d2-4d78-9ff3-f77e33073c98)
+
 
 <br>
 

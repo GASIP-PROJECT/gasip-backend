@@ -205,11 +205,28 @@ public class BoardController {
     }
 
     /**
+     * 교수 이름 검색(querydsl)
+     */
+    /**
+     * 교수 게시글 검색
+     */
+    @GetMapping("/query-professor-search")
+    public ResponseEntity<?> findProfNameLike(@RequestParam String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findProfNameLike(profName, memberDetails)
+                        )
+                );
+    }
+
+    /**
      * 교수 정보 및 게시글 불러오기
      */
     //TODO Boards/{profId}와 중복 여부 확인
     @GetMapping("/boards-detail/{profId}")
-    public ResponseEntity<?> findçiBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(

@@ -127,9 +127,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return new PageImpl<>(boardReadResponses);
     }
 
-
+    /**
+     * 교수 이름 검색
+     */
     @Override
-    public List<BoardReadResponse> findByProfNameLike(String profName) {
+    public List<BoardReadResponse> findProfNameLike(String profName) {
         return queryFactory
                 .select(new QBoardReadResponse(
                     board.regDate, board.updateDate, board.postId, board.member.nickname,

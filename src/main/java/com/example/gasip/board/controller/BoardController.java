@@ -169,6 +169,22 @@ public class BoardController {
                 .ok()
                 .body(
                         ApiUtils.success(
+                                boardService.findByContainingContentOrderByRegDateDesc(content, memberDetails , pageable)
+                        )
+                );
+    }
+
+    /**
+     * 게시글 내용 검색 (querydsl)
+     */
+    @GetMapping("/query-search")
+    public ResponseEntity<?> findContentContainingOrderByRegDateDesc(@RequestParam String content,
+                                                                       @AuthenticationPrincipal MemberDetails memberDetails,
+                                                                       Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
                                 boardService.findContainingContentOrderByRegDateDesc(content, memberDetails , pageable)
                         )
                 );
@@ -177,7 +193,6 @@ public class BoardController {
     /**
      * 교수 게시글 검색
      */
-    //TODO 쓰는 API인지 확인 필요
     @GetMapping("/professor-search")
     public ResponseEntity<?> findByProfNameLike(@RequestParam String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity

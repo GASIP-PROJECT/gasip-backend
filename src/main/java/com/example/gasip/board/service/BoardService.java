@@ -124,6 +124,27 @@ public class BoardService {
     }
 
     /**
+     * 게시글 내용 검색 (querydsl)
+     */
+    @Transactional
+    public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findContainingContentOrderByRegDateDesc(content, pageable);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+        }
+
+        return boardReadResponseList;
+    }
+
+
+    /**
      *
      * 자유게시글 제외한 모든 교수 리뷰 반환
      *
@@ -229,7 +250,7 @@ public class BoardService {
      * 게시글 검색 기능
      */
     @Transactional(readOnly = true)
-    public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
+    public List<BoardReadResponse> findByContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
         Page<Board> boards = boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable);
         checkMemberClickBoardLike(memberDetails, boards);
         return boards.stream()

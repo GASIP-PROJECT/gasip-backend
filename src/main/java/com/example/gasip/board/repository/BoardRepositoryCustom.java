@@ -40,4 +40,9 @@ public interface BoardRepositoryCustom {
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
     Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
+
+    /**
+     * 게시글 내용 검색
+     */
+    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable);
 }

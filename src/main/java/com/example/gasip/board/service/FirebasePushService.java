@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class FirebasePushService {
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/gasip-4eb42/messages:send";  // 요청을 보낼 엔드포인트
     private final ObjectMapper objectMapper;
 
+    @Async
     public int sendMessageTo(BoardPushRequest boardPushRequest) throws IOException {
         String message = makeMessage(boardPushRequest.getTargetToken(), boardPushRequest.getTitle(), boardPushRequest.getBody());
 

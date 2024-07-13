@@ -15,7 +15,7 @@ env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: gasipawsbucket
   AWS_CODE_DEPLOY_APPLICATION: cicd-gasip-staging
-  AWS_CODE_DEPLOY_GROUP: cicd-gasip-staging-group
+  AWS_CODE_DEPLOY_GROUP: cicd-staging-CD-group
   
 jobs:
   build-with-gradle:

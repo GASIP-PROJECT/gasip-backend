@@ -169,6 +169,22 @@ public class BoardController {
                 .ok()
                 .body(
                         ApiUtils.success(
+                                boardService.findByContainingContentOrderByRegDateDesc(content, memberDetails , pageable)
+                        )
+                );
+    }
+
+    /**
+     * 게시글 내용 검색 (querydsl)
+     */
+    @GetMapping("/query-search")
+    public ResponseEntity<?> findContentContainingOrderByRegDateDesc(@RequestParam String content,
+                                                                       @AuthenticationPrincipal MemberDetails memberDetails,
+                                                                       Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
                                 boardService.findContainingContentOrderByRegDateDesc(content, memberDetails , pageable)
                         )
                 );
@@ -177,7 +193,6 @@ public class BoardController {
     /**
      * 교수 게시글 검색
      */
-    //TODO 쓰는 API인지 확인 필요
     @GetMapping("/professor-search")
     public ResponseEntity<?> findByProfNameLike(@RequestParam String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
@@ -190,11 +205,28 @@ public class BoardController {
     }
 
     /**
+     * 교수 이름 검색(querydsl)
+     */
+    /**
+     * 교수 게시글 검색
+     */
+    @GetMapping("/query-professor-search")
+    public ResponseEntity<?> findProfNameLike(@RequestParam String profName, @AuthenticationPrincipal MemberDetails memberDetails) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.findProfNameLike(profName, memberDetails)
+                        )
+                );
+    }
+
+    /**
      * 교수 정보 및 게시글 불러오기
      */
     //TODO Boards/{profId}와 중복 여부 확인
     @GetMapping("/boards-detail/{profId}")
-    public ResponseEntity<?> findçiBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
+    public ResponseEntity<?> findBoarByProfessor(@PathVariable Long profId, Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(

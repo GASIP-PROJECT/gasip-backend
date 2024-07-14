@@ -30,9 +30,9 @@ permissions:
     group: ubuntu
 
 hooks:
-  AfterInstall:
-    - location: scripts/stop.sh
-      timeout: 60
+#  AfterInstall:
+#    - location: scripts/stop.sh
+#      timeout: 60
   ApplicationStart:
-    - location: scripts/start.sh
+    - location: scripts/stop.sh
       timeout: 60

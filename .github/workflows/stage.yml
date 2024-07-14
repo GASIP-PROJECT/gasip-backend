@@ -36,7 +36,7 @@ jobs:
     - name: Set YML
       run: | 
         mkdir -p src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application-dev.yml
+        echo "${{ secrets.APPLICATION_DEV_YML }}" | base64 --decode > src/main/resources/application.yml
         find src
 
     - name: Set FCM.json

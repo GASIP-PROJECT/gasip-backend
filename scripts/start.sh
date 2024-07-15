@@ -7,9 +7,9 @@ APP_NAME=gasip
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
-STOP_LOG="$ROOT_PATH/start.log"
-ERROR_LOG="$ROOT_PATH/error.log"
-APP_LOG="$ROOT_PATH/application.log"
+START_LOG="$REPOSITORY/start.log"
+ERROR_LOG="$REPOSITORY/error.log"
+APP_LOG="$REPOSITORY/application.log"
 
 SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
 NOW=$(date +%c)

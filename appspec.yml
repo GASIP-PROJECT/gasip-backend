@@ -16,6 +16,7 @@
 #    - location: deploy.sh
 #      timeout: 60
 #      runas: ec2-user
+
 version: 0.0
 os: linux
 
@@ -30,9 +31,9 @@ permissions:
     group: ubuntu
 
 hooks:
-#  AfterInstall:
-#    - location: scripts/stop.sh
-#      timeout: 60
+  AfterInstall:
+    - location: scripts/start.sh
+      timeout: 60
   ApplicationStart:
     - location: scripts/stop.sh
       timeout: 60

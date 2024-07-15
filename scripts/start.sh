@@ -1,29 +1,24 @@
 #!/bin/bash
 
-ROOT_PATH="/home/ubuntu/spring-github-action"
-JAR="$ROOT_PATH/application.jar"
-STOP_LOG="$ROOT_PATH/stop.log"
+REPOSITORY="/home/ubuntu/spring-github-action"
+cd $REPOSITORY
+
+APP_NAME=gasip
+JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
+JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
+
+STOP_LOG="$ROOT_PATH/start.log"
+ERROR_LOG="$ROOT_PATH/error.log"
+APP_LOG="$ROOT_PATH/application.log"
+
 SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
+NOW=$(date +%c)
 
 
-#ROOT_PATH="/home/ubuntu/spring-github-action"
-#JAR="$ROOT_PATH/application.jar"
-#
-#APP_LOG="$ROOT_PATH/application.log"
-#ERROR_LOG="$ROOT_PATH/error.log"
-#START_LOG="$ROOT_PATH/start.log"
-#
-#NOW=$(date +%c)
+echo "[$NOW] > $JAR 실행" >> $START_LOG
+nohup java -jar $JAR_PATH > $APP_LOG 2> $ERROR_LOG &
 
-#echo "[$NOW] $JAR 복사" >> $START_LOG
-#cp $ROOT_PATH/build/libs/spring-github-action-1.0.0.jar $JAR
+echo "[$NOW] > 서비스 PID: $SERVICE_PID" >> $START_LOG
 
-#nohup java -jar $JAR > $APP_LOG 2> $ERROR_LOG &
-#echo "[$NOW] > $JAR 실행" >> $START_LOG
-#JAR_NAME=$(ls -tr $ROOT_PATH/ | grep SNAPSHOT.jar | tail -n 1)
-#
-#echo "> Jar Name: $JAR_NAME"
-#nohup ./run.sh &
-
-#SERVICE_PID=$(pgrep -f $JAR)
-#echo "[$NOW] > 서비스 PID: $SERVICE_PID" >> $START_LOG
+#echo "> $JAR_PATH 배포"
+#nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &

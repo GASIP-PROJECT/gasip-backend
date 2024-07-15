@@ -11,9 +11,9 @@ START_LOG="$REPOSITORY/start.log"
 ERROR_LOG="$REPOSITORY/error.log"
 APP_LOG="$REPOSITORY/application.log"
 
-$ chmod +wx $START_LOG
-$ chmod +wx ERROR_LOG
-$ chmod +wx APP_LOG
+$ chmod 666 $START_LOG
+$ chmod 666 ERROR_LOG
+$ chmod 666 APP_LOG
 
 
 SERVICE_PID=$(pgrep -f ${APP_NAME}.*.jar) # 실행중인 Spring 서버의 PID
@@ -21,7 +21,7 @@ NOW=$(date +%c)
 
 
 echo "[$NOW] > $JAR_PATH 실행" >> $START_LOG
-nohup java -jar $JAR_PATH 1> $APP_LOG 2> $ERROR_LOG &
+nohup java -jar $JAR_PATH > $APP_LOG 2> $ERROR_LOG < /dev/null &
 
 echo "[$NOW] > 서비스 PID: $SERVICE_PID" >> $START_LOG
 

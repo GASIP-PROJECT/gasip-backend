@@ -11,11 +11,11 @@ START_LOG="$REPOSITORY/start.log"
 ERROR_LOG="$REPOSITORY/error.log"
 APP_LOG="$REPOSITORY/application.log"
 
-SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
+SERVICE_PID=$(pgrep -f $JAR_PATH) # 실행중인 Spring 서버의 PID
 NOW=$(date +%c)
 
 
-echo "[$NOW] > $JAR 실행" >> $START_LOG
+echo "[$NOW] > $JAR_PATH 실행" >> $START_LOG
 nohup java -jar $JAR_PATH > $APP_LOG 2> $ERROR_LOG &
 
 echo "[$NOW] > 서비스 PID: $SERVICE_PID" >> $START_LOG

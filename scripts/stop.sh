@@ -6,7 +6,7 @@ cd $REPOSITORY
 APP_NAME=gasip
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
-STOP_LOG="$ROOT_PATH/stop.log"
+STOP_LOG="$REPOSITORY/stop.log"
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 

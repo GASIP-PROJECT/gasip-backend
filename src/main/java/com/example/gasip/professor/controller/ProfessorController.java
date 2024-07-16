@@ -3,7 +3,9 @@ package com.example.gasip.professor.controller;
 import com.example.gasip.category.model.Category;
 import com.example.gasip.global.api.ApiUtils;
 import com.example.gasip.global.security.MemberDetails;
+import com.example.gasip.professor.dto.ProfessorCrawlRequest;
 import com.example.gasip.professor.dto.ProfessorResponse;
+import com.example.gasip.professor.service.ProfessorDataCrawlingService;
 import com.example.gasip.professor.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,10 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,15 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfessorController {
 
     private final ProfessorService professorService;
+    private final ProfessorDataCrawlingService professorDataCrawlingService;
 
     /**
      * 교수 조회
      */
     @GetMapping("")
-    @Operation(summary = "교수 전체 목록 불러오기", description = "교수 전체 목록을 불러옵니다.", tags = { "Professor Controller" })
+    @Operation(summary = "교수 전체 목록 불러오기", description = "교수 전체 목록을 불러옵니다.", tags = {"Professor Controller"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = ProfessorResponse.class))),
+        @ApiResponse(responseCode = "200", description = "OK",
+            content = @Content(schema = @Schema(implementation = ProfessorResponse.class))),
     })
     public ResponseEntity<?> findAllProfessor() {
         return ResponseEntity
@@ -50,14 +52,14 @@ public class ProfessorController {
      * 특정 교수 정보 조회
      */
     @GetMapping("{profId}")
-    @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = { "Professor Controller" })
+    @Operation(summary = "교수 상세 정보 불러오기", description = "교수 상세 정보를 불러옵니다.", tags = {"Professor Controller"})
     public ResponseEntity<?> findByProfId(@PathVariable Long profId, Pageable pageable,
                                           @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
             .ok()
             .body(
                 ApiUtils.success(
-                    professorService.findByProfId(profId,memberDetails)
+                    professorService.findByProfId(profId, memberDetails)
 
                 )
             );
@@ -68,15 +70,15 @@ public class ProfessorController {
      * 특정 학과 교수
      */
     @GetMapping("/majors/{Id}")
-    @Operation(summary = "학과별 교수 정보 불러오기", description = "학과별 교수 정보를 불러옵니다.", tags = { "Professor Controller" })
+    @Operation(summary = "학과별 교수 정보 불러오기", description = "학과별 교수 정보를 불러옵니다.", tags = {"Professor Controller"})
     public ResponseEntity<?> findAllById(@PathVariable Category Id) {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(
-                                professorService.findProfByMajor(Id)
-                        )
-                );
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorService.findProfByMajor(Id)
+                )
+            );
     }
 
     /**
@@ -87,12 +89,12 @@ public class ProfessorController {
     public ResponseEntity<?> findProfessorByProfNameLike(String profName,
                                                          @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(
-                                professorService.findProfessorByProfNameLike(profName,memberDetails)
-                        )
-                );
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorService.findProfessorByProfNameLike(profName, memberDetails)
+                )
+            );
     }
 
     /**
@@ -101,10 +103,10 @@ public class ProfessorController {
     @GetMapping("/boards-detail/{profId}")
     public ResponseEntity<?> findBoardByProfessor(@PathVariable Long profId) {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(professorService.findBoardByProfessor(profId))
-                );
+            .ok()
+            .body(
+                ApiUtils.success(professorService.findBoardByProfessor(profId))
+            );
     }
 
     /**
@@ -115,12 +117,12 @@ public class ProfessorController {
     public ResponseEntity<?> findProfessorByCategoryNameContaining(String majorName,
                                                                    @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(
-                                professorService.findProfessorByCategoryNameContaining(majorName,memberDetails)
-                        )
-                );
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorService.findProfessorByCategoryNameContaining(majorName, memberDetails)
+                )
+            );
     }
 
     /**
@@ -131,11 +133,23 @@ public class ProfessorController {
     public ResponseEntity<?> findProfessorByProfessorNameLike(String profName,
                                                               @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
-                .ok()
-                .body(
-                        ApiUtils.success(
-                                professorService.findProfessorByProfessorNameLike(profName, memberDetails)
-                        )
-                );
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorService.findProfessorByProfessorNameLike(profName, memberDetails)
+                )
+            );
+    }
+
+    @PostMapping("/crawl/info")
+    public ResponseEntity<?> CrawlingProfessorInfo(@RequestBody ProfessorCrawlRequest professorCrawlRequest,
+                                                   @AuthenticationPrincipal MemberDetails memberDetails) throws IOException {
+        return ResponseEntity
+            .ok()
+            .body(
+                ApiUtils.success(
+                    professorDataCrawlingService.CrawlingProfessorInfo(professorCrawlRequest)
+                )
+            );
     }
 }

@@ -216,4 +216,9 @@ public class BoardController {
                 ApiUtils.success(firebasePushService.sendMessageTo(boardPushRequest))
             );
     }
+
+    @PostMapping("/api/fcm/test")
+    public void test(@RequestBody BoardPushRequest boardPushRequest) throws InterruptedException {
+        firebasePushService.send(boardPushRequest);
+    }
 }

@@ -2,11 +2,13 @@ package com.example.gasip.board.service;
 
 import com.example.gasip.board.dto.BoardPushRequest;
 import com.example.gasip.board.dto.FcmMessageRequest;
+import com.example.gasip.board.repository.BoardRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +21,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class FirebasePushService {
+
+    private final BoardRepository boardRepository;
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/gasip-4eb42/messages:send";  // 요청을 보낼 엔드포인트
     private final ObjectMapper objectMapper;
 
@@ -41,6 +46,18 @@ public class FirebasePushService {
 
         System.out.println(response.body().string());
         return response.code() == HttpURLConnection.HTTP_OK ? 1 : 0;
+    }
+
+    @Async
+    public void send(BoardPushRequest boardPushRequest) throws InterruptedException {
+        for (int i = 1; i < 101; i++) {
+            boardRepository.findBestBoard();
+            log.info(String.valueOf(i));
+            Thread.sleep(1000);
+        }
+        Thread.sleep(100000);
+
+
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {

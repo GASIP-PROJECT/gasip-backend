@@ -73,6 +73,7 @@ dependencies {
 
     // 크롤링
     implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.9.1'
 
 }
 tasks.named('bootBuildImage') {

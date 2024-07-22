@@ -21,7 +21,8 @@ NOW=$(date +%c)
 
 
 echo "[$NOW] > $JAR_PATH 실행" >> $START_LOG
-nohup java -jar $JAR_PATH 1> $APP_LOG 2> $ERROR_LOG &
+nohup java -jar $JAR_PATH &
+#nohup java -jar $JAR_PATH 1> $APP_LOG 2> $ERROR_LOG &
 
 echo "[$NOW] > 서비스 PID: $SERVICE_PID" >> $START_LOG
 

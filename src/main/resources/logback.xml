@@ -9,7 +9,7 @@
     </springProfile>
     <!--Discord Log server-->
     <springProfile name="dev">
-        <property resource="application-dev.yml"/>
+        <property resource="application.yml"/>
         <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
         <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
             <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>

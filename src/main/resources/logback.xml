@@ -35,7 +35,6 @@
             </filter>
         </appender>
 
-
         <!--로그 레벨 지정-->
         <root level="INFO">
             <appender-ref ref="ASYNC_DISCORD"/>

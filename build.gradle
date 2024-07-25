@@ -73,6 +73,11 @@ dependencies {
 
     // 크롤링
     implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.9.1'
+
+    // 모니터링
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
 }
 tasks.named('bootBuildImage') {

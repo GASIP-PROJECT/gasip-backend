@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - stage
+      - main
 env:
   CODE_DEPLOY_APPLICATION_NAME: spring-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: spring-deploy-group

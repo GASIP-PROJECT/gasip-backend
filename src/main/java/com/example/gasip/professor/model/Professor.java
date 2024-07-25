@@ -25,7 +25,14 @@ public class Professor {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "major_id")
     private Category category;
-
+    @Schema(description = "직위/직책")
+    private String position;
+    @Schema(description = "학위전공")
+    private String degreeMajor;
+    @Schema(description = "전화번호")
+    private String tel;
+    @Schema(description = "사무실 위치")
+    private String location;
     @Transient
     private String averageGradePoint;
     @Transient
@@ -45,6 +52,18 @@ public class Professor {
 
     public void updateGrade(Boolean isGrade) {
         this.isGrade=isGrade;
+    }
+    public void updatePostion(String position) {
+        this.position=position;
+    }
+    public void updateDegreeMajor(String degreeMajor) {
+        this.degreeMajor=degreeMajor;
+    }
+    public void updateTel(String tel) {
+        this.tel=tel;
+    }
+    public void updateLocation(String location) {
+        this.location=location;
     }
 
 }

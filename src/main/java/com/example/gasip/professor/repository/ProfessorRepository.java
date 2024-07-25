@@ -13,5 +13,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long>, Pro
     List<Professor> findProfessorByCategory(Category Id);
 
     List<Professor> findProfessorByProfNameLike(String profName);
+
+    Professor findByProfNameAndCategory(String profName,Category category);
 }
 

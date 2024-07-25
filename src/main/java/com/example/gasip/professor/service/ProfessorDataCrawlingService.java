@@ -83,7 +83,7 @@ public class ProfessorDataCrawlingService {
                     } else if (Pattern.matches("\\d{3}-\\d{3,4}-\\d{4}", information)) {
                         professor.updateTel(information);
                         continue;
-                    } else if (information.endsWith("호") || information.contains("가천관") || information.contains("아름관")) {
+                    } else if (isSpecialLocation(information)) {
                         professor.updateLocation(information);
                         continue;
                     } else if (information.length() <= 15 && containsKorean(information)) {
@@ -95,6 +95,19 @@ public class ProfessorDataCrawlingService {
 
         }
         return 1;
+    }
+
+    private static boolean isSpecialLocation(String information) {
+        return information.endsWith("호") || information.contains("가천관") || information.contains("아름관") || information.contains("새롬관")
+            || information.contains("비전타워") || information.contains("공과대학") || information.contains("공학관") || information.contains("중앙도서관")
+            || information.contains("산학협력관") || information.contains("IT대학") || information.contains("반도체대학") || information.contains("교육대학원")
+            || information.contains("미래관") || information.contains("미래1관") || information.contains("미래 1관") || information.contains("바이오나노연구")
+            || information.contains("진리관") || information.contains("암당뇨연구원") || information.contains("AI공학관") || information.contains("AI관")
+            || information.contains("IT building") || information.contains("IT융합대학") || information.contains("컨벤션센터") || information.contains("Artificial Intelligence")
+            || information.contains("창의관") || information.contains("공학2관") || information.contains("한의대")|| information.contains("의과대학")
+            || information.contains("벤처타워")|| information.contains("한의과대학")|| information.contains("미래2관") || information.contains("암당뇨 연구원")
+            || information.contains("창조관") || information.contains("예술대학")|| information.contains("예술체육대학") || information.contains("교육대학원")
+            || information.contains("예음관");
     }
 
 }

@@ -12,5 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProfessorCrawlRequest {
     @NotNull
-    private List<Short> majorNumber;
+    private List<String> majorUrl;
+    @NotNull
+    private List<String> majorName;
 }

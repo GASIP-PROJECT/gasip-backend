@@ -16,7 +16,7 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```</pattern>
             </layout>
-            <username>서버 에러 났다</username>
+            <username>운영 서버 에러</username>
             <avatarUrl>https://velog.velcdn.com/images/heelieben/post/675309bf-a0a3-4443-8ced-8a55ce40ce08/image.png</avatarUrl>
             <tts>false</tts>
         </appender>

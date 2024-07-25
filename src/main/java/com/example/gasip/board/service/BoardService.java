@@ -124,6 +124,27 @@ public class BoardService {
     }
 
     /**
+     * 게시글 내용 검색 (querydsl)
+     */
+    @Transactional
+    public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findContainingContentOrderByRegDateDesc(content, pageable);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+        }
+
+        return boardReadResponseList;
+    }
+
+
+    /**
      *
      * 자유게시글 제외한 모든 교수 리뷰 반환
      *
@@ -228,8 +249,9 @@ public class BoardService {
     /**
      * 게시글 검색 기능
      */
+    //TODO Querydsl로 리팩토링중 - 성능 개선 완료되면 삭제 예정
     @Transactional(readOnly = true)
-    public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
+    public List<BoardReadResponse> findByContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
         Page<Board> boards = boardRepository.findByContentContainingOrderByRegDateDesc(content, pageable);
         checkMemberClickBoardLike(memberDetails, boards);
         return boards.stream()
@@ -241,6 +263,7 @@ public class BoardService {
      * 교수 이름으로 게시글 검색
      */
     // TODO 비로그인 유저도 사용할 수 있도록 변경.
+    //TODO Querydsl로 리팩토링중 - 성능 개선 완료되면 삭제 예정
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findByProfNameLike(String profName, MemberDetails memberDetails) {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
@@ -257,6 +280,29 @@ public class BoardService {
         return boards.stream()
                 .map(BoardReadResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 교수 이름으로 게시글 검색 (querydsl)
+     */
+    @Transactional
+    public List<BoardReadResponse> findProfNameLike(String profName, MemberDetails memberDetails) {
+        Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
+            () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        List<BoardReadResponse> boardReadResponses = boardRepository.findProfNameLike(profName);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+        }
+
+        return boardReadResponseList;
     }
 
     /**

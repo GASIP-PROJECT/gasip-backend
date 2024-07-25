@@ -1,19 +1,39 @@
+#version: 0.0
+#os: linux
+#files:
+#  - source: /
+#    destination: /home/ec2-user/app
+#    overwrite: yes
+#
+#permissions:
+#  - object: /
+#    pattern: "**"
+#    owner: ec2-user
+#    group: ec2-user
+#
+#hooks:
+#  ApplicationStart:
+#    - location: deploy.sh
+#      timeout: 60
+#      runas: ec2-user
+
 version: 0.0
 os: linux
+
 files:
-  - source: /
-    destination: /home/ec2-user/app
+  - source:  /
+    destination: /home/ubuntu/spring-github-action
     overwrite: yes
 
 permissions:
   - object: /
-    pattern: "**"
-    owner: ec2-user
-    group: ec2-user
+    owner: ubuntu
+    group: ubuntu
 
 hooks:
-  ApplicationStart:
-    - location: deploy.sh
+  AfterInstall:
+    - location: scripts/stop.sh
       timeout: 60
-      runas: ec2-user
-
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 60

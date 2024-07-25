@@ -22,7 +22,6 @@ public interface BoardRepositoryCustom {
 
     void addViewCount(Board board);
 
-    List<BoardReadResponse> findByProfNameLike(String profName);
 
     List<BoardReadResponse> findBestBoard();
 
@@ -40,4 +39,14 @@ public interface BoardRepositoryCustom {
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
     Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
+
+    /**
+     * 게시글 내용 검색
+     */
+    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable);
+
+    /**
+     * 교수 이름 검색
+     */
+    List<BoardReadResponse> findProfNameLike(String profName);
 }

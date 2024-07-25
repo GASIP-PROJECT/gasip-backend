@@ -9,14 +9,14 @@
     </springProfile>
     <!--Discord Log server-->
     <springProfile name="dev">
-        <property resource="application.yml"/>
+        <property resource="application-dev.yml"/>
         <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
         <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
             <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```</pattern>
             </layout>
-            <username>서버 에러 났다</username>
+            <username>🚨 Stage 서버 에러 🚨</username>
             <avatarUrl>https://velog.velcdn.com/images/heelieben/post/675309bf-a0a3-4443-8ced-8a55ce40ce08/image.png</avatarUrl>
             <tts>false</tts>
         </appender>

@@ -106,9 +106,32 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return new PageImpl<>(boardReadResponses);
     }
 
-
+    /**
+     * 게시글 내용 검색 (querydsl)
+     */
     @Override
-    public List<BoardReadResponse> findByProfNameLike(String profName) {
+    public Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable) {
+        List<BoardReadResponse> boardReadResponses = queryFactory
+                .select(new QBoardReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.member.nickname,
+                        board.content, board.clickCount, board.likeCount, board.professor.profId,
+                        board.professor.profName, board.professor.category.collegeName,
+                        board.professor.category.majorName))
+                .from(board)
+                .leftJoin(board.professor, professor)
+                .where(board.content.contains(content))
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return new PageImpl<>(boardReadResponses);
+    }
+
+    /**
+     * 교수 이름 검색
+     */
+    @Override
+    public List<BoardReadResponse> findProfNameLike(String profName) {
         return queryFactory
                 .select(new QBoardReadResponse(
                     board.regDate, board.updateDate, board.postId, board.member.nickname,

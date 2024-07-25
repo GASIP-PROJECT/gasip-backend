@@ -65,8 +65,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'org.springframework.cloud:spring-cloud-gcp-starter:1.2.8.RELEASE'
 
-    //인기글 캐싱
+    // 인기글 캐싱
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
+
+    // 로그
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // 크롤링
+    implementation 'org.jsoup:jsoup:1.15.3'
 
 }
 tasks.named('bootBuildImage') {

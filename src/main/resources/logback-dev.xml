@@ -16,8 +16,8 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```</pattern>
             </layout>
-            <username>🚨 Stage 서버 에러 🚨</username>
-            <avatarUrl>https://velog.velcdn.com/images/heelieben/post/675309bf-a0a3-4443-8ced-8a55ce40ce08/image.png</avatarUrl>
+            <username> Stage 서버 에러 </username>
+            <avatarUrl>https://i.namu.wiki/i/7VvLL2_yXmrOJB8aRMGUOjdIGqyUpM9Ls93Fl-bWO-g0QVXU09cF-hL3UiQppi08773RiaExoch6FSU4FNzEeejwpwuh-w9mnWR4sZ1RT5g75bwVqRpoGl35rS-DOHPjHTL7ZowRjQDuVypc74odzqYKHOHkaKtlIstBogoSt_0.webp</avatarUrl>
             <tts>false</tts>
         </appender>
 

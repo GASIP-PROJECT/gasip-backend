@@ -195,7 +195,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public void insertBestBoardListRedis() {
         List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
-        boardReadResponses.removeIf(boardReadRespons -> boardReadRespons.getRegDate().isBefore(LocalDateTime.now().minusDays(1)));
+        boardReadResponses.removeIf(boardReadRespons -> boardReadRespons.getRegDate().isBefore(LocalDateTime.now().minusDays(10)));
         redisBestBoardService.addBestBoardList(boardReadResponses);
     }
 

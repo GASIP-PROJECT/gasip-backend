@@ -15,7 +15,6 @@ $ chmod 666 $START_LOG
 $ chmod 666 ERROR_LOG
 $ chmod 666 APP_LOG
 
-
 SERVICE_PID=$(pgrep -f ${APP_NAME}.*.jar) # 실행중인 Spring 서버의 PID
 NOW=$(date +%c)
 

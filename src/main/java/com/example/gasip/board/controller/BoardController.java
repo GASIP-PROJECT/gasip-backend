@@ -148,6 +148,12 @@ public class BoardController {
             );
     }
 
+    /**
+     * 인기글 조회
+     * @param memberDetails
+     * @param pageable
+     * @return
+     */
     @GetMapping("/best")
     @Operation(summary = "인기 리뷰 조회 요청", description = "인기글 조회 요청합니다.", tags = { "Board Controller" })
     public ResponseEntity<?> getBestBoard(@AuthenticationPrincipal MemberDetails memberDetails,Pageable pageable) {

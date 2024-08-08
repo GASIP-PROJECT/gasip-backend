@@ -190,6 +190,7 @@ public class BoardService {
             }
             bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
+
         return bestBoardReadResponseList;
     }
 //    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")

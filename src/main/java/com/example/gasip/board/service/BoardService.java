@@ -177,17 +177,6 @@ public class BoardService {
         boardRepository.deleteById(boardId);
         return boardId + "번 게시글이 삭제되었습니다.";
     }
-    @Transactional(readOnly = true)
-    public List<BoardReadResponse> findBestBoardTest(MemberDetails memberDetails,Pageable pageable) {
-        List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
-        Board board1 = boardRepository.getReferenceById(2L);
-        Board board2 = boardRepository.getReferenceById(5L);
-        Board board3 = boardRepository.getReferenceById(14L);
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board1));
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board2));
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board3));
-        return bestBoardReadResponseList;
-    }
 
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
@@ -202,12 +191,6 @@ public class BoardService {
             }
             bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
-        Board board1 = boardRepository.getReferenceById(2L);
-        Board board2 = boardRepository.getReferenceById(5L);
-        Board board3 = boardRepository.getReferenceById(14L);
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board1));
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board2));
-        bestBoardReadResponseList.add(BoardReadResponse.fromEntity(board3));
         return bestBoardReadResponseList;
     }
 //    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")

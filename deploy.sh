@@ -20,3 +20,5 @@ JAR_NAME=$(ls -tr $REPOSITORY/ | grep SNAPSHOT.jar | tail -n 1)
 
 echo "> Jar Name: $JAR_NAME"
 nohup ./run.sh &
+
+exit 0

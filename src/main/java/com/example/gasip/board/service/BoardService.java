@@ -179,7 +179,8 @@ public class BoardService {
     }
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findBestBoard(MemberDetails memberDetails,Pageable pageable) {
-        List<BoardReadResponse> boardReadResponseList = redisBestBoardService.getData("bestBoard");
+//        List<BoardReadResponse> boardReadResponseList = redisBestBoardService.getData("bestBoard");
+        List<BoardReadResponse> boardReadResponseList = boardRepository.findBestBoard();
         List<BoardReadResponse> bestBoardReadResponseList = new ArrayList<>();
         for (BoardReadResponse boardReadResponse : boardReadResponseList) {
             Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
@@ -191,13 +192,13 @@ public class BoardService {
         }
         return bestBoardReadResponseList;
     }
-    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
-    @Transactional(readOnly = true)
-    public void insertBestBoardListRedis() {
-        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
-        boardReadResponses.removeIf(boardReadRespons -> boardReadRespons.getRegDate().isBefore(LocalDateTime.now().minusDays(10)));
-        redisBestBoardService.addBestBoardList(boardReadResponses);
-    }
+//    @Scheduled(cron = "* */10 * * * *",zone = "Asia/Seoul")
+//    @Transactional(readOnly = true)
+//    public void insertBestBoardListRedis() {
+//        List<BoardReadResponse> boardReadResponses = boardRepository.findBestBoard();
+//        boardReadResponses.removeIf(boardReadRespons -> boardReadRespons.getRegDate().isBefore(LocalDateTime.now().minusDays(10)));
+//        redisBestBoardService.addBestBoardList(boardReadResponses);
+//    }
 
     @Transactional
     public Board insertView(Long postId,Member member) {

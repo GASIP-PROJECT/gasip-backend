@@ -160,7 +160,7 @@ public class BoardController {
         return ResponseEntity
             .ok()
             .body(
-                ApiUtils.success(boardService.findBestBoard(memberDetails,pageable))
+                ApiUtils.success(boardService.findBestBoardTest(memberDetails,pageable))
             );
     }
 

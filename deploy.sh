@@ -19,6 +19,4 @@ echo "> 새 애플리케이션 배포"
 JAR_NAME=$(ls -tr $REPOSITORY/ | grep SNAPSHOT.jar | tail -n 1)
 
 echo "> Jar Name: $JAR_NAME"
-nohup ./run.sh &
-
-exit 0
+nohup java -jar -Dspring.profiles.active=dev $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &

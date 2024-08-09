@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +34,9 @@ public class Professor {
     private String tel;
     @Schema(description = "사무실 위치")
     private String location;
+    @Schema(description = "학력")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> education;
     @Transient
     private String averageGradePoint;
     @Transient
@@ -64,6 +68,9 @@ public class Professor {
     }
     public void updateLocation(String location) {
         this.location=location;
+    }
+    public void updateEducation(List<String> education) {
+        this.education=education;
     }
 
 }

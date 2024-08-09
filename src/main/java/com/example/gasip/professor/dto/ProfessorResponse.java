@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Getter
 @SuperBuilder
 @Schema(description = "교수 DTO Response 관련 VO")
@@ -21,6 +23,17 @@ public class ProfessorResponse {
     private Long majorId;
     @Schema(description = "교수 전공 이름")
     private String majorName;
+    @Schema(description = "직위/직책")
+    private String position;
+    @Schema(description = "학위전공")
+    private String degreeMajor;
+    @Schema(description = "전화번호")
+    private String tel;
+    @Schema(description = "사무실 위치")
+    private String location;
+    @Schema(description = "학력")
+    private List<String> education;
+
     @Schema(description = "교수 평균 평점")
     private String professorAverageGradePoint;
     @Schema(description = "교수 평점 작성 여부")
@@ -42,6 +55,11 @@ public class ProfessorResponse {
                 .collegeName(professor.getCategory().getCollegeName())
                 .majorId(professor.getCategory().getId())
                 .majorName(professor.getCategory().getMajorName())
+                .position(professor.getPosition())
+                .degreeMajor(professor.getDegreeMajor())
+                .tel(professor.getTel())
+                .location(professor.getLocation())
+                .education(professor.getEducation())
                 .professorAverageGradePoint(professor.getAverageGradePoint())
                 .isGrade(professor.getIsGrade())
                 .build();

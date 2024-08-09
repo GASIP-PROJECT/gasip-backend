@@ -8,7 +8,7 @@
 </div>
 
 ## ⭐️ 앱 다운로드 링크
-> 테스트 플라이트로 베타 테스트 진행중
+> [테스트 플라이트로 베타 테스트 진행중](https://testflight.apple.com/join/ysZxlK9N)
 <br>
 
 ## 💡 프로젝트 주제

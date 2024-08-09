@@ -28,18 +28,7 @@ public class CategoryController {
                 );
     }
 
-    @GetMapping("/majors")
-    public ResponseEntity<?> findCategory() {
-        return ResponseEntity
-            .ok()
-            .body(
-                ApiUtils.success(
-                    categoryService.findCategory()
-                )
-            );
-    }
-
-    @GetMapping("/majors/{parentCategory_id}")
+    @GetMapping("/{parentCategory_id}")
     public ResponseEntity<?> findCategoryByParentCategory(@PathVariable Category parentCategory_id) {
         return ResponseEntity
             .ok()
@@ -50,7 +39,7 @@ public class CategoryController {
             );
     }
 
-    @GetMapping("/majors/{parentCategory_id}/{Id}")
+    @GetMapping("/{parentCategory_id}/{Id}")
     public ResponseEntity<?> findCategoryByMajorId(@PathVariable Long Id) {
         return ResponseEntity
                 .ok()

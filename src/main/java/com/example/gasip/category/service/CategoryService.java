@@ -37,14 +37,6 @@ public class CategoryService {
     }
 
     @Transactional
-    public List<CategoryDto> findCategory() {
-        return categoryRepository.findCategory()
-            .stream()
-            .map(CategoryDto::toEntity)
-            .collect(Collectors.toList());
-    }
-
-    @Transactional
     public List<CategoryDto> findCategoryByParentCategory(Category parentCategory_id) {
         return categoryRepository.findCategoryByParentCategory(parentCategory_id)
             .stream()

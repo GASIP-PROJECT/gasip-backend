@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ import java.util.List;
 @SuperBuilder
 @Schema(description = "게시글 관련된 VO")
 @DynamicInsert
+@SQLDelete(sql = "UPDATE board SET deleted = true WHERE post_id = ?")
+@Where(clause = "deleted = false")
 public class Board extends BaseTimeEntity {
 
     @Id

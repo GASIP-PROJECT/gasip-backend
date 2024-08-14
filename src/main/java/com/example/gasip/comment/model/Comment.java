@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @DynamicInsert
+@SQLDelete(sql = "UPDATE comment SET deleted = true WHERE comment_id = ?")
+@Where(clause = "deleted = false")
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

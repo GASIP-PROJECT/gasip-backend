@@ -111,7 +111,8 @@ public class MemberService {
     @Transactional
     public String sendCodeToEmail(String email) {
         checkDuplicatedEmail(email);
-        String authCode = createCode();
+//        String authCode = createCode();
+        String authCode = String.valueOf(315123);
         try {
             mailService.sendEmail(email, authCode);
         } catch (MessagingException e) {

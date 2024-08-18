@@ -27,6 +27,8 @@ public enum ErrorCode {
     DUPLICATE_LIKE("좋아요 중복 오류"),
     NO_STOCK_ERROR("재고 부족 오류"),
     DUPLICATE_PHONENUMBER("이미 존재하는 휴대폰 번호"),
+    DUPLICATE_REPORT("신고 중복 오류"),
+    CANNOT_REPORT_YOURSELF("자신이 작성한 글을 신고할 수 없습니다."),
 
     // Member
     NOT_FOUND_MEMBER("회원 정보가 없습니다. 로그인 후 이용해주세요."),

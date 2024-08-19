@@ -94,7 +94,7 @@ public class Board extends BaseTimeEntity {
         this.professor = professor;
         this.member = member;
         this.comments = comments;
-        this.contentActivity = (contentActivity != null) ? contentActivity : ContentActivity.GENERAL;
+        this.contentActivity = contentActivity;
     }
     public void updateBoard(String content) {
         this.content = content;

@@ -47,6 +47,20 @@ public class BoardController {
                 )
             );
     }
+
+    @PutMapping("/change/{postId}")
+    public ResponseEntity<?> changeActivity(
+            @AuthenticationPrincipal MemberDetails memberDetails,
+            @PathVariable Long postId) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiUtils.success(
+                                boardService.changeActivity(memberDetails, postId)
+                        )
+                );
+    }
+
     //TODO 쓰는 API인지 확인 필요
     @GetMapping("/all-boards")
     @Operation(summary = "전체 리뷰 정보 요청", description = "모든 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
@@ -127,7 +141,7 @@ public class BoardController {
             .ok()
             .body(
                 ApiUtils.success(
-                    boardService.editBoard(memberDetails, postId,boardUpdateRequest)
+                    boardService.editBoard(memberDetails, postId, boardUpdateRequest)
                 )
             );
 

@@ -3,16 +3,14 @@ package com.example.gasip.board.service;
 
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.dto.CommentReadResponse;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
 import com.example.gasip.commentLikes.repository.CommentLikesRepository;
 import com.example.gasip.global.constant.ErrorCode;
-import com.example.gasip.global.exception.BoardNotFoundException;
-import com.example.gasip.global.exception.InvalidWritterException;
-import com.example.gasip.global.exception.MemberNotFoundException;
-import com.example.gasip.global.exception.ProfessorNotFoundException;
+import com.example.gasip.global.exception.*;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.likes.repository.LikeRepository;
 import com.example.gasip.member.model.Member;
@@ -25,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -173,9 +172,27 @@ public class BoardService {
     }
     @Transactional
     public String deleteBoard(MemberDetails memberDetails,Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
         validatedBoardWritterEqualMember(memberDetails, boardId);
-        boardRepository.deleteById(boardId);
+        boardRepository.deleteById(board.getPostId());
         return boardId + "번 게시글이 삭제되었습니다.";
+    }
+
+    @Transactional
+    public BoardActivityResponseDto changeActivity(MemberDetails memberDetails, Long postId) {
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+        validatedBoardWritterEqualMember(memberDetails, postId);
+
+        if (board.getContentActivity() != ContentActivity.FLAGGED) {
+            throw new SelfBoardReportException(ErrorCode.CANNOT_REPORT_YOURSELF);
+        }
+
+        board.changeActivity(ContentActivity.RESTRICTED);
+        boardRepository.save(board);
+
+        return BoardActivityResponseDto.fromEntity(board);
     }
 
     @Transactional(readOnly = true)

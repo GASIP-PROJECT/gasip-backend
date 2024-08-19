@@ -29,6 +29,7 @@ public enum ErrorCode {
     DUPLICATE_PHONENUMBER("이미 존재하는 휴대폰 번호"),
     DUPLICATE_REPORT("신고 중복 오류"),
     CANNOT_REPORT_YOURSELF("자신이 작성한 글을 신고할 수 없습니다."),
+    CHECK_FLAGGED_CONTENT("신고된 게시글만 상태를 변경할 수 있습니다."),
 
     // Member
     NOT_FOUND_MEMBER("회원 정보가 없습니다. 로그인 후 이용해주세요."),

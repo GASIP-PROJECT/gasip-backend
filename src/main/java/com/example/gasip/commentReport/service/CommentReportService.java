@@ -9,8 +9,8 @@ import com.example.gasip.commentReport.dto.CommentReportRequestDto;
 import com.example.gasip.commentReport.model.CommentReport;
 import com.example.gasip.commentReport.repository.CommentReportRepository;
 import com.example.gasip.global.constant.ErrorCode;
-import com.example.gasip.global.exception.DuplicateResourceException;
 import com.example.gasip.global.exception.SelfBoardReportException;
+import com.example.gasip.global.exception.handler.DuplicateReportException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -38,7 +38,7 @@ public class CommentReportService {
         Comment comment = commentRepository.getReferenceById(commentReportRequestDto.getCommentId());
 
         if (commentReportRepository.findByMemberAndCommentAndBoard(member, comment, board).isPresent()) {
-            throw new DuplicateResourceException(ErrorCode.DUPLICATE_LIKE);
+            throw new DuplicateReportException(ErrorCode.DUPLICATE_REPORT);
         }
 
         if (commentReportRepository.countByComment_CommentId(commentReportRequestDto.getCommentId()) > REPORT_LIMIT) {

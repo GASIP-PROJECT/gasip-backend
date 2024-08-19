@@ -1,5 +1,6 @@
 package com.example.gasip.comment.dto;
 
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class CommentChildrenReadResponse extends BaseTimeEntity implements Seria
     private Boolean isCommentLike;
     private Long parentId;
     private String nickName;
+    private ContentActivity contentActivity;
 
     public static CommentChildrenReadResponse fromEntity(Comment comment) {
         return CommentChildrenReadResponse.builder()
@@ -37,6 +39,7 @@ public class CommentChildrenReadResponse extends BaseTimeEntity implements Seria
             .isCommentLike(comment.getIsCommentLike())
             .parentId(comment.getParentComment().getCommentId())
             .nickName(comment.getMember().getNickname())
+            .contentActivity(comment.getContentActivity())
             .build();
     }
 }

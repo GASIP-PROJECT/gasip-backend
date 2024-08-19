@@ -1,5 +1,6 @@
 package com.example.gasip.comment.dto;
 
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
     private String content;
     private Long commentLike;
     private Boolean isCommentLike;
+    private ContentActivity contentActivity;
     private List<CommentChildrenReadResponse> commentChildren = new ArrayList<>();
 
     public static CommentReadResponse fromEntity(Comment comment) {
@@ -47,6 +49,7 @@ public class CommentReadResponse extends BaseTimeEntity implements Serializable 
             .content(comment.getContent())
             .commentLike(comment.getCommentLike())
             .isCommentLike(comment.getIsCommentLike())
+            .contentActivity(comment.getContentActivity())
             .commentChildren(comment.getCommentChildren()
                 .stream()
                 .map(CommentChildrenReadResponse::fromEntity)

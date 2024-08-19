@@ -1,7 +1,8 @@
 package com.example.gasip.board.dto;
 
-import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
+import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.professor.model.Professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -29,14 +30,16 @@ public class BoardCreateResponse extends BaseTimeEntity {
     @NotNull
     @Schema(description = "게시글과 관련된 교수 정보")
     private Long profId;
+    private ContentActivity contentActivity;
 
-    public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Professor professor) {
+    public BoardCreateResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Professor professor, ContentActivity contentActivity) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
         this.clickCount = 0L;
         this.likeCount = 0L;
         this.profId = professor.getProfId();
+        this.contentActivity = contentActivity;
     }
 
     public BoardCreateResponse(Long postId, String content,Long profId) {
@@ -55,6 +58,7 @@ public class BoardCreateResponse extends BaseTimeEntity {
                 .clickCount(0L)
                 .likeCount(0L)
                 .profId(board.getProfessor().getProfId())
+                .contentActivity(board.getContentActivity())
                 .build();
     }
 

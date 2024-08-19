@@ -1,6 +1,7 @@
 package com.example.gasip.comment.dto;
 
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.member.model.Member;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class CommentCreateRequest{
     private String content;
     private Long parentId;
+    private ContentActivity contentActivity = ContentActivity.GENERAL;
 
     public Comment toEntity(Board board, Member member) {
         return Comment.builder()
@@ -21,6 +23,8 @@ public class CommentCreateRequest{
                 .member(member)
                 .content(content)
                 .commentLike(0L)
+                .reportCount(0L)
+                .contentActivity(contentActivity)
                 .build();
     }
 }

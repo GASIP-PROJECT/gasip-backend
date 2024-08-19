@@ -22,6 +22,8 @@ public interface BoardRepositoryCustom {
 
     void addViewCount(Board board);
 
+    void addReportCount(Board board);
+    void subReportCount(Board board);
 
     List<BoardReadResponse> findBestBoard();
 

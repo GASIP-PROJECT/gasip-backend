@@ -216,6 +216,26 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .execute();
     }
 
+    /**
+     * 신고 관련 기능
+     */
+    @Override
+    public void addReportCount(Board selectedBoard) {
+        queryFactory.update(board)
+                .set(board.reportCount, board.reportCount.add(1))
+                .where(board.eq(selectedBoard))
+                .execute();
+    }
+
+    @Override
+    public void subReportCount(Board selectedBoard) {
+        queryFactory.update(board)
+                .set(board.reportCount, board.reportCount.subtract(1))
+                .where(board.eq(selectedBoard))
+                .execute();
+    }
+
+
     private BooleanExpression idEqual(Long id) {
         return (id == null) ? null : member.memberId.eq(id);
     }

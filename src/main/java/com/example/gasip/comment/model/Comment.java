@@ -1,8 +1,10 @@
 package com.example.gasip.comment.model;
 
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.member.model.Member;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,10 +13,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.gasip.board.model.ContentActivity.GENERAL;
 
 @Entity
 @Getter
@@ -23,6 +29,8 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @DynamicInsert
+@SQLDelete(sql = "UPDATE comment SET deleted = true WHERE comment_id = ?")
+@Where(clause = "deleted = false")
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +57,14 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE)
     private List<Comment> commentChildren = new ArrayList<>();
 
+    @Column(nullable = false)
+    @Schema(description = "신고 횟수")
+    @ColumnDefault("0")
+    private Long reportCount;
+
+    @Enumerated(EnumType.STRING)
+    private ContentActivity contentActivity = GENERAL;
+
     @Transient
     private Boolean isCommentLike;
 
@@ -67,6 +83,11 @@ public class Comment extends BaseTimeEntity {
 
     public void updateCommentLike(Boolean isCommentLike) {
         this.isCommentLike=isCommentLike;
+    }
+
+    public void changeActivity(ContentActivity contentActivity) {
+        this.contentActivity = contentActivity;
+        this.updateDate = LocalDateTime.now();
     }
 
 }

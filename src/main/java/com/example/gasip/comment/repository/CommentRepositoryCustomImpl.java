@@ -25,4 +25,23 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom{
                 .where(comment.eq(selectedComment))
                 .execute();
     }
+
+    /**
+     * 신고 관련 기능
+     */
+    @Override
+    public void addReportCount(Comment selectedComment) {
+        queryFactory.update(comment)
+                .set(comment.reportCount, comment.reportCount.add(1))
+                .where(comment.eq(selectedComment))
+                .execute();
+    }
+
+    @Override
+    public void subReportCount(Comment selectedComment) {
+        queryFactory.update(comment)
+                .set(comment.reportCount, comment.reportCount.subtract(1))
+                .where(comment.eq(selectedComment))
+                .execute();
+    }
 }

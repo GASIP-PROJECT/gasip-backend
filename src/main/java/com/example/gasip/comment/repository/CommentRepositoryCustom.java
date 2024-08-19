@@ -6,4 +6,7 @@ public interface CommentRepositoryCustom {
     void addCommentLikeCount(Comment comment);
 
     void subCommentLikeCount(Comment comment);
+
+    void addReportCount(Comment comment);
+    void subReportCount(Comment comment);
 }

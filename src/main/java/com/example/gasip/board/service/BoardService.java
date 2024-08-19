@@ -186,7 +186,7 @@ public class BoardService {
         validatedBoardWritterEqualMember(memberDetails, postId);
 
         if (board.getContentActivity() != ContentActivity.FLAGGED) {
-            throw new SelfBoardReportException(ErrorCode.CANNOT_REPORT_YOURSELF);
+            throw new CheckFlaggedException(ErrorCode.CHECK_FLAGGED_CONTENT);
         }
 
         board.changeActivity(ContentActivity.RESTRICTED);

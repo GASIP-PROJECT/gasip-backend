@@ -2,6 +2,7 @@ package com.example.gasip.board.repository;
 
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
                 board.professor.profName, board.professor.category.collegeName,
-                board.professor.category.majorName))
+                board.professor.category.majorName, board.contentActivity))
             .from(board)
             .leftJoin(board.professor, professor)
-            .where(board.member.memberId.eq(memberId))
+            .where(board.member.memberId.eq(memberId).and(board.contentActivity.eq(ContentActivity.GENERAL)))
             .orderBy(board.regDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -44,7 +45,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
                     board.professor.profName, board.professor.category.collegeName,
-                    board.professor.category.majorName))
+                    board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .fetch();
     }
@@ -59,14 +60,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(0L))
+                .where(board.professor.profId.eq(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .where(board.postId.in(ids))
                 .orderBy(board.regDate.desc())
@@ -87,14 +88,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0L))
+                .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
 //                .leftJoin(board.professor, professor)
 //                .where(board.professor.profId.gt(0))
@@ -116,10 +117,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.content.contains(content))
+                .where(board.content.contains(content).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -137,10 +138,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                     board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
                     board.professor.profName, board.professor.category.collegeName,
-                    board.professor.category.majorName))
+                    board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profName.like(profName))
+                .where(board.professor.profName.like(profName).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .orderBy(board.regDate.desc())
                 .fetch();
     }
@@ -157,7 +158,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                     board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(profId))
+                .where(board.professor.profId.eq(profId).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .orderBy(board.regDate.desc())
                 .fetch();
     }
@@ -169,10 +170,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
                 board.professor.profName, board.professor.category.collegeName,
-                board.professor.category.majorName))
+                board.professor.category.majorName, board.contentActivity))
             .from(board)
             .leftJoin(board.professor, professor)
-            .where(board.likeCount.goe(5))
+            .where(board.likeCount.goe(5).and(board.contentActivity.eq(ContentActivity.GENERAL)))
             .orderBy(board.regDate.desc())
             .limit(30)
             .fetch();

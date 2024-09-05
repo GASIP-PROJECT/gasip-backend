@@ -8,7 +8,7 @@
 </div>
 
 ## ⭐️ 앱 다운로드 링크
-> [다운로드 링크 - 현재 아이폰만 가능](https://testflight.apple.com/join/ysZxlK9N](https://apps.apple.com/kr/app/gasip/id6499491490)
+> [다운로드 링크 - 현재 아이폰만 가능](https://apps.apple.com/kr/app/gasip/id6499491490?l=en-GB)
 <br>
 
 ## 💡 프로젝트 주제

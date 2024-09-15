@@ -63,10 +63,10 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-//    @Column(nullable = false)
-//    @Schema(description = "삭제 여부")
-//    @ColumnDefault("0")
-//    private Long deleted;
+    @Column(nullable = false)
+    @Schema(description = "삭제 여부")
+    @ColumnDefault("0")
+    private Long deleted;
 
     @Column(nullable = false)
     @Schema(description = "신고 횟수")
@@ -76,10 +76,10 @@ public class Board extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ContentActivity contentActivity = GENERAL;
 
-//    @Column(nullable = false)
-//    @Schema(description = "교수 평점")
-//    @ColumnDefault("0")
-//    private int gradePoint;
+    @Column(nullable = false)
+    @Schema(description = "교수 평점")
+    @ColumnDefault("0")
+    private int gradePoint;
 
     @Transient
     private Boolean isLike;

@@ -12,10 +12,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.gasip.board.model.ContentActivity.GENERAL;
 
 @Entity
 @Getter
@@ -24,6 +28,8 @@ import java.util.List;
 @SuperBuilder
 @Schema(description = "게시글 관련된 VO")
 @DynamicInsert
+@SQLDelete(sql = "UPDATE board SET deleted = true WHERE post_id = ?")
+@Where(clause = "deleted = false")
 public class Board extends BaseTimeEntity {
 
     @Id
@@ -58,6 +64,19 @@ public class Board extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
 //    @Column(nullable = false)
+//    @Schema(description = "삭제 여부")
+//    @ColumnDefault("0")
+//    private Long deleted;
+
+    @Column(nullable = false)
+    @Schema(description = "신고 횟수")
+    @ColumnDefault("0")
+    private Long reportCount;
+
+    @Enumerated(EnumType.STRING)
+    private ContentActivity contentActivity = GENERAL;
+
+//    @Column(nullable = false)
 //    @Schema(description = "교수 평점")
 //    @ColumnDefault("0")
 //    private int gradePoint;
@@ -66,7 +85,7 @@ public class Board extends BaseTimeEntity {
     private Boolean isLike;
 
 
-    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member, List<Comment>comments) {
+    public Board(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String content, Long clickCount, Long likeCount, Professor professor, Member member, List<Comment>comments, ContentActivity contentActivity) {
         super(regDate, updateDate);
         this.postId = postId;
         this.content = content;
@@ -75,6 +94,7 @@ public class Board extends BaseTimeEntity {
         this.professor = professor;
         this.member = member;
         this.comments = comments;
+        this.contentActivity = contentActivity;
     }
     public void updateBoard(String content) {
         this.content = content;
@@ -87,5 +107,10 @@ public class Board extends BaseTimeEntity {
 
     public void updateLike(Boolean isLike) {
         this.isLike=isLike;
+    }
+
+    public void changeActivity(ContentActivity contentActivity) {
+        this.contentActivity = contentActivity;
+        this.updateDate = LocalDateTime.now();
     }
 }

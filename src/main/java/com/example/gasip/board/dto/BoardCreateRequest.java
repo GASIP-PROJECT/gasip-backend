@@ -1,5 +1,6 @@
 package com.example.gasip.board.dto;
 
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.member.model.Member;
@@ -27,6 +28,7 @@ public class BoardCreateRequest extends BaseTimeEntity {
     private Professor professor;
     @Schema(description = "게시글 작성한 사용자")
     private Member member;
+    private ContentActivity contentActivity = ContentActivity.GENERAL;
 
 
     public Board toEntity(Professor prof, Member mem) {
@@ -36,6 +38,7 @@ public class BoardCreateRequest extends BaseTimeEntity {
                 .likeCount(likeCount)
                 .professor(prof)
                 .member(mem)
+                .contentActivity(contentActivity)
                 .build();
     }
 

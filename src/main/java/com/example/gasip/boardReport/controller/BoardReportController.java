@@ -1,6 +1,6 @@
 package com.example.gasip.boardReport.controller;
 
-import com.example.gasip.boardReport.dto.BoardReportRequestDto;
+import com.example.gasip.boardReport.dto.BoardReportRequest;
 import com.example.gasip.boardReport.service.BoardReportService;
 import com.example.gasip.global.entity.HttpResponseEntity;
 import com.example.gasip.global.security.MemberDetails;
@@ -20,16 +20,16 @@ public class BoardReportController {
     private final BoardReportService boardReportService;
 
     @PostMapping
-    public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid BoardReportRequestDto boardReportRequestDto,
+    public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid BoardReportRequest boardReportRequest,
                                                        @AuthenticationPrincipal MemberDetails memberDetails) throws  Exception {
-        boardReportService.insert(boardReportRequestDto, memberDetails);
+        boardReportService.insert(boardReportRequest, memberDetails);
         return success();
     }
 
     @DeleteMapping
-    public HttpResponseEntity.ResponseResult<?> delete(@RequestBody @Valid BoardReportRequestDto boardReportRequestDto,
+    public HttpResponseEntity.ResponseResult<?> delete(@RequestBody @Valid BoardReportRequest boardReportRequest,
                                                        @AuthenticationPrincipal MemberDetails memberDetails) throws  Exception {
-        boardReportService.delete(boardReportRequestDto, memberDetails);
+        boardReportService.delete(boardReportRequest, memberDetails);
         return success();
     }
 }

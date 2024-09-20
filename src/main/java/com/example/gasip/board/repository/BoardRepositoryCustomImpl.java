@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.example.gasip.board.model.QBoard.board;
 import static com.example.gasip.member.model.QMember.member;
+import static com.example.gasip.memberBlock.model.QMemberBlock.memberBlock;
 import static com.example.gasip.professor.model.QProfessor.professor;
 
 @RequiredArgsConstructor
@@ -55,13 +56,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      * 자유 게시판 게시글 불러오기
      */
     @Override
-    public Page<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable) {
+    public Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.eq(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
+
+        List<Long> blockedIds = queryFactory
+                .select(memberBlock.blocked.memberId)
+                .from(memberBlock)
+                .where(memberBlock.blocker.memberId.eq(blockerId))
+                .fetch();
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -69,7 +77,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
-                .where(board.postId.in(ids))
+                .where(board.postId.in(ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -83,13 +91,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      *
      */
     @Override
-    public Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable) {
+    public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
         List<Long> prof_ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
+
+        List<Long> blockedIds = queryFactory
+                .select(memberBlock.blocked.memberId)
+                .from(memberBlock)
+                .where(memberBlock.blocker.memberId.eq(blockerId))
+                .fetch();
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -99,7 +114,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .from(board)
 //                .leftJoin(board.professor, professor)
 //                .where(board.professor.profId.gt(0))
-                .where(board.postId.in(prof_ids))
+                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

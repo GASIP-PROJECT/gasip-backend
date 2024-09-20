@@ -107,7 +107,10 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
-        Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(pageable);
+
+        Long blockerId = memberDetails.getId();
+
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(blockerId, pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses) {
@@ -150,7 +153,10 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
-        Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(pageable);
+
+        Long blockerId = memberDetails.getId();
+
+        Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(blockerId, pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses1) {

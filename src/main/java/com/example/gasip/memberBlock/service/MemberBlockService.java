@@ -1,8 +1,8 @@
 package com.example.gasip.memberBlock.service;
 
-import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.global.constant.ErrorCode;
 import com.example.gasip.global.exception.MemberNotFoundException;
+import com.example.gasip.global.exception.handler.DuplicateReportException;
 import com.example.gasip.global.security.MemberDetails;
 import com.example.gasip.member.model.Member;
 import com.example.gasip.member.repository.MemberRepository;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberBlockService {
     private final MemberBlockRepository memberBlockRepository;
     private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
 
     @Transactional
     public MemberBlockResponse blockMember(MemberBlockRequest memberBlockRequest, MemberDetails memberDetails) {
@@ -27,6 +26,10 @@ public class MemberBlockService {
                 () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
         Member blocked = memberRepository.findById(memberBlockRequest.getBlocked()).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER));
+
+        if (memberBlockRepository.findByBlockerAndBlocked(blocker, blocked).isPresent()) {
+            throw new DuplicateReportException(ErrorCode.DUPLICATE_REPORT);
+        }
 
         MemberBlock memberBlock = MemberBlock.builder()
                 .blocker(blocker)

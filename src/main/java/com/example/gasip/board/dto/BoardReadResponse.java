@@ -1,6 +1,7 @@
 package com.example.gasip.board.dto;
 
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.global.entity.BaseTimeEntity;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,11 +53,13 @@ public class BoardReadResponse extends BaseTimeEntity implements Serializable {
     @NotNull
     @Schema(description = "좋아요 클릭 여부")
     private Boolean isLike;
+    @NotNull
+    private ContentActivity contentActivity;
 
     @QueryProjection
     public BoardReadResponse(LocalDateTime regDate, LocalDateTime updateDate, Long postId, String memberNickname,
                              String content, Long clickCount, Long likeCount, Long profId,
-                             String profName, String collegeName,String majorName
+                             String profName, String collegeName,String majorName, ContentActivity contentActivity
     ) {
         super(regDate, updateDate);
         this.postId = postId;
@@ -68,6 +71,7 @@ public class BoardReadResponse extends BaseTimeEntity implements Serializable {
         this.profName = profName;
         this.collegeName = collegeName;
         this.majorName = majorName;
+        this.contentActivity = contentActivity;
     }
     public static BoardReadResponse fromEntity(Board board) {
         return BoardReadResponse.builder()
@@ -84,6 +88,7 @@ public class BoardReadResponse extends BaseTimeEntity implements Serializable {
             .collegeName(board.getProfessor().getCategory().getCollegeName())
             .majorName(board.getProfessor().getCategory().getMajorName())
             .isLike(board.getIsLike())
+            .contentActivity(board.getContentActivity())
             .build();
     }
 }

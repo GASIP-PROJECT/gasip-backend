@@ -2,6 +2,9 @@ package com.example.gasip.board.repository;
 
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.board.model.ContentActivity;
+import com.example.gasip.memberBlock.model.QMemberBlock;
+import com.example.gasip.professor.model.Professor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,16 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    private List<Long> getBlockedIds(Long blockerId) {
+        QMemberBlock memberBlock = QMemberBlock.memberBlock;
+
+        return queryFactory
+                .select(memberBlock.blocked.memberId)
+                .from(memberBlock)
+                .where(memberBlock.blocker.memberId.eq(blockerId))
+                .fetch();
+    }
+
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
         return queryFactory
@@ -27,10 +40,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
                 board.professor.profName, board.professor.category.collegeName,
-                board.professor.category.majorName))
+                board.professor.category.majorName, board.contentActivity))
             .from(board)
             .leftJoin(board.professor, professor)
-            .where(board.member.memberId.eq(memberId))
+            .where(board.member.memberId.eq(memberId).and(board.contentActivity.eq(ContentActivity.GENERAL)))
             .orderBy(board.regDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -44,7 +57,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
                     board.professor.profName, board.professor.category.collegeName,
-                    board.professor.category.majorName))
+                    board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .fetch();
     }
@@ -54,21 +67,25 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      * 자유 게시판 게시글 불러오기
      */
     @Override
-    public Page<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable) {
+    public Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
         List<Long> ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(0L))
+                .where(board.professor.profId.eq(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
-                .where(board.postId.in(ids))
+                .where(board.postId.in(ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -82,23 +99,27 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      *
      */
     @Override
-    public Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable) {
+    public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
         List<Long> prof_ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0L))
+                .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
 //                .leftJoin(board.professor, professor)
 //                .where(board.professor.profId.gt(0))
-                .where(board.postId.in(prof_ids))
+                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -107,19 +128,53 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     /**
-     * 게시글 내용 검색 (querydsl)
+     * 교수 상세 페이지 게시글
      */
     @Override
-    public Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable) {
+    public Page<BoardReadResponse> findAllByProfessor(Long blockerId, Professor professor, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
+        List<Long> prof_ids = queryFactory
+                .select(board.postId)
+                .from(board)
+                .leftJoin(board.professor)
+                .where(board.professor.profId.gt(professor.getProfId()).and(board.contentActivity.eq(ContentActivity.GENERAL)))
+                .fetch();
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
                         board.content, board.clickCount, board.likeCount, board.professor.profId,
                         board.professor.profName, board.professor.category.collegeName,
-                        board.professor.category.majorName))
+                        board.professor.category.majorName, board.contentActivity))
+                .from(board)
+                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(boardReadResponses);
+    }
+
+    /**
+     * 게시글 내용 검색 (querydsl)
+     */
+    @Override
+    public Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(Long blockerId, String content, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
+        List<BoardReadResponse> boardReadResponses = queryFactory
+                .select(new QBoardReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.member.nickname,
+                        board.content, board.clickCount, board.likeCount, board.professor.profId,
+                        board.professor.profName, board.professor.category.collegeName,
+                        board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.content.contains(content))
+                .where(board.content.contains(content).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -137,10 +192,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                     board.regDate, board.updateDate, board.postId, board.member.nickname,
                     board.content, board.clickCount, board.likeCount, board.professor.profId,
                     board.professor.profName, board.professor.category.collegeName,
-                    board.professor.category.majorName))
+                    board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profName.like(profName))
+                .where(board.professor.profName.like(profName).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .orderBy(board.regDate.desc())
                 .fetch();
     }
@@ -157,7 +212,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                     board.professor.category.Id, board.professor.category.majorName, board.member.nickname))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(profId))
+                .where(board.professor.profId.eq(profId).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .orderBy(board.regDate.desc())
                 .fetch();
     }
@@ -169,10 +224,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 board.regDate, board.updateDate, board.postId, board.member.nickname,
                 board.content, board.clickCount, board.likeCount, board.professor.profId,
                 board.professor.profName, board.professor.category.collegeName,
-                board.professor.category.majorName))
+                board.professor.category.majorName, board.contentActivity))
             .from(board)
             .leftJoin(board.professor, professor)
-            .where(board.likeCount.goe(5))
+            .where(board.likeCount.goe(5).and(board.contentActivity.eq(ContentActivity.GENERAL)))
             .orderBy(board.regDate.desc())
             .limit(30)
             .fetch();

@@ -12,5 +12,7 @@ public interface ProfessorRepositoryCustom {
     List<ProfessorResponse> findProfessorByCategoryNameContaining(String majorName);
     // 교수 검색
     List<ProfessorResponse> findProfessorByProfessorNameLike(String majorName);
+
+    List<ProfessorResponse> findProfessorByProfessorNameContaining(String majorName);
 }
 

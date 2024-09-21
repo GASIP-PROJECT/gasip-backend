@@ -4,6 +4,7 @@ import com.example.gasip.board.dto.BoardProfessorReadResponse;
 import com.example.gasip.board.dto.BoardReadRequest;
 import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.professor.model.Professor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,20 +36,25 @@ public interface BoardRepositoryCustom {
     /**
      * 자유게시판 게시글 불러오기
      */
-    Page<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable);
+    Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable);
 
     /**
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
-    Page<BoardReadResponse> findBoardByAllProfessor(Pageable pageable);
+    Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable);
 
     /**
      * 게시글 내용 검색
      */
-    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable);
+    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(Long blockerId, String content, Pageable pageable);
 
     /**
      * 교수 이름 검색
      */
     List<BoardReadResponse> findProfNameLike(String profName);
+
+    /**
+     * 교수 상세 페이지 게시글
+     */
+    Page<BoardReadResponse> findAllByProfessor(Long blockerId, Professor professor, Pageable pageable);
 }

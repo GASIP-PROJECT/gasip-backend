@@ -67,13 +67,32 @@ public class BoardService {
     // TODO LIKE 테이블 join해서 queryDSL 쓰는게 빠른지 비교
     @Transactional(readOnly = true)
     public List<BoardReadResponse> findBoardByProfessor(MemberDetails memberDetails,Long profId, Pageable pageable) {
+
+        Long blockerId = memberDetails.getId();
+
         Professor professor = professorRepository.findById(profId).orElseThrow(
             () -> new ProfessorNotFoundException(ErrorCode.NOT_FOUND_PROFESSOR));
-        Page<Board> boards = boardRepository.findAllByProfessorOrderByRegDateDesc(professor, pageable);
-        checkMemberClickBoardLike(memberDetails, boards);
-        return boards.stream()
-            .map(BoardReadResponse::fromEntity)
-            .collect(Collectors.toList());
+//        Page<Board> boards = boardRepository.findAllByProfessorOrderByRegDateDesc(professor, pageable);
+//        checkMemberClickBoardLike(memberDetails, boards);
+
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findAllByProfessor(blockerId, professor, pageable);
+        List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
+
+        for (BoardReadResponse boardReadResponse : boardReadResponses) {
+            Board board = boardRepository.getReferenceById(boardReadResponse.getPostId());
+            board.updateLike(false);
+            if (Boolean.TRUE.equals(likeRepository.existsByBoard_PostIdAndMember_MemberId(board.getPostId(), memberDetails.getId()))) {
+                board.updateLike(true);
+            }
+            boardReadResponseList.add(BoardReadResponse.fromEntity(board));
+        }
+
+        return boardReadResponseList;
+
+
+//        return boards.stream()
+//            .map(BoardReadResponse::fromEntity)
+//            .collect(Collectors.toList());
     }
 
     // TODO 자식 댓글 isCommentLike 칼럼 값 들어오도록 설정

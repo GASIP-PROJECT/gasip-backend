@@ -45,7 +45,7 @@ public interface BoardRepositoryCustom {
     /**
      * 게시글 내용 검색
      */
-    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable);
+    Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(Long blockerId, String content, Pageable pageable);
 
     /**
      * 교수 이름 검색

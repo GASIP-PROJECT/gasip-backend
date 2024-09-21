@@ -4,6 +4,7 @@ import com.example.gasip.board.dto.BoardProfessorReadResponse;
 import com.example.gasip.board.dto.BoardReadRequest;
 import com.example.gasip.board.dto.BoardReadResponse;
 import com.example.gasip.board.model.Board;
+import com.example.gasip.professor.model.Professor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -51,4 +52,9 @@ public interface BoardRepositoryCustom {
      * 교수 이름 검색
      */
     List<BoardReadResponse> findProfNameLike(String profName);
+
+    /**
+     * 교수 상세 페이지 게시글
+     */
+    Page<BoardReadResponse> findAllByProfessor(Long blockerId, Professor professor, Pageable pageable);
 }

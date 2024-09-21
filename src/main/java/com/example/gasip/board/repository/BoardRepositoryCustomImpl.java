@@ -4,6 +4,7 @@ import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.memberBlock.model.QMemberBlock;
+import com.example.gasip.professor.model.Professor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -123,6 +124,37 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+        return new PageImpl<>(boardReadResponses);
+    }
+
+    /**
+     * 교수 상세 페이지 게시글
+     */
+    @Override
+    public Page<BoardReadResponse> findAllByProfessor(Long blockerId, Professor professor, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
+        List<Long> prof_ids = queryFactory
+                .select(board.postId)
+                .from(board)
+                .leftJoin(board.professor)
+                .where(board.professor.profId.gt(professor.getProfId()).and(board.contentActivity.eq(ContentActivity.GENERAL)))
+                .fetch();
+
+        List<BoardReadResponse> boardReadResponses = queryFactory
+                .select(new QBoardReadResponse(
+                        board.regDate, board.updateDate, board.postId, board.member.nickname,
+                        board.content, board.clickCount, board.likeCount, board.professor.profId,
+                        board.professor.profName, board.professor.category.collegeName,
+                        board.professor.category.majorName, board.contentActivity))
+                .from(board)
+                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
         return new PageImpl<>(boardReadResponses);
     }
 

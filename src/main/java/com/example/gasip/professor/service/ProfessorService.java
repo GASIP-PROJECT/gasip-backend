@@ -133,8 +133,11 @@ public class ProfessorService {
         Member member = memberRepository.findById(memberDetails.getId()).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
+
         List<ProfessorResponse> professorResponses = new ArrayList<>();
-        List<ProfessorResponse> professorResponseList = professorRepository.findProfessorByProfessorNameLike(professorName);
+//        List<ProfessorResponse> professorResponseList = professorRepository.findProfessorByProfessorNameLike(professorName);
+        List<ProfessorResponse> professorResponseList = professorRepository.findProfessorByProfessorNameContaining(professorName);
+
         for (ProfessorResponse professorResponse : professorResponseList) {
             Professor professor = professorRepository.getReferenceById(professorResponse.getProfId());
             String averageGradePoint = gradeRepository.professorAverageGradepoint(professor.getProfId()).get(0).toString();

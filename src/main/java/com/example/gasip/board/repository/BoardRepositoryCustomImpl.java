@@ -5,6 +5,7 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.memberBlock.model.QMemberBlock;
 import com.example.gasip.professor.model.Professor;
+import com.example.gasip.professor.model.QProfessor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -138,8 +139,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         List<Long> prof_ids = queryFactory
                 .select(board.postId)
                 .from(board)
-                .leftJoin(board.professor)
-                .where(board.professor.profId.gt(professor.getProfId()).and(board.contentActivity.eq(ContentActivity.GENERAL)))
+                .leftJoin(board.professor, QProfessor.professor)
+                .where(board.professor.profId.eq(professor.getProfId()).and(board.contentActivity.eq(ContentActivity.GENERAL)))
                 .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory

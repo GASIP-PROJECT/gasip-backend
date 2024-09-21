@@ -3,6 +3,7 @@ package com.example.gasip.board.repository;
 import com.example.gasip.board.dto.*;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.model.ContentActivity;
+import com.example.gasip.memberBlock.model.QMemberBlock;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,22 @@ import java.util.List;
 
 import static com.example.gasip.board.model.QBoard.board;
 import static com.example.gasip.member.model.QMember.member;
-import static com.example.gasip.memberBlock.model.QMemberBlock.memberBlock;
 import static com.example.gasip.professor.model.QProfessor.professor;
 
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+
+    private List<Long> getBlockedIds(Long blockerId) {
+        QMemberBlock memberBlock = QMemberBlock.memberBlock;
+
+        return queryFactory
+                .select(memberBlock.blocked.memberId)
+                .from(memberBlock)
+                .where(memberBlock.blocker.memberId.eq(blockerId))
+                .fetch();
+    }
 
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
@@ -57,17 +67,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
     @Override
     public Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
         List<Long> ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.eq(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
-                .fetch();
-
-        List<Long> blockedIds = queryFactory
-                .select(memberBlock.blocked.memberId)
-                .from(memberBlock)
-                .where(memberBlock.blocker.memberId.eq(blockerId))
                 .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory
@@ -92,17 +99,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      */
     @Override
     public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
         List<Long> prof_ids = queryFactory
                 .select(board.postId)
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
-                .fetch();
-
-        List<Long> blockedIds = queryFactory
-                .select(memberBlock.blocked.memberId)
-                .from(memberBlock)
-                .where(memberBlock.blocker.memberId.eq(blockerId))
                 .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory
@@ -126,7 +130,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      * 게시글 내용 검색 (querydsl)
      */
     @Override
-    public Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, Pageable pageable) {
+    public Page<BoardReadResponse> findContainingContentOrderByRegDateDesc(Long blockerId, String content, Pageable pageable) {
+
+        List<Long> blockedIds = getBlockedIds(blockerId);
+
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -135,7 +142,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.content.contains(content).and(board.contentActivity.eq(ContentActivity.GENERAL)))
+                .where(board.content.contains(content).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

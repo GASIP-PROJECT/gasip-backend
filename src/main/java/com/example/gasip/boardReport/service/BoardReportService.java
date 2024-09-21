@@ -3,7 +3,7 @@ package com.example.gasip.boardReport.service;
 import com.example.gasip.board.model.Board;
 import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.board.repository.BoardRepository;
-import com.example.gasip.boardReport.dto.BoardReportRequestDto;
+import com.example.gasip.boardReport.dto.BoardReportRequest;
 import com.example.gasip.boardReport.model.BoardReport;
 import com.example.gasip.boardReport.repository.BoardReportRepository;
 import com.example.gasip.global.constant.ErrorCode;
@@ -26,11 +26,11 @@ public class BoardReportService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public void insert(BoardReportRequestDto boardReportRequestDto, MemberDetails memberDetails) throws Exception {
+    public void insert(BoardReportRequest boardReportRequest, MemberDetails memberDetails) throws Exception {
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
-        Board board = boardRepository.findById(boardReportRequestDto.getPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReportRequestDto.getPostId()));
+        Board board = boardRepository.findById(boardReportRequest.getPostId())
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReportRequest.getPostId()));
 
         validateSelfReport(memberDetails.getId(), board.getMember().getMemberId());
 
@@ -38,14 +38,14 @@ public class BoardReportService {
             throw new DuplicateReportException(ErrorCode.DUPLICATE_REPORT);
         }
 
-        if (boardReportRepository.countByBoard_PostId(boardReportRequestDto.getPostId()) > REPORT_LIMIT) {
+        if (boardReportRepository.countByBoard_PostId(boardReportRequest.getPostId()) > REPORT_LIMIT) {
             board.changeActivity(ContentActivity.FLAGGED);
         }
 
         BoardReport boardReport = BoardReport.builder()
                 .board(board)
                 .member(member)
-                .content(boardReportRequestDto.getContent())
+                .content(boardReportRequest.getContent())
                 .build();
 
         boardReportRepository.save(boardReport);
@@ -53,12 +53,12 @@ public class BoardReportService {
     }
 
     @Transactional
-    public void delete(BoardReportRequestDto boardReportRequestDto, MemberDetails memberDetails) {
+    public void delete(BoardReportRequest boardReportRequest, MemberDetails memberDetails) {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
-        Board board = boardRepository.findById(boardReportRequestDto.getPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReportRequestDto.getPostId()));
+        Board board = boardRepository.findById(boardReportRequest.getPostId())
+                .orElseThrow(() -> new NotFoundException("Could not found board id : " + boardReportRequest.getPostId()));
 
         BoardReport boardReport = boardReportRepository.findByMemberAndBoard(member, board)
                 .orElseThrow(() -> new NotFoundException("Could not found report id"));

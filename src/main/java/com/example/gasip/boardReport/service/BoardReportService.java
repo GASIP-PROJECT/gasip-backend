@@ -4,6 +4,7 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.boardReport.dto.BoardReportRequest;
+import com.example.gasip.boardReport.dto.BoardReportResponse;
 import com.example.gasip.boardReport.model.BoardReport;
 import com.example.gasip.boardReport.repository.BoardReportRepository;
 import com.example.gasip.global.constant.ErrorCode;
@@ -26,7 +27,7 @@ public class BoardReportService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public void insert(BoardReportRequest boardReportRequest, MemberDetails memberDetails) throws Exception {
+    public BoardReportResponse insert(BoardReportRequest boardReportRequest, MemberDetails memberDetails) throws Exception {
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
         Board board = boardRepository.findById(boardReportRequest.getPostId())
@@ -50,10 +51,12 @@ public class BoardReportService {
 
         boardReportRepository.save(boardReport);
         boardRepository.addReportCount(board);
+
+        return BoardReportResponse.fromEntity(boardReport);
     }
 
     @Transactional
-    public void delete(BoardReportRequest boardReportRequest, MemberDetails memberDetails) {
+    public BoardReportResponse delete(BoardReportRequest boardReportRequest, MemberDetails memberDetails) {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
@@ -65,6 +68,8 @@ public class BoardReportService {
 
         boardReportRepository.delete(boardReport);
         boardRepository.subReportCount(board);
+
+        return BoardReportResponse.fromEntity(boardReport);
     }
 
     @Transactional

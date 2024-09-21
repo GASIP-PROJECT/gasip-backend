@@ -5,7 +5,8 @@ import com.example.gasip.board.model.ContentActivity;
 import com.example.gasip.board.repository.BoardRepository;
 import com.example.gasip.comment.model.Comment;
 import com.example.gasip.comment.repository.CommentRepository;
-import com.example.gasip.commentReport.dto.CommentReportRequestDto;
+import com.example.gasip.commentReport.dto.CommentReportRequest;
+import com.example.gasip.commentReport.dto.CommentReportResponse;
 import com.example.gasip.commentReport.model.CommentReport;
 import com.example.gasip.commentReport.repository.CommentReportRepository;
 import com.example.gasip.global.constant.ErrorCode;
@@ -29,19 +30,19 @@ public class CommentReportService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void commentReportInsert(CommentReportRequestDto commentReportRequestDto, MemberDetails memberDetails) throws Exception {
+    public CommentReportResponse commentReportInsert(CommentReportRequest commentReportRequest, MemberDetails memberDetails) throws Exception {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
-        Board board = boardRepository.getReferenceById(commentReportRequestDto.getPostId());
+        Board board = boardRepository.getReferenceById(commentReportRequest.getPostId());
 
-        Comment comment = commentRepository.getReferenceById(commentReportRequestDto.getCommentId());
+        Comment comment = commentRepository.getReferenceById(commentReportRequest.getCommentId());
 
         if (commentReportRepository.findByMemberAndCommentAndBoard(member, comment, board).isPresent()) {
             throw new DuplicateReportException(ErrorCode.DUPLICATE_REPORT);
         }
 
-        if (commentReportRepository.countByComment_CommentId(commentReportRequestDto.getCommentId()) > REPORT_LIMIT) {
+        if (commentReportRepository.countByComment_CommentId(commentReportRequest.getCommentId()) > REPORT_LIMIT) {
             comment.changeActivity(ContentActivity.FLAGGED);
         }
 
@@ -49,29 +50,33 @@ public class CommentReportService {
                 .member(member)
                 .comment(comment)
                 .board(board)
-                .content(commentReportRequestDto.getContent())
+                .content(commentReportRequest.getContent())
                 .build();
 
         commentReportRepository.save(commentReport);
         commentRepository.addReportCount(comment);
 
+        return CommentReportResponse.fromEntity(commentReport);
+
     }
 
     @Transactional
-    public void commentReportDelete(CommentReportRequestDto commentReportRequestDto, MemberDetails memberDetails) {
+    public CommentReportResponse commentReportDelete(CommentReportRequest commentReportRequest, MemberDetails memberDetails) {
 
         Member member = memberRepository.getReferenceById(memberDetails.getId());
 
-        Board board = boardRepository.getReferenceById(commentReportRequestDto.getPostId());
+        Board board = boardRepository.getReferenceById(commentReportRequest.getPostId());
 
-        Comment comment = commentRepository.findById(commentReportRequestDto.getCommentId())
-                .orElseThrow(() -> new NotFoundException(("Could not found comment id : " + commentReportRequestDto.getCommentId())));
+        Comment comment = commentRepository.findById(commentReportRequest.getCommentId())
+                .orElseThrow(() -> new NotFoundException(("Could not found comment id : " + commentReportRequest.getCommentId())));
 
         CommentReport commentReport = commentReportRepository.findByMemberAndCommentAndBoard(member, comment, board)
                 .orElseThrow(() -> new NotFoundException("Could not found report id"));
 
         commentReportRepository.save(commentReport);
         commentRepository.subReportCount(comment);
+
+        return CommentReportResponse.fromEntity(commentReport);
     }
 
 

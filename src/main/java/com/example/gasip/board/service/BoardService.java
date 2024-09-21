@@ -130,7 +130,10 @@ public class BoardService {
      */
     @Transactional
     public List<BoardReadResponse> findContainingContentOrderByRegDateDesc(String content, MemberDetails memberDetails, Pageable pageable) {
-        Page<BoardReadResponse> boardReadResponses = boardRepository.findContainingContentOrderByRegDateDesc(content, pageable);
+
+        Long blockerId = memberDetails.getId();
+
+        Page<BoardReadResponse> boardReadResponses = boardRepository.findContainingContentOrderByRegDateDesc(blockerId, content, pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses) {

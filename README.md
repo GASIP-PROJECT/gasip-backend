@@ -12,7 +12,7 @@
 <br>
 
 ## 🎥 앱 데모 영상
-<img width="80%", src="https://github.com/user-attachments/assets/c6ddf4c7-fe6e-44b8-9d97-79da01999c3a"/>
+> ![video](https://github.com/user-attachments/assets/fb57787a-f353-43d4-834a-ff6ce6902dfb)
 <br>
 
 ## 💡 프로젝트 주제

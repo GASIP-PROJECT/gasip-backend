@@ -11,6 +11,10 @@
 > [다운로드 링크 - 현재 아이폰만 가능](https://apps.apple.com/kr/app/gasip/id6499491490?l=en-GB)
 <br>
 
+## 🎥 앱 데모 영상
+<img width="80%", src="https://github.com/user-attachments/assets/c6ddf4c7-fe6e-44b8-9d97-79da01999c3a"/>
+<br>
+
 ## 💡 프로젝트 주제
 
 - **익명의 가천대학교 교수님 및 강의 리뷰 서비스**

@@ -104,11 +104,16 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
 
-        List<Long> prof_ids = queryFactory
+        List<Long> postIds = queryFactory
                 .select(board.postId)
                 .from(board)
-                .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
+                .where(
+                        board.professor.profId.gt(0L),
+                        board.contentActivity.eq(ContentActivity.GENERAL)
+                )
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory
@@ -119,12 +124,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0).and(board.member.memberId.notIn(blockedIds)))
-//                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
+                .where(board.postId.in(postIds).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
+
         return new PageImpl<>(boardReadResponses);
     }
 

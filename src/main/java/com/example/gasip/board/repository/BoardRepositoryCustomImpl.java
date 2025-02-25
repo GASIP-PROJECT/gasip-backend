@@ -24,7 +24,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    private List<Long> getBlockedIds(Long blockerId) {
+    public List<Long> getBlockedIds(Long blockerId) {
         QMemberBlock memberBlock = QMemberBlock.memberBlock;
 
         return queryFactory
@@ -33,6 +33,22 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .where(memberBlock.blocker.memberId.eq(blockerId))
                 .fetch();
     }
+
+    public List<Long> getPostIds(List<Long> blockedIds, Pageable pageable) {
+        return queryFactory
+                .select(board.postId)
+                .from(board)
+                .where(
+                        board.professor.profId.gt(0L)
+                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                                .and(board.member.memberId.notIn(blockedIds))
+                )
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
 
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
@@ -114,9 +130,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.gt(0).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
+
         return new PageImpl<>(boardReadResponses);
     }
 

@@ -119,7 +119,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
-//        List<Long> blockedIds = cacheService.getBlockedIds(blockerId, queryFactory);
         List<Long> postIds = getPostIds(blockedIds, pageable);
 
         List<BoardReadResponse> boardReadResponses = queryFactory

@@ -108,7 +108,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .where(
-                        board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL))
+                        board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds))
                 )
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
@@ -123,7 +123,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.postId.in(postIds).and(board.member.memberId.notIn(blockedIds)))
+                .where(board.postId.in(postIds))
                 .orderBy(board.regDate.desc())
                 .fetch();
 

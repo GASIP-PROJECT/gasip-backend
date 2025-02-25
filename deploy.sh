@@ -1,5 +1,5 @@
 # 자주 사용하는 값 변수에 저장
-REPOSITORY=/home/ec2-user/app/build/libs
+REPOSITORY=/home/ec2-user/app
 PROJECT_NAME=gasip
 # git clone 받은 위치로 이동
 cd $REPOSITORY

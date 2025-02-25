@@ -119,7 +119,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0).and(board.member.memberId.notIn(blockedIds)))
+                .where(board.professor.profId.gt(0).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds)))
 //                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())

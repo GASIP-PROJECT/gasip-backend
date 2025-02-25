@@ -104,13 +104,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
 
-        List<Long> prof_ids = queryFactory
-                .select(board.postId)
-                .from(board)
-                .leftJoin(board.professor, professor)
-                .where(board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
-                .fetch();
-
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
                         board.regDate, board.updateDate, board.postId, board.member.nickname,
@@ -120,7 +113,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .from(board)
                 .leftJoin(board.professor, professor)
                 .where(board.professor.profId.gt(0).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds)))
-//                .where(board.postId.in(prof_ids).and(board.member.memberId.notIn(blockedIds)))
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

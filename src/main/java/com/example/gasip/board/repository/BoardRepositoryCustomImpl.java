@@ -108,8 +108,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .where(
-                        board.professor.profId.gt(0L),
-                        board.contentActivity.eq(ContentActivity.GENERAL)
+                        board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL))
                 )
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())

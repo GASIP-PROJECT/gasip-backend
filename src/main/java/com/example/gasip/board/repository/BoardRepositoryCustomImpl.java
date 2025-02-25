@@ -9,6 +9,7 @@ import com.example.gasip.professor.model.QProfessor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    private List<Long> getBlockedIds(Long blockerId) {
+    @Cacheable(value = "blockedIdsCache", key = "#blockerId", unless = "#result == null or #result.isEmpty()")
+    public List<Long> getBlockedIds(Long blockerId) {
         QMemberBlock memberBlock = QMemberBlock.memberBlock;
 
         return queryFactory
@@ -33,6 +35,23 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .where(memberBlock.blocker.memberId.eq(blockerId))
                 .fetch();
     }
+
+    @Cacheable(value = "postIdsCache", key = "'professor-' + #pageable.pageNumber", unless = "#result == null or #result.isEmpty()")
+    public List<Long> getPostIds(List<Long> blockedIds, Pageable pageable) {
+        return queryFactory
+                .select(board.postId)
+                .from(board)
+                .where(
+                        board.professor.profId.gt(0L)
+                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                                .and(board.member.memberId.notIn(blockedIds))
+                )
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
 
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
@@ -103,17 +122,17 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
-
-        List<Long> postIds = queryFactory
-                .select(board.postId)
-                .from(board)
-                .where(
-                        board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds))
-                )
-                .orderBy(board.regDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+        List<Long> postIds = getPostIds(blockedIds, pageable);
+//        List<Long> postIds = queryFactory
+//                .select(board.postId)
+//                .from(board)
+//                .where(
+//                        board.professor.profId.gt(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)).and(board.member.memberId.notIn(blockedIds))
+//                )
+//                .orderBy(board.regDate.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(

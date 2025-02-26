@@ -7,6 +7,7 @@ import com.example.gasip.board.model.Board;
 import com.example.gasip.professor.model.Professor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -41,7 +42,8 @@ public interface BoardRepositoryCustom {
     /**
      * 자유게시판 제외한 모든 교수 게시글 불러오기
      */
-    Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable);
+//    Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable);
+    Slice<BoardReadResponse> findBoardByAllProfessorNoOffset(Long blockerId, Long lastPostId, Pageable pageable);
 
     /**
      * 게시글 내용 검색

@@ -20,6 +20,7 @@ import com.example.gasip.professor.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -174,11 +175,11 @@ public class BoardService {
      *
      */
     @Transactional(readOnly = true)
-    public List<BoardReadResponse> findBoardByAllProfessor(Pageable pageable, MemberDetails memberDetails) {
+    public BoardResponseWithPagination findBoardByAllProfessor(Long lastPostId, Pageable pageable, MemberDetails memberDetails) {
 
         Long blockerId = memberDetails.getId();
 
-        Page<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessor(blockerId, pageable);
+        Slice<BoardReadResponse> boardReadResponses1 = boardRepository.findBoardByAllProfessorNoOffset(blockerId, lastPostId, pageable);
         List<BoardReadResponse> boardReadResponseList2 = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses1) {
@@ -189,7 +190,9 @@ public class BoardService {
             }
             boardReadResponseList2.add(BoardReadResponse.fromEntity(board));
         }
-        return boardReadResponseList2;
+
+        return BoardResponseWithPagination.fromEntity(boardReadResponseList2, boardReadResponses1.hasNext());
+//        return boardReadResponseList2;
     }
 
     @Transactional

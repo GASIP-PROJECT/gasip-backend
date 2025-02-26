@@ -9,9 +9,7 @@ import com.example.gasip.professor.model.QProfessor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 
@@ -31,21 +29,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(memberBlock.blocked.memberId)
                 .from(memberBlock)
                 .where(memberBlock.blocker.memberId.eq(blockerId))
-                .fetch();
-    }
-
-    public List<Long> getPostIds(List<Long> blockedIds, Pageable pageable) {
-        return queryFactory
-                .select(board.postId)
-                .from(board)
-                .where(
-                        board.professor.profId.gt(0L)
-                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
-                                .and(board.member.memberId.notIn(blockedIds))
-                )
-                .orderBy(board.regDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -116,10 +99,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      *
      */
     @Override
-    public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
+    public Slice<BoardReadResponse> findBoardByAllProfessorNoOffset(Long blockerId, Long lastPostId, Pageable pageable) {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
-        List<Long> postIds = getPostIds(blockedIds, pageable);
 
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
@@ -129,12 +111,34 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(board.postId.in(postIds))
-                .orderBy(board.regDate.desc())
+                .where(
+                        ltPostId(lastPostId)
+                                .and(board.deleted.eq(0L))
+                                .and(board.professor.profId.gt(0L))
+                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                                .and(board.member.memberId.notIn(blockedIds))
+                )
+                .orderBy(board.postId.desc())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        return new PageImpl<>(boardReadResponses);
+        // hasNext 판별
+        boolean hasNext = boardReadResponses.size() > pageable.getPageSize();
+        if (hasNext) {
+            boardReadResponses.remove(pageable.getPageSize()); // 초과된 데이터 제거
+        }
+
+        return new SliceImpl<>(boardReadResponses, pageable, hasNext);
     }
+
+    private BooleanExpression ltPostId(Long postId) {
+        if (postId == null) {
+            return board.postId.isNotNull();
+        }
+
+        return board.postId.lt(postId);
+    }
+
 
     /**
      * 교수 상세 페이지 게시글

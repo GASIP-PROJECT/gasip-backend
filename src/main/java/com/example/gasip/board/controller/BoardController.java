@@ -89,12 +89,13 @@ public class BoardController {
     @GetMapping("/professor-boards")
     @Operation(summary = "모든 교수 리뷰 정보 요청", description = "모든 교수 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
     public ResponseEntity<?> findBoardByAllProfessor(
+            @RequestParam(required = false) Long lastPostId,
             Pageable pageable,
             @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
-                        ApiUtils.success(boardService.findBoardByAllProfessor(pageable, memberDetails))
+                        ApiUtils.success(boardService.findBoardByAllProfessor(lastPostId, pageable, memberDetails))
                 );
     }
     @GetMapping("/{profId}")

@@ -113,9 +113,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      *
      */
     @Override
-    public Slice<BoardReadResponse> findBoardByAllProfessorNoOffset(Long blockerId, Long lastPostId, Pageable pageable) {
+    public Page<BoardReadResponse> findBoardByAllProfessor(Long blockerId, Pageable pageable) {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
+        List<Long> postIds = getPostIds(blockedIds, pageable);
 
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
@@ -125,32 +126,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
                 .leftJoin(board.professor, professor)
-                .where(
-                        ltPostId(lastPostId)
-                                .and(board.deleted.eq(0L))
-                                .and(board.professor.profId.gt(0L))
-                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
-                                .and(board.member.memberId.notIn(blockedIds))
-                )
+                .where(board.postId.in(postIds))
                 .orderBy(board.postId.desc())
-                .limit(pageable.getPageSize() + 1)
+                .orderBy(board.regDate.desc())
                 .fetch();
 
-        // hasNext 판별
-        boolean hasNext = boardReadResponses.size() > pageable.getPageSize();
-        if (hasNext) {
-            boardReadResponses.remove(pageable.getPageSize()); // 초과된 데이터 제거
-        }
-
-        return new SliceImpl<>(boardReadResponses, pageable, hasNext);
-    }
-
-    private BooleanExpression ltPostId(Long postId) {
-        if (postId == null) {
-            return board.postId.isNotNull();
-        }
-
-        return board.postId.lt(postId);
+        return new PageImpl<>(boardReadResponses);
     }
 
 

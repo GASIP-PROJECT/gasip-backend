@@ -32,6 +32,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .fetch();
     }
 
+    public List<Long> getPostIds(List<Long> blockedIds, Pageable pageable) {
+        return queryFactory
+                .select(board.postId)
+                .from(board)
+                .where(
+                    board.contentActivity.eq(ContentActivity.GENERAL)
+                            .and(board.professor.profId.gt(0L))
+                            .and(board.member.memberId.notIn(blockedIds))
+                )
+                .orderBy(board.regDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+}
 
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {

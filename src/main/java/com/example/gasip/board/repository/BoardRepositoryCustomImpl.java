@@ -39,9 +39,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .select(board.postId)
                 .from(board)
                 .where(
-                        board.professor.profId.gt(0L)
-                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
-                                .and(board.member.memberId.notIn(blockedIds))
+                    board.contentActivity.eq(ContentActivity.GENERAL)
+                            .and(board.professor.profId.gt(0L))
+                            .and(board.member.memberId.notIn(blockedIds))
                 )
                 .orderBy(board.regDate.desc())
                 .offset(pageable.getOffset())

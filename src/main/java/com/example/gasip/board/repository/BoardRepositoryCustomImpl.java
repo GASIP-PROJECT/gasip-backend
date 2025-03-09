@@ -114,8 +114,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .where(
                         ltPostId(lastPostId)
                                 .and(board.deleted.eq(0L))
-                                .and(board.professor.profId.gt(0L))
                                 .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                                .and(board.professor.profId.gt(0L))
                                 .and(board.member.memberId.notIn(blockedIds))
                 )
                 .orderBy(board.postId.desc())

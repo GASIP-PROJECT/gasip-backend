@@ -32,7 +32,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .fetch();
     }
 
-
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
         return queryFactory

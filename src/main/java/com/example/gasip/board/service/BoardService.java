@@ -126,11 +126,11 @@ public class BoardService {
      *
      */
     @Transactional(readOnly = true)
-    public List<BoardReadResponse> findFreeBoardByProfessor(Pageable pageable, MemberDetails memberDetails) {
+    public BoardResponseWithPagination findFreeBoardByProfessor(Long lastPostId, Pageable pageable, MemberDetails memberDetails) {
 
         Long blockerId = memberDetails.getId();
 
-        Page<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(blockerId, pageable);
+        Slice<BoardReadResponse> boardReadResponses = boardRepository.findFreeBoardByProfessor(blockerId, lastPostId, pageable);
         List<BoardReadResponse> boardReadResponseList = new ArrayList<>();
 
         for (BoardReadResponse boardReadResponse : boardReadResponses) {
@@ -142,7 +142,7 @@ public class BoardService {
             boardReadResponseList.add(BoardReadResponse.fromEntity(board));
         }
 
-        return boardReadResponseList;
+        return BoardResponseWithPagination.fromEntity(boardReadResponseList, boardReadResponses.hasNext());
     }
 
     /**

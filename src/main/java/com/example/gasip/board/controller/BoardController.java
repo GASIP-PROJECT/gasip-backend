@@ -77,12 +77,13 @@ public class BoardController {
     @GetMapping("/free-boards")
     @Operation(summary = "자유 게시판 전체 리뷰 정보 요청", description = "자유 게시글 목록을 최신순으로 불러옵니다.", tags = {"Board Controller"})
     public ResponseEntity<?> findFreeBoardByProfessor(
+            @RequestParam(required = false) Long lastPostId,
             Pageable pageable,
             @AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity
                 .ok()
                 .body(
-                        ApiUtils.success(boardService.findFreeBoardByProfessor(pageable, memberDetails))
+                        ApiUtils.success(boardService.findFreeBoardByProfessor(lastPostId, pageable, memberDetails))
                 );
     }
 

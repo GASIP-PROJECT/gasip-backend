@@ -192,7 +192,6 @@ public class BoardService {
         }
 
         return BoardResponseWithPagination.fromEntity(boardReadResponseList2, boardReadResponses1.hasNext());
-//        return boardReadResponseList2;
     }
 
     @Transactional

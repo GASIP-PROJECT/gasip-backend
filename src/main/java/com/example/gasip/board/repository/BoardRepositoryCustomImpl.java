@@ -32,6 +32,13 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .fetch();
     }
 
+    private BooleanExpression ltPostId(Long postId) {
+        if (postId == null) {
+            return board.postId.isNotNull();
+        }
+
+        return board.postId.lt(postId);
+    }
 
     @Override
     public List<BoardReadResponse> findAllByMemberId(Long memberId,Pageable pageable) {
@@ -67,16 +74,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
      * 자유 게시판 게시글 불러오기
      */
     @Override
-    public Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable) {
+    public Slice<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Long lastPostId, Pageable pageable) {
 
         List<Long> blockedIds = getBlockedIds(blockerId);
-
-        List<Long> ids = queryFactory
-                .select(board.postId)
-                .from(board)
-                .leftJoin(board.professor, professor)
-                .where(board.professor.profId.eq(0L).and(board.contentActivity.eq(ContentActivity.GENERAL)))
-                .fetch();
 
         List<BoardReadResponse> boardReadResponses = queryFactory
                 .select(new QBoardReadResponse(
@@ -85,12 +85,26 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.professor.profName, board.professor.category.collegeName,
                         board.professor.category.majorName, board.contentActivity))
                 .from(board)
-                .where(board.postId.in(ids).and(board.member.memberId.notIn(blockedIds)))
-                .orderBy(board.regDate.desc())
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .leftJoin(board.professor, professor)
+                .where(
+                        ltPostId(lastPostId)
+                        .and(board.deleted.eq(0L))
+                        .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                        .and(board.professor.profId.eq(0L))
+                        .and(board.member.memberId.notIn(blockedIds))
+                )
+                .orderBy(board.postId.desc())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
-        return new PageImpl<>(boardReadResponses);
+
+        // hasNext 판별
+        boolean hasNext = boardReadResponses.size() > pageable.getPageSize();
+
+        if (hasNext) {
+            boardReadResponses.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(boardReadResponses, pageable, hasNext);
     }
 
     /**
@@ -113,10 +127,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .leftJoin(board.professor, professor)
                 .where(
                         ltPostId(lastPostId)
-                                .and(board.deleted.eq(0L))
-                                .and(board.contentActivity.eq(ContentActivity.GENERAL))
-                                .and(board.professor.profId.gt(0L))
-                                .and(board.member.memberId.notIn(blockedIds))
+                        .and(board.deleted.eq(0L))
+                        .and(board.contentActivity.eq(ContentActivity.GENERAL))
+                        .and(board.professor.profId.gt(0L))
+                        .and(board.member.memberId.notIn(blockedIds))
                 )
                 .orderBy(board.postId.desc())
                 .limit(pageable.getPageSize() + 1)
@@ -124,19 +138,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
         // hasNext 판별
         boolean hasNext = boardReadResponses.size() > pageable.getPageSize();
+
         if (hasNext) {
-            boardReadResponses.remove(pageable.getPageSize()); // 초과된 데이터 제거
+            boardReadResponses.remove(pageable.getPageSize());
         }
 
         return new SliceImpl<>(boardReadResponses, pageable, hasNext);
-    }
-
-    private BooleanExpression ltPostId(Long postId) {
-        if (postId == null) {
-            return board.postId.isNotNull();
-        }
-
-        return board.postId.lt(postId);
     }
 
 

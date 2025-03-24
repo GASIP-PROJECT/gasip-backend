@@ -37,7 +37,7 @@ public interface BoardRepositoryCustom {
     /**
      * 자유게시판 게시글 불러오기
      */
-    Page<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Pageable pageable);
+    Slice<BoardReadResponse> findFreeBoardByProfessor(Long blockerId, Long lastPostId, Pageable pageable);
 
     /**
      * 자유게시판 제외한 모든 교수 게시글 불러오기

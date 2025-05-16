@@ -176,5 +176,5 @@
 
 ## 📐 ERD 설계도
 
-<img width="984" alt="image" src="https://github.com/GASIP-PROJECT/gasip-backend/assets/114489245/11471c0a-56c1-4ea5-a3e2-70c2aa8c0ba8">
+<img width="1063" alt="Image" src="https://github.com/user-attachments/assets/b6225ae1-c8fd-4c79-93cb-ceb962d48b61" />
 
